@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <EditText
+        android:id="@+id/nome_cliente_edicao"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/tamanho_textos"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/nome_do_cliente"
+        android:inputType="textPersonName"
+        android:textColorHint="#757575"
+        app:layout_constraintEnd_toStartOf="@+id/devendo_edicao"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/devendo_edicao"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/tamanho_textos"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:clickable="false"
+        android:text="@string/devendo"
+        android:textColor="#757575"
+        android:textColorHint="#8E8E8E"
+        android:textSize="@dimen/tamanho_fonte_menor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nome_cliente_edicao" />
+
+    <EditText
+        android:id="@+id/contato_cliente_edicao"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/tamanho_textos"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/contato_do_cliente"
+        android:inputType="textPersonName"
+        android:textColorHint="#757575"
+        android:textSize="@dimen/tamanho_fonte_menor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txt_contato_edicao"
+        app:layout_constraintTop_toTopOf="@+id/txt_contato_edicao" />
+
+    <EditText
+        android:id="@+id/endereco_cliente_edicao"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/tamanho_textos"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/endere_o_do_cliente"
+        android:inputType="textPersonName"
+        android:textColorHint="#757575"
+        android:textSize="@dimen/tamanho_fonte_menor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txt_endereco_edicao"
+        app:layout_constraintTop_toTopOf="@+id/txt_endereco_edicao" />
+
+    <EditText
+        android:id="@+id/cpf_cliente_edicao"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/tamanho_textos"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/cpf_do_cliente"
+        android:inputType="textPersonName"
+        android:textColorHint="#757575"
+        android:textSize="@dimen/tamanho_fonte_menor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txt_cpf_edicao"
+        app:layout_constraintTop_toTopOf="@+id/txt_cpf_edicao" />
+
+    <TextView
+        android:id="@+id/txt_contato_edicao"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/tamanho_textos"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center|start"
+        android:text="@string/contato"
+        android:textSize="@dimen/tamanho_fonte_menor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+    <TextView
+        android:id="@+id/txt_endereco_edicao"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/tamanho_textos"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center|start"
+        android:text="@string/endere_o"
+        android:textSize="@dimen/tamanho_fonte_menor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_contato_edicao" />
+
+    <TextView
+        android:id="@+id/txt_cpf_edicao"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/tamanho_textos"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center|start"
+        android:text="@string/cpf"
+        android:textSize="@dimen/tamanho_fonte_menor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_endereco_edicao" />
+
+    <Button
+        android:id="@+id/salvar_cliente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/salvar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_cpf_edicao" />
+
+    <Button
+        android:id="@+id/cancelar_cliente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/cancelar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cpf_cliente_edicao" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

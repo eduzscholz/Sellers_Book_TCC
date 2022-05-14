@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="70dp">
+
+    <TextView
+        android:id="@+id/nome_cliente_detalhes"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/tamanho_textos"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="center|start"
+        android:textSize="@dimen/tamanho_fonte_maior"
+        app:layout_constraintEnd_toStartOf="@+id/devendo_detalhes"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="nome_cliente" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="409dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nome_cliente_detalhes" />
+
+    <TextView
+        android:id="@+id/txt_contato_detalhes"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/tamanho_textos"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center|start"
+        android:text="@string/contato"
+        android:textSize="@dimen/tamanho_fonte_menor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+    <TextView
+        android:id="@+id/txt_endereco_detalhes"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/tamanho_textos"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center|start"
+        android:text="@string/endere_o"
+        android:textSize="@dimen/tamanho_fonte_menor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_contato_detalhes" />
+
+    <TextView
+        android:id="@+id/contato_cliente_detalhes"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/tamanho_textos"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="center|start"
+        android:textSize="@dimen/tamanho_fonte_menor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txt_contato_detalhes"
+        app:layout_constraintTop_toTopOf="@+id/txt_contato_detalhes" />
+
+    <TextView
+        android:id="@+id/endereco_cliente_detalhes"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/tamanho_textos"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="center|start"
+        android:textSize="@dimen/tamanho_fonte_menor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txt_endereco_detalhes"
+        app:layout_constraintTop_toTopOf="@+id/txt_endereco_detalhes" />
+
+    <TextView
+        android:id="@+id/txt_cpf_detalhes"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/tamanho_textos"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center|start"
+        android:text="@string/cpf"
+        android:textSize="@dimen/tamanho_fonte_menor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_endereco_detalhes" />
+
+    <TextView
+        android:id="@+id/cpf_cliente_detalhes"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/tamanho_textos"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="center|start"
+        android:textSize="@dimen/tamanho_fonte_menor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/txt_cpf_detalhes"
+        app:layout_constraintTop_toTopOf="@+id/txt_cpf_detalhes" />
+
+    <CheckBox
+        android:id="@+id/devendo_detalhes"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/tamanho_textos"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:clickable="false"
+        android:text="@string/devendo"
+        android:textSize="@dimen/tamanho_fonte_menor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/detalhes_cliente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="divider,txt_contato_detalhes,txt_endereco_detalhes,contato_cliente_detalhes,endereco_cliente_detalhes,txt_cpf_detalhes,cpf_cliente_detalhes,editar_cliente,remover_cliente" />
+
+    <Button
+        android:id="@+id/editar_cliente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/editar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_cpf_detalhes" />
+
+    <Button
+        android:id="@+id/remover_cliente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/remover"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cpf_cliente_detalhes" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

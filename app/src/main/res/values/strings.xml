@@ -1,0 +1,58 @@
+<resources>
+    <string name="app_name">Meu TCC</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="inicio">Inicio</string>
+    <string name="produto">Produtos</string>
+    <string name="vendas">Vendas</string>
+    <string name="cliente">Clientes</string>
+    <string name="imagem_do_produto">Imagem do produto</string>
+    <string name="reais">R$:</string>
+    <string name="quantidade">Quantidade:</string>
+    <string name="tipo">Tipo:</string>
+    <string name="editar">EDITAR</string>
+    <string name="remover">REMOVER</string>
+
+    <string name="adcionar_produto">Adicionar Produto</string>
+    <string name="remover_produtos">Remover Produtos</string>
+    <string name="adcionar_venda">Adicionar Venda</string>
+    <string name="remover_venda">Remover Venda</string>
+    <string name="adcionar_cliente">Adicionar Cliente</string>
+    <string name="remover_cliente">Remover Cliente</string>
+    <string name="configuraçoes">Configurações</string>
+    <string name="selecionar_varios">Selecionar Vários</string>
+    <string name="valor">Valor</string>
+    <string name="nome_do_produto">Nome do Produto</string>
+    <string name="marca">Marca</string>
+    <string name="volume_peso">Volume/Peso</string>
+    <string name="complemento">Complemento</string>
+    <string name="tipo_da_produto">Tipo do Produto, exemplo: Cosmético</string>
+    <string name="estoque">Estoque</string>
+    <string name="salvar">salvar</string>
+    <string name="cancelar">cancelar</string>
+    <string name="contato">Contato:</string>
+    <string name="endere_o">Endereço:</string>
+    <string name="cpf">CPF:</string>
+    <string name="devendo">devendo</string>
+    <string name="nome_do_cliente">Nome do Cliente</string>
+    <string name="contato_do_cliente">Contato do cliente</string>
+    <string name="cpf_do_cliente">CPF do cliente</string>
+    <string name="endere_o_do_cliente">Endereço do cliente</string>
+    <string name="produto_da_venda">Produto da venda</string>
+    <string name="pago">Pago</string>
+    <string name="data_da_compra">Data da compra:</string>
+    <string name="data_prevista">Data prevista:</string>
+    <string name="data_de_pagamento">Data de pagamento:</string>
+    <string name="quantidade_produto">Quantidade</string>
+
+    <dimen name="tamanho_textos">48dp</dimen>
+    <dimen name="tamanho_fonte_menor">18sp</dimen>
+    <dimen name="tamanho_fonte_maior">20sp</dimen>
+
+    <string-array name="tipo">
+        <item>Cosmético</item>
+        <item>Alimenticio</item>
+        <item>Roupas</item>
+        <item>Artesanato</item>
+    </string-array>
+</resources>
