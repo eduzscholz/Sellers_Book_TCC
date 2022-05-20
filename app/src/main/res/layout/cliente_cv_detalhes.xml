@@ -121,6 +121,7 @@
         android:id="@+id/detalhes_cliente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:constraint_referenced_ids="divider,txt_contato_detalhes,txt_endereco_detalhes,contato_cliente_detalhes,endereco_cliente_detalhes,txt_cpf_detalhes,cpf_cliente_detalhes,editar_cliente,remover_cliente" />
 
     <Button

@@ -25,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
     //TODO TELA INICIAL
     //TODO VERIFICAR CHECKBOXES
     //todo camera
+    //TODO PADROES
+    //TODO CONFIRMACOES DE REMOCAO E UPDATES
+    //TODO CLASSE PARA CRIAR O BANCO
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         VPAdapater vpAdapater = new VPAdapater(this);
         //SETA O ADAPTADOR COM O VIEW PAGER
         viewPager.setAdapter(vpAdapater);
-        viewPager.setOffscreenPageLimit(1);
+        //viewPager.setOffscreenPageLimit(1);
         //CONECTA O VIEWPAGER2 COM O TABLAYOUT
         new TabLayoutMediator(tabLayout,viewPager,(tab, position) -> tab.setText(titulos[position])).attach();
     }
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_toolbar, menu);
+        inflater.inflate(R.menu.menu_principal, menu);
         return true;
     }
 }

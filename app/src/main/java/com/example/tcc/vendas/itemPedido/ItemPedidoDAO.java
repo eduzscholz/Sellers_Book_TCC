@@ -9,8 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.tcc.vendas.itemPedido.ItemPedido;
-
 import java.util.ArrayList;
 
 public class ItemPedidoDAO extends SQLiteOpenHelper{
@@ -58,7 +56,6 @@ public class ItemPedidoDAO extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
-        cv.put(COL_ID, itemPedido.getItemPedidoID());
         cv.put(COL_PRECO, itemPedido.getPreco());
         cv.put(COL_QUANTIDADE, itemPedido.getQuantidade());
         cv.put(COL_PRODUTO_ID, itemPedido.getProdutoID());

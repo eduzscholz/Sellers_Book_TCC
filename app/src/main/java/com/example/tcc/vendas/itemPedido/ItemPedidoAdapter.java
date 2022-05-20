@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.tcc.R;
 import com.example.tcc.produtos.Produto;
@@ -37,10 +38,10 @@ public class ItemPedidoAdapter extends RecyclerView.Adapter<ItemPedidoAdapter.It
 
         Produto p = produtosDAO.readOneProdutoID(itemPedidoArrayList.get(position).getProdutoID());
 
-        holder.valorItemproduto.setText(String.valueOf(itemPedidoArrayList.get(position).getPreco()));
-        holder.quantidadeItemProduto.setText(String.valueOf(itemPedidoArrayList.get(position).getQuantidade()));
-        holder.nomeItemProduto.setText(p.getNome());
-        holder.imagemItemProduto.setImageResource(p.getImg());
+        holder.valorItemPedido.setText(String.valueOf(itemPedidoArrayList.get(position).getPreco()));
+        holder.quantidadeItemPedido.setText(String.valueOf(itemPedidoArrayList.get(position).getQuantidade()));
+        holder.nomeItemPedido.setText(p.getNome());
+        holder.imagemItemPedido.setImageResource(p.getImg());
 
     }
 
@@ -49,15 +50,17 @@ public class ItemPedidoAdapter extends RecyclerView.Adapter<ItemPedidoAdapter.It
 
     public static class ItemPedidoViewHolder extends RecyclerView.ViewHolder{
 
-        TextView nomeItemProduto, quantidadeItemProduto, valorItemproduto;
-        ImageView imagemItemProduto;
+        public TextView nomeItemPedido, quantidadeItemPedido, valorItemPedido;
+        public ImageView imagemItemPedido;
+        public CardView cvItemPedido;
 
         public ItemPedidoViewHolder(@NonNull View itemView) {
             super(itemView);
-            nomeItemProduto = itemView.findViewById(R.id.nome_item_pedido);
-            quantidadeItemProduto = itemView.findViewById(R.id.quantidade_item_pedido);
-            valorItemproduto = itemView.findViewById(R.id.preco_item_pedido);
-            imagemItemProduto = itemView.findViewById(R.id.imagem_item_pedido);
+            nomeItemPedido = itemView.findViewById(R.id.nome_item_pedido);
+            quantidadeItemPedido = itemView.findViewById(R.id.quantidade_item_pedido);
+            valorItemPedido = itemView.findViewById(R.id.preco_item_pedido);
+            imagemItemPedido = itemView.findViewById(R.id.imagem_item_pedido);
+            cvItemPedido = itemView.findViewById(R.id.cv_item_pedido);
         }
     }
 }

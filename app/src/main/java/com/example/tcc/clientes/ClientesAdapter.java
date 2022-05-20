@@ -28,22 +28,11 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Client
         this.clienteArrayList = clienteArrayList;
     }
 
-    private View.OnClickListener maisDetalhes = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            if(view.findViewById(R.id.detalhes_cliente).getVisibility()==view.VISIBLE){
-                view.findViewById(R.id.detalhes_cliente).setVisibility(view.GONE);
-            }else {
-                view.findViewById(R.id.detalhes_cliente).setVisibility(view.VISIBLE);
-            }
-        }
-    };
-
     @NonNull
     @Override
     public ClientesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.linha_cliente,parent,false);
-        return new ClientesAdapter.ClientesViewHolder(view, maisDetalhes);
+        return new ClientesAdapter.ClientesViewHolder(view);
     }
 
     @Override
@@ -52,7 +41,7 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Client
         holder.nomeClienteFrente.setText(clienteArrayList.get(position).getNome());
         holder.contatoClienteFrente.setText(clienteArrayList.get(position).getContato());
         holder.enderecoClienteFrente.setText(clienteArrayList.get(position).getEndereço());
-        holder.estaDevendoFrente.setChecked(true);
+        holder.pagementoFrente.setChecked(true);
         holder.cpfClienteFrente.setText(clienteArrayList.get(position).getCPF());
         holder.btnEditar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,7 +52,7 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Client
                     holder.contatoClienteAtras.setText(clienteArrayList.get(holder.getAdapterPosition()).getContato());
                     holder.enderecoClienteAtras.setText(clienteArrayList.get(holder.getAdapterPosition()).getEndereço());
                     holder.cpfClienteAtras.setText(clienteArrayList.get(holder.getAdapterPosition()).getCPF());                    holder.nomeClienteAtras.setText(clienteArrayList.get(holder.getAdapterPosition()).getNome());
-                    holder.estaDevendoAtras.setChecked(true);
+                    holder.pagamentoAtras.setChecked(true);
                 }
             }
         });
@@ -116,33 +105,42 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Client
         return clienteArrayList.size();
     }
 
-    public static class ClientesViewHolder extends RecyclerView.ViewHolder{
+    public static class ClientesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final CardView cardViewAtras, cardViewFrente;
         private final TextView nomeClienteFrente,contatoClienteFrente, enderecoClienteFrente, cpfClienteFrente, nomeClienteAtras, contatoClienteAtras, enderecoClienteAtras, cpfClienteAtras;
-        private final CheckBox estaDevendoFrente, estaDevendoAtras;
+        private final CheckBox pagementoFrente, pagamentoAtras;
         private final Button btnEditar, btnCancelar, btnSalvar, btnRemover;
 
 
-        public ClientesViewHolder(@NonNull View itemView, View.OnClickListener maisDetalhes) {
+        public ClientesViewHolder(@NonNull View itemView) {
             super(itemView);
             nomeClienteFrente = itemView.findViewById(R.id.nome_cliente_detalhes);
             contatoClienteFrente = itemView.findViewById(R.id.contato_cliente_detalhes);
-            estaDevendoFrente = itemView.findViewById(R.id.devendo_detalhes);
+            pagementoFrente = itemView.findViewById(R.id.devendo_detalhes);
             enderecoClienteFrente = itemView.findViewById(R.id.endereco_cliente_detalhes);
             cpfClienteFrente = itemView.findViewById(R.id.cpf_cliente_detalhes);
             cardViewFrente = itemView.findViewById(R.id.cardeview_cliente_detalhes);
-            cardViewFrente.setOnClickListener(maisDetalhes);
             cardViewAtras = itemView.findViewById(R.id.cardview_cliente_edicao);
             nomeClienteAtras = itemView.findViewById(R.id.nome_cliente_edicao);
             contatoClienteAtras = itemView.findViewById(R.id.contato_cliente_edicao);
             enderecoClienteAtras = itemView.findViewById(R.id.endereco_cliente_edicao);
             cpfClienteAtras = itemView.findViewById(R.id.cpf_cliente_detalhes);
-            estaDevendoAtras = itemView.findViewById(R.id.devendo_edicao);
+            pagamentoAtras = itemView.findViewById(R.id.devendo_edicao);
             btnEditar = itemView.findViewById(R.id.editar_cliente);
             btnCancelar = itemView.findViewById(R.id.cancelar_cliente);
             btnSalvar = itemView.findViewById(R.id.salvar_cliente);
             btnRemover = itemView.findViewById(R.id.remover_cliente);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if(view.findViewById(R.id.detalhes_cliente).getVisibility()==view.VISIBLE){
+                view.findViewById(R.id.detalhes_cliente).setVisibility(view.GONE);
+            }else {
+                view.findViewById(R.id.detalhes_cliente).setVisibility(view.VISIBLE);
+            }
         }
     }
 }

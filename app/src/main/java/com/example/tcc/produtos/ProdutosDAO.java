@@ -17,15 +17,15 @@ public class ProdutosDAO extends SQLiteOpenHelper{
     private static final String TABELA = "produtos";
     private static final int VERSAO = 1;
 
-    private static final String COL_NOME = "nome";
-    private static final String COL_MARCA = "marca";
-    private static final String COL_COMPLEMENTO = "complemento";
-    private static final String COL_PRECO = "preco";
-    private static final String COL_MEDIDA = "Medida";
-    private static final String COL_QUANTIDADE = "quantidade";
-    private static final String COL_ID = "produtoID";
-    private static final String COL_TIPO = "tipo";
-    private static final String COL_IMG = "imagem";
+    public static final String COL_NOME = "nome";
+    public static final String COL_MARCA = "marca";
+    public static final String COL_COMPLEMENTO = "complemento";
+    public static final String COL_PRECO = "preco";
+    public static final String COL_MEDIDA = "Medida";
+    public static final String COL_QUANTIDADE = "quantidade";
+    public static final String COL_ID = "produtoID";
+    public static final String COL_TIPO = "tipo";
+    public static final String COL_IMG = "imagem";
 
     public ProdutosDAO(@Nullable Context context) {
         super(context, DATABASE, null, VERSAO);
@@ -164,6 +164,21 @@ public class ProdutosDAO extends SQLiteOpenHelper{
         String pre = String.valueOf(preco);
 
         return  updateProduto(id, new String[] {COL_NOME,COL_MARCA,COL_COMPLEMENTO,COL_PRECO,COL_MEDIDA,COL_QUANTIDADE,COL_TIPO,COL_IMG}, new String[] {nome,marca,complemento,pre,medida,qua,tipo,img});
+    }
+    //REDUZ A QUANTIDADE DO PRODUTO TODO TESTE UNITARIO
+    public boolean updateReduzQuantidade(int id, int quantidade){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        Cursor cursor = db.query(TABELA, null,COL_ID + " = ?", new String[] {String.valueOf(id)}, null, null, null);
+        int quant = cursor.getInt(cursor.getColumnIndexOrThrow(COL_QUANTIDADE));
+        quant = quant - quantidade;
+        cv.put(COL_QUANTIDADE, quant);
+        int count = db.update(TABELA, cv, COL_ID + " = ?", new String[] {String.valueOf(id)});
+        cursor.close();
+        db.close();
+
+        return count!=0;
     }
     //DELETA UM PRODUTO POR ID
     public boolean deleteOneProduto(int id){

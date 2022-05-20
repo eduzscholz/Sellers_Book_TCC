@@ -54,11 +54,10 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.VendasView
     public void onBindViewHolder(@NonNull VendasAdapter.VendasViewHolder holder, int position) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(holder.vendasRV.getContext());
         ClientesDAO clientesDAO = new ClientesDAO(context);
-        ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO(context);
         Cliente c = clientesDAO.readOneClienteID(vendaArrayList.get(position).getClienteID());
         double valorTotal=0;
         VendasDAO vendasDAO = new VendasDAO(context);
-        itemPedidoArrayList = itemPedidoDAO.readManyItemPedidoVendaID(vendaArrayList.get(position).getIDVenda());
+        itemPedidoArrayList = vendaArrayList.get(position).getItemPedidoArrayList();
 
 
         for (int i=0;i<itemPedidoArrayList.size();i++) {
@@ -90,6 +89,7 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.VendasView
             public void onClick(View view) {
                 int id = vendaArrayList.get(holder.getAdapterPosition()).getIDVenda();
                 if(vendasDAO.deleteOneVenda(id)){
+                    holder.cvVenda.findViewById(R.id.detalhes_venda).setVisibility(View.GONE);
                     vendaArrayList = vendasDAO.readAllVenda();
                     notifyDataSetChanged();
                 }else{
@@ -118,7 +118,7 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.VendasView
         return vendaArrayList.size();
     }
 
-    public static class VendasViewHolder extends RecyclerView.ViewHolder {
+    public static class VendasViewHolder extends RecyclerView.ViewHolder{
 
         private final TextView nomeCliente,  dataPrevista, dataPagamento, dataCompra;
         private final CheckBox pagamento;

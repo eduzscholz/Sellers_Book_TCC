@@ -65,12 +65,25 @@ public class VendasDAO extends SQLiteOpenHelper {
 
         cv.put(COL_ID_CLIENTE,venda.getClienteID());
         cv.put(COL_DATA_COMPRA,simpleDateFormat.format(venda.getDataCompra()));
-        cv.put(COL_DATA_PAGAMENTO,simpleDateFormat.format(venda.getDataPagamento()));
+        if(venda.getDataPagamento()==null){
+            cv.put(COL_DATA_PAGAMENTO, "");
+        }else {
+            cv.put(COL_DATA_PAGAMENTO, simpleDateFormat.format(venda.getDataPagamento()));
+        }
         cv.put(COL_PREVISAO,simpleDateFormat.format(venda.getPrevisao()));
 
         long insert = db.insert(TABELA, null, cv);
         db.close();
         return insert != -1;
+    }
+
+    public int ultimoID(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM "+TABELA+" WHERE "+COL_ID+" = (SELECT MAX("+COL_ID+")  FROM "+TABELA+");", null);
+
+        cursor.moveToNext();
+
+        return cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID));
     }
 
     public ArrayList<Venda> readAllVenda(){
@@ -86,7 +99,11 @@ public class VendasDAO extends SQLiteOpenHelper {
             int id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID));
             try {
                 dataCompra = simpleDateFormat.parse(cursor.getString(cursor.getColumnIndexOrThrow(COL_DATA_COMPRA)));
-                dataPagamento = simpleDateFormat.parse(cursor.getString(cursor.getColumnIndexOrThrow(COL_DATA_PAGAMENTO)));
+                if(cursor.getString(cursor.getColumnIndexOrThrow(COL_DATA_PAGAMENTO)).equals("")){
+                    dataPagamento = null;
+                }else {
+                    dataPagamento = simpleDateFormat.parse(cursor.getString(cursor.getColumnIndexOrThrow(COL_DATA_PAGAMENTO)));
+                }
                 previsao = simpleDateFormat.parse(cursor.getString(cursor.getColumnIndexOrThrow(COL_PREVISAO)));
                 int idCliente = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID_CLIENTE));
                 ArrayList<ItemPedido> itemPedidoArrayList = itemPedidoDAO.readManyItemPedidoVendaID(id);

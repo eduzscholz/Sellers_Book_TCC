@@ -62,66 +62,75 @@ public class ProdutosFragment extends Fragment {
         mAdapter = new ProdutosAdapter(this.getContext(), produtoArrayList);
         recyclerView.setAdapter(mAdapter);
         //BOTAO QUE FAZ APARECER O CARDVIEW DE ADICIONAR PRODUTO
-        btnAdcionarProduto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cvAdcionarProduto.setVisibility(view.VISIBLE);
-                Spinner spinner = cvAdcionarProduto.findViewById(R.id.tipo_produto_edicao);
-                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view.getContext(),R.array.tipo, android.R.layout.simple_spinner_dropdown_item);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinner.setAdapter(adapter);
-                btnAdcionarProduto.setVisibility(view.GONE);
-            }
-        });
+        btnAdcionarProduto.setOnClickListener(adicionarProduto);
         //BOTAO QUE FAZ SUMIR O CARDVIEW
-        btnCancelar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(cvAdcionarProduto.getVisibility()==View.VISIBLE){
-                    cvAdcionarProduto.setVisibility(View.GONE);
-                    btnAdcionarProduto.setVisibility(view.VISIBLE);
-                }
-            }
-        });
+        btnCancelar.setOnClickListener(cancelar);
         //SALVA O PROUTO NO BANCO DE DADOS
-        btnSalvarProduto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EditText txtNomeProduto = cvAdcionarProduto.findViewById(R.id.nome_produto_edicao);
-                EditText txtValorProduto = cvAdcionarProduto.findViewById(R.id.valor_produto_atras);
-                EditText txtMarcaProduto = cvAdcionarProduto.findViewById(R.id.marca_produto_edicao);
-                EditText txtQuantidadeProduto = cvAdcionarProduto.findViewById(R.id.quantidade_produto_edicao);
-                EditText txtDescricaoProduto = cvAdcionarProduto.findViewById(R.id.complemento_produto_edicao);
-                EditText txtMedidaProduto = cvAdcionarProduto.findViewById(R.id.medida_produto_edicao);
-                Spinner spinTipoAtras = cvAdcionarProduto.findViewById(R.id.tipo_produto_edicao);
-
-                String nome = txtNomeProduto.getText().toString();
-                Double valor = Double.parseDouble(txtValorProduto.getText().toString());
-                String marca = txtMarcaProduto.getText().toString();
-                int quant = Integer.parseInt(txtQuantidadeProduto.getText().toString());
-                String complemento = txtDescricaoProduto.getText().toString();
-                String medida = txtMedidaProduto.getText().toString();
-                String tipo = spinTipoAtras.getSelectedItem().toString();
-                Produto p = new Produto(0,R.drawable.img1,nome,marca,complemento,medida,valor,quant,tipo);
-                if(produtosDAO.createProduto(p)){
-                    produtoArrayList.add(p);
-                    mAdapter.notifyDataSetChanged();
-                }else{
-                    Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG);
-                }
-                txtDescricaoProduto.setText("");
-                txtMarcaProduto.setText("");
-                txtMedidaProduto.setText("");
-                txtValorProduto.setText("");
-                txtQuantidadeProduto.setText("");
-                txtNomeProduto.setText("");
-                cvAdcionarProduto.setVisibility(View.GONE);
-                btnAdcionarProduto.setVisibility(view.VISIBLE);
-            }
-        });
+        btnSalvarProduto.setOnClickListener(salvarProduto);
 
         return view;
     }
+
+    private View.OnClickListener adicionarProduto = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            cvAdcionarProduto.setVisibility(view.VISIBLE);
+            Spinner spinner = cvAdcionarProduto.findViewById(R.id.tipo_produto_edicao);
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view.getContext(),R.array.tipo, android.R.layout.simple_spinner_dropdown_item);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(adapter);
+            btnAdcionarProduto.setVisibility(view.GONE);
+        }
+    };
+
+    private View.OnClickListener cancelar = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if(cvAdcionarProduto.getVisibility()==View.VISIBLE){
+                cvAdcionarProduto.setVisibility(View.GONE);
+                btnAdcionarProduto.setVisibility(view.VISIBLE);
+            }
+        }
+    };
+
+    private View.OnClickListener salvarProduto = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            ProdutosDAO produtosDAO = new ProdutosDAO(view.getContext());
+
+            EditText txtNomeProduto = cvAdcionarProduto.findViewById(R.id.nome_produto_edicao);
+            EditText txtValorProduto = cvAdcionarProduto.findViewById(R.id.valor_produto_atras);
+            EditText txtMarcaProduto = cvAdcionarProduto.findViewById(R.id.marca_produto_edicao);
+            EditText txtQuantidadeProduto = cvAdcionarProduto.findViewById(R.id.quantidade_produto_edicao);
+            EditText txtDescricaoProduto = cvAdcionarProduto.findViewById(R.id.complemento_produto_edicao);
+            EditText txtMedidaProduto = cvAdcionarProduto.findViewById(R.id.medida_produto_edicao);
+            Spinner spinTipoAtras = cvAdcionarProduto.findViewById(R.id.tipo_produto_edicao);
+
+            String nome = txtNomeProduto.getText().toString();
+            Double valor = Double.parseDouble(txtValorProduto.getText().toString());
+            String marca = txtMarcaProduto.getText().toString();
+            int quant = Integer.parseInt(txtQuantidadeProduto.getText().toString());
+            String complemento = txtDescricaoProduto.getText().toString();
+            String medida = txtMedidaProduto.getText().toString();
+            String tipo = spinTipoAtras.getSelectedItem().toString();
+            Produto p = new Produto(0,R.drawable.img1,nome,marca,complemento,medida,valor,quant,tipo);
+            if(produtosDAO.createProduto(p)){
+                produtoArrayList.add(p);
+                mAdapter.notifyDataSetChanged();
+            }else{
+                Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG);
+            }
+            txtDescricaoProduto.setText("");
+            txtMarcaProduto.setText("");
+            txtMedidaProduto.setText("");
+            txtValorProduto.setText("");
+            txtQuantidadeProduto.setText("");
+            txtNomeProduto.setText("");
+            cvAdcionarProduto.setVisibility(View.GONE);
+            btnAdcionarProduto.setVisibility(view.VISIBLE);
+            mAdapter.notifyDataSetChanged();
+        }
+    };
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

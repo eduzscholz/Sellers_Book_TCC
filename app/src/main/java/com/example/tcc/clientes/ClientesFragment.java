@@ -102,6 +102,7 @@ public class ClientesFragment extends Fragment {
                 txtCpfCliente.setText("");
                 cvAdcionarCliente.setVisibility(View.GONE);
                 btnAdcionarCliente.setVisibility(view.VISIBLE);
+                mAdapter.notifyDataSetChanged();
             }
         });
 

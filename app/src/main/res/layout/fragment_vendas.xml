@@ -10,12 +10,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lista_vendas"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:listitem="@layout/linha_vendas">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
         <ImageButton
             android:id="@+id/adcionar_venda"
             android:layout_width="75dp"
             android:layout_height="75dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginBottom="50dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginBottom="25dp"
             android:background="@drawable/round_button"
             android:contentDescription="@string/adcionar_produto"
             android:elevation="8dp"
@@ -23,13 +33,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/lista_vendas"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:listitem="@layout/linha_vendas" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

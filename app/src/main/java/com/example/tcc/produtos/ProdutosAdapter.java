@@ -128,19 +128,19 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
 
 
     //VIEW HOLDER GUARDA É O QUE GUARDA O CONTEUDO DAS LINHAS DA LISTVIEW
-    public static class ProdutosViewHolder extends RecyclerView.ViewHolder {
+    public static class ProdutosViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         //COMPONENTES DA LINHA DA LISTA QUE O VIEW HOLDER DEVE PREENCHER EM ITEM_PRODUTO
         private final ImageView imgProdutof,imgProdutoa;
         private final TextView qntProdutof,  precoProdutof, marcaProdutof, nomeProdutof, descricaof, tipof, unidadef;
-        private final CardView cardViewFrente,cardViewAtras;
+        private final CardView cardViewAtras;
         private final Button btnEditar,btnCancelar, btnRemover, btnSalvar;
         private final EditText  precoProdutoa, marcaProdutoa, nomeProdutoa, descricaoa, qntProdutoa, unidadea;
         private final Spinner tipoa;
 
 
         //CONTRUTOR CONECTA COM OS COMPONENTES DE ITEMVIEW(ITEM_PRODUTO)
-        public ProdutosViewHolder(@NonNull View itemView){
+        public ProdutosViewHolder(@NonNull View itemView) {
             super(itemView);
             imgProdutof = itemView.findViewById(R.id.imagem_produto_detalhes);
             qntProdutof = itemView.findViewById(R.id.quantidade_produto_detalhes);
@@ -150,7 +150,6 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
             descricaof = itemView.findViewById(R.id.complemento_produto_detalhes);
             tipof = itemView.findViewById(R.id.tipo_produto_detalhes);
             unidadef = itemView.findViewById(R.id.unidade_produto_detalhes);
-            cardViewFrente = itemView.findViewById(R.id.cardView_produto_detalhes);
             cardViewAtras = itemView.findViewById(R.id.cardView_produto_edicao);
             imgProdutoa = itemView.findViewById(R.id.imagem_produto_edicao);
             qntProdutoa = itemView.findViewById(R.id.quantidade_produto_edicao);
@@ -165,16 +164,15 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
             btnRemover = itemView.findViewById(R.id.remover_produto);
             btnSalvar = itemView.findViewById(R.id.salvar_produto);
             //ABRE OS DETALHES DO PRODUTO QUANDO CLICA NELE
-            cardViewFrente.setOnClickListener(new View.OnClickListener() {    //
-                @Override
-                public void onClick(View view) {
-                    if(view.findViewById(R.id.detalhes_produto).getVisibility()==view.VISIBLE){
-                        view.findViewById(R.id.detalhes_produto).setVisibility(view.GONE);
-                    }else {
-                        view.findViewById(R.id.detalhes_produto).setVisibility(view.VISIBLE);
-                    }
-                }
-            });
+            itemView.setOnClickListener(this);
+        }
+        @Override
+        public void onClick(View view) {
+            if(view.findViewById(R.id.detalhes_produto).getVisibility()==view.VISIBLE){
+                view.findViewById(R.id.detalhes_produto).setVisibility(view.GONE);
+            }else {
+                view.findViewById(R.id.detalhes_produto).setVisibility(view.VISIBLE);
+            }
         }
     }
 }
