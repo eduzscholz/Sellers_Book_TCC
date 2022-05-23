@@ -1,6 +1,8 @@
 package com.example.tcc.vendas.adicionar;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tcc.R;
 import com.example.tcc.produtos.Produto;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 
 public class ProdutosVendaAdapter extends RecyclerView.Adapter<ProdutosVendaAdapter.ProdutoVendaViewHolder> {
@@ -40,8 +43,11 @@ public class ProdutosVendaAdapter extends RecyclerView.Adapter<ProdutosVendaAdap
 
     @Override
     public void onBindViewHolder(@NonNull ProdutosVendaAdapter.ProdutoVendaViewHolder holder, int position) {
+        ByteArrayInputStream imagemStream = new ByteArrayInputStream(produtos.get(position).getImg());
+        Bitmap bitmap = BitmapFactory.decodeStream(imagemStream);
+
         holder.nomeItemPedido.setText(produtos.get(position).getNome());
-        holder.imagemItemPedido.setImageResource(produtos.get(position).getImg());
+        holder.imagemItemPedido.setImageBitmap(bitmap);
         holder.quantidadeItemPedido.setText(String.valueOf(produtos.get(position).getQuantidade()));
         holder.valorItemPedido.setText(String.valueOf(produtos.get(position).getPreco()));
     }

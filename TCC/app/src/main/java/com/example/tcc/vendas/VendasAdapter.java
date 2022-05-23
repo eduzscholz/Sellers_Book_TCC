@@ -16,14 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tcc.R;
-import com.example.tcc.clientes.Cliente;
-import com.example.tcc.clientes.ClientesDAO;
-import com.example.tcc.produtos.Produto;
-import com.example.tcc.produtos.ProdutosAdapter;
-import com.example.tcc.produtos.ProdutosDAO;
 import com.example.tcc.vendas.itemPedido.ItemPedido;
 import com.example.tcc.vendas.itemPedido.ItemPedidoAdapter;
-import com.example.tcc.vendas.itemPedido.ItemPedidoDAO;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.text.DecimalFormat;
@@ -56,8 +50,6 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.VendasView
     @Override
     public void onBindViewHolder(@NonNull VendasAdapter.VendasViewHolder holder, int position) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(holder.vendasRV.getContext());
-        ClientesDAO clientesDAO = new ClientesDAO(context);
-        Cliente c = clientesDAO.readOneClienteID(vendaArrayList.get(position).getClienteID());
         double valorTotal=0;
         VendasDAO vendasDAO = new VendasDAO(context);
         itemPedidoArrayList = vendaArrayList.get(position).getItemPedidoArrayList();
@@ -79,7 +71,7 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.VendasView
         }else{
             holder.dataPagamento.setText(simpleDateFormat.format(date));
         }
-        holder.nomeCliente.setText(c.getNome());
+        holder.nomeCliente.setText(vendaArrayList.get(position).getNomeCliente());
         holder.pagamento.setChecked(date!=null ? true : false);
 
         ItemPedidoAdapter mAdapter = new ItemPedidoAdapter(context, itemPedidoArrayList);
@@ -92,7 +84,7 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.VendasView
             @Override
             public void onClick(View view) {
                 MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
-                dialog .setTitle("Deseja remover esse cliente?")
+                dialog .setTitle("Deseja apagar essa venda?")
                         .setNegativeButton("Não",null)
                         .setPositiveButton("Sim", new DialogInterface.OnClickListener(){
                             @Override

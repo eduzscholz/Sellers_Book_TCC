@@ -46,10 +46,7 @@ public class ItemPedidoDAO extends SQLiteOpenHelper{
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        String sql = "DROP TABLE IF EXISTS " + TABELA;
 
-        sqLiteDatabase.execSQL(sql);
-        onCreate(sqLiteDatabase);
     }
 
     public boolean createItemPedido(ItemPedido itemPedido){

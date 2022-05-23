@@ -1,6 +1,8 @@
 package com.example.tcc.vendas.adicionar;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,20 +14,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tcc.R;
 import com.example.tcc.produtos.Produto;
-import com.example.tcc.produtos.ProdutosDAO;
-import com.example.tcc.vendas.itemPedido.ItemPedido;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 
 public class ItemPedidoVendaAdapter  extends RecyclerView.Adapter<ItemPedidoVendaAdapter.ItemPedidoVendaViewHolder> {
 
     Context context;
-    ArrayList<Produto> itemPedidos = new ArrayList<>();
+    ArrayList<Produto> carrinho = new ArrayList<>();
     OnClickItemPedidoListener onClickItemPedidoListener;
 
-    public ItemPedidoVendaAdapter(Context context, ArrayList<Produto> itemPedidos, OnClickItemPedidoListener onClickItemPedidoListener){
+    public ItemPedidoVendaAdapter(Context context, ArrayList<Produto> carrinho, OnClickItemPedidoListener onClickItemPedidoListener){
         this.context=context;
-        this.itemPedidos=itemPedidos;
+        this.carrinho = carrinho;
         this.onClickItemPedidoListener=onClickItemPedidoListener;
     }
     @NonNull
@@ -37,15 +38,18 @@ public class ItemPedidoVendaAdapter  extends RecyclerView.Adapter<ItemPedidoVend
 
     @Override
     public void onBindViewHolder(@NonNull ItemPedidoVendaAdapter.ItemPedidoVendaViewHolder holder, int position) {
-        holder.nomeItemPedido.setText(itemPedidos.get(position).getNome());
-        holder.imagemItemPedido.setImageResource(itemPedidos.get(position).getImg());
-        holder.quantidadeItemPedido.setText(String.valueOf(itemPedidos.get(position).getQuantidade()));
-        holder.valorItemPedido.setText(String.valueOf(itemPedidos.get(position).getPreco()));
+        ByteArrayInputStream imagemStream = new ByteArrayInputStream(carrinho.get(position).getImg());
+        Bitmap bitmap = BitmapFactory.decodeStream(imagemStream);
+
+        holder.nomeItemPedido.setText(carrinho.get(position).getNome());
+        holder.imagemItemPedido.setImageBitmap(bitmap);
+        holder.quantidadeItemPedido.setText(String.valueOf(carrinho.get(position).getQuantidade()));
+        holder.valorItemPedido.setText(String.valueOf(carrinho.get(position).getPreco()));
     }
 
     @Override
     public int getItemCount() {
-        return itemPedidos.size();
+        return carrinho.size();
     }
 
     public class ItemPedidoVendaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

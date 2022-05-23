@@ -1,14 +1,16 @@
 package com.example.tcc.produtos;
 
+import android.graphics.Bitmap;
+
 //CLASSE DOS PRODUTOS
 public class Produto {
-    private int img;    //APONTA PARA A IMAGEM DENTRO DOS AQUIVOS
+    private byte[] img;    //IMAGEM DO PRODUTO
     private String nome, marca, complemento, medida, tipoDeProduto;
     private double preco;
     private int quantidade;
     private int IDProduto;
 
-    public Produto(int id, int img, String nome, String marca, String complemento, String medida, double preco, int quantidade, String tipo) {
+    public Produto(int id, byte[] img, String nome, String marca, String complemento, String medida, double preco, int quantidade, String tipo) {
         this.img = img;
         this.nome = nome;
         this.marca = marca;
@@ -53,11 +55,11 @@ public class Produto {
         this.IDProduto = IDProduto;
     }
 
-    public int getImg() {
+    public byte[] getImg() {
         return img;
     }
 
-    public void setImg(int img) {
+    public void setImg(byte[] img) {
         this.img = img;
     }
 

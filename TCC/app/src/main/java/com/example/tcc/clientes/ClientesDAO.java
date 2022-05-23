@@ -43,10 +43,7 @@ public class ClientesDAO extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        String sql = "DROP TABLE IF EXISTS " + TABELA;
 
-        sqLiteDatabase.execSQL(sql);
-        onCreate(sqLiteDatabase);
     }
 
     public boolean createCliente(Cliente cliente){
@@ -98,6 +95,19 @@ public class ClientesDAO extends SQLiteOpenHelper {
 
         cursor.close();
         return cli;
+    }
+
+    public String readOneClienteIDNome(int buscaID){
+        Cliente cli;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABELA, new String[]{COL_NOME},COL_ID + " = ?", new String[] {String.valueOf(buscaID)}, null, null, null);
+        cursor.moveToNext();
+
+        String nome= cursor.getString(cursor.getColumnIndexOrThrow(COL_NOME));
+
+        cursor.close();
+        return nome;
     }
 
     //BUSCA POR NOME

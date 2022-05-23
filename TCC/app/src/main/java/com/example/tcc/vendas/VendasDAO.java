@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.tcc.clientes.ClientesDAO;
 import com.example.tcc.vendas.itemPedido.ItemPedido;
 import com.example.tcc.vendas.itemPedido.ItemPedidoDAO;
 
@@ -51,10 +52,7 @@ public class VendasDAO extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        String sql = "DROP TABLE IF EXISTS " + TABELA;
 
-        sqLiteDatabase.execSQL(sql);
-        onCreate(sqLiteDatabase);
     }
 
     public boolean createVenda(Venda venda){
@@ -89,6 +87,7 @@ public class VendasDAO extends SQLiteOpenHelper {
     public ArrayList<Venda> readAllVenda(){
         ArrayList<Venda> vendaArrayList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
+        ClientesDAO clientesDAO = new ClientesDAO(context);
 
         Cursor cursor = db.query(TABELA, null, null, null, null, null, COL_DATA_COMPRA + " ASC");
         Date dataPagamento, dataCompra, previsao;
@@ -106,8 +105,9 @@ public class VendasDAO extends SQLiteOpenHelper {
                 }
                 previsao = simpleDateFormat.parse(cursor.getString(cursor.getColumnIndexOrThrow(COL_PREVISAO)));
                 int idCliente = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID_CLIENTE));
+                String nomeCliente = clientesDAO.readOneClienteIDNome(idCliente);
                 ArrayList<ItemPedido> itemPedidoArrayList = itemPedidoDAO.readManyItemPedidoVendaID(id);
-                vendaArrayList.add(new Venda(id,dataCompra,dataPagamento,previsao,idCliente,itemPedidoArrayList));
+                vendaArrayList.add(new Venda(id,nomeCliente,dataCompra,dataPagamento,previsao,idCliente,itemPedidoArrayList));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -118,6 +118,7 @@ public class VendasDAO extends SQLiteOpenHelper {
     public ArrayList<Venda> readManyVendaNome(String nome){
         ArrayList<Venda> vendaArrayList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
+        ClientesDAO clientesDAO = new ClientesDAO(context);
 
         Cursor cursor = db.rawQuery("SELECT * FROM "+TABELA+" AS v INNER JOIN clientes AS c ON c.clienteID=v.vendaID AND c.nome LIKE '?'",new String[] {nome});
         db.close();
@@ -132,8 +133,9 @@ public class VendasDAO extends SQLiteOpenHelper {
                 dataPagamento = simpleDateFormat.parse(cursor.getString(cursor.getColumnIndexOrThrow(COL_DATA_PAGAMENTO)));
                 previsao = simpleDateFormat.parse(cursor.getString(cursor.getColumnIndexOrThrow(COL_PREVISAO)));
                 int idCliente = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID_CLIENTE));
+                String nomeCliente = clientesDAO.readOneClienteIDNome(idCliente);
                 ArrayList<ItemPedido> itemPedidoArrayList = itemPedidoDAO.readManyItemPedidoVendaID(id);
-                vendaArrayList.add(new Venda(id,dataCompra,dataPagamento,previsao,idCliente,itemPedidoArrayList));
+                vendaArrayList.add(new Venda(id,nomeCliente,dataCompra,dataPagamento,previsao,idCliente,itemPedidoArrayList));
             } catch (ParseException e) {
                 e.printStackTrace();
             }

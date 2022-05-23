@@ -19,9 +19,9 @@ public class MainActivity extends AppCompatActivity {
     //TITULOS DAS TABS
     private final String[] titulos = {"INICIO","PRODUTOS","VENDAS","CLIENTES"};
 
-    //todo camera
+    //todo camera                                       X
     //TODO BARRA DE PESQUISA
-    //TODO ARRUMAR CLIENTE configurar banco
+    //TODO ARRUMAR CLIENTE configurar banco             X
     //TODO NOTIFICAÇÃO
     //TODO TELA INICIAL
 
@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //LINKA O MAIN ACTIVITY COM O ACTIVY_MAIN.XML
         setContentView(R.layout.activity_main);
+        new CriarBancoSQL(this);
 
         Toolbar Toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(Toolbar);

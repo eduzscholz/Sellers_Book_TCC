@@ -38,7 +38,7 @@ import java.util.Date;
 public class AdicionarVendaProduto extends AppCompatActivity  implements ProdutosVendaAdapter.OnClickProdutoListener,ItemPedidoVendaAdapter.OnClickItemPedidoListener{
 
     private ArrayList<Produto> produtos;
-    private ArrayList<Produto> produtoItemPedidos = new ArrayList<>();
+    private ArrayList<Produto> carrinho = new ArrayList<>();
     private Cliente cliente;
     private ClientesDAO clientesDAO;
     private RecyclerView rvProdutos, rvItemPedido;
@@ -64,7 +64,7 @@ public class AdicionarVendaProduto extends AppCompatActivity  implements Produto
         rvItemPedido = findViewById(R.id.rv_itempedido_add_venda);
         rvProdutos = findViewById(R.id.rv_produto_add_venda);
         adpProdutos = new ProdutosVendaAdapter(this,produtos,this::onClickProduto);
-        adpItemPedido = new ItemPedidoVendaAdapter(this, produtoItemPedidos,this::onClickItemPedido);
+        adpItemPedido = new ItemPedidoVendaAdapter(this, carrinho,this::onClickItemPedido);
         rvProdutos.setLayoutManager(layoutManagerProdutos);
         rvItemPedido.setLayoutManager(layoutManagerItemPedido);
         rvProdutos.setAdapter(adpProdutos);
@@ -78,7 +78,7 @@ public class AdicionarVendaProduto extends AppCompatActivity  implements Produto
     private View.OnClickListener datePicker = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if(produtoItemPedidos.size()==0){
+            if(carrinho.size()==0){
                 MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(view.getContext());
                 dialog .setTitle("Voce precisa adicionar produtos para salvar")
                         .setPositiveButton("OK", null)
@@ -107,16 +107,16 @@ public class AdicionarVendaProduto extends AppCompatActivity  implements Produto
         public void onDateSet(DatePicker datePicker, int y, int m, int d) {
             VendasDAO vendasDAO = new VendasDAO(getBaseContext());
             ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO(getBaseContext());
-            Date dataPrevisao;
+            Date dataPrevisao = new Date();
             Date dataAtual = new Date();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/DD");
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
             try {
-                dataPrevisao = simpleDateFormat.parse(y+"/"+m+1+"/"+d);
-                Venda v = new Venda(0, dataAtual, null, dataPrevisao, cliente.getID(), null);
+                dataPrevisao = simpleDateFormat.parse(y+"/"+(m+1)+"/"+d);
+                Venda v = new Venda(0,cliente.getNome(), dataAtual, null, dataPrevisao, cliente.getID(), null);
                 vendasDAO.createVenda(v);
                 int idVenda= vendasDAO.ultimoID();
-                for(int i = 0; i < produtoItemPedidos.size(); i++){
-                    ItemPedido ip = new ItemPedido(0, produtoItemPedidos.get(i).getQuantidade(), produtoItemPedidos.get(i).getPreco(), produtoItemPedidos.get(i).getIDProduto(),idVenda);
+                for(int i = 0; i < carrinho.size(); i++){
+                    ItemPedido ip = new ItemPedido(0, carrinho.get(i).getQuantidade(), carrinho.get(i).getPreco(), carrinho.get(i).getIDProduto(),idVenda);
                     itemPedidoDAO.createItemPedido(ip);
                     produtosDAO.updateReduzQuantidade(ip.getProdutoID(),ip.getQuantidade());
                 }
@@ -153,7 +153,7 @@ public class AdicionarVendaProduto extends AppCompatActivity  implements Produto
                 .setPositiveButton("Excluir", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        produtoItemPedidos.remove(position);
+                        carrinho.remove(position);
                         adpItemPedido.notifyDataSetChanged();
                     }
                 });
@@ -188,14 +188,14 @@ public class AdicionarVendaProduto extends AppCompatActivity  implements Produto
                 if(valor==0){
                     Toast.makeText(view.getContext(), "Valor invalido",Toast.LENGTH_LONG).show();
                 }else{
-                    for(int i = 0; i< produtoItemPedidos.size(); i++){
-                        if(produtoItemPedidos.get(i).getIDProduto()==p.getIDProduto()){
-                            produtoItemPedidos.get(i).setQuantidade(produtoItemPedidos.get(i).getQuantidade()+valor);
+                    for(int i = 0; i< carrinho.size(); i++){
+                        if(carrinho.get(i).getIDProduto()==p.getIDProduto()){
+                            carrinho.get(i).setQuantidade(carrinho.get(i).getQuantidade()+valor);
                             chave=false;
                             break;
                         }
                     }if (chave){
-                        produtoItemPedidos.add(new Produto(p.getIDProduto(),p.getImg(),p.getNome(),p.getMarca(),p.getComplemento(),p.getMedida(),p.getPreco(),valor,p.getTipoDeProduto()));
+                        carrinho.add(new Produto(p.getIDProduto(),p.getImg(),p.getNome(),p.getMarca(),p.getComplemento(),p.getMedida(),p.getPreco(),valor,p.getTipoDeProduto()));
                     }
                     p.setQuantidade(p.getQuantidade()-valor);
                     adpItemPedido.notifyDataSetChanged();

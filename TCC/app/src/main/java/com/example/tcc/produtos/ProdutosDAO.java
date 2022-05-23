@@ -41,16 +41,13 @@ public class ProdutosDAO extends SQLiteOpenHelper{
                                                              + COL_TIPO + " TEXT, "
                                                              + COL_COMPLEMENTO + " TEXT, "
                                                              + COL_MEDIDA + " TEXT, "
-                                                             + COL_IMG + " INT);";
+                                                             + COL_IMG + " BLOB);";
         sqLiteDatabase.execSQL(createTable);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        String sql = "DROP TABLE IF EXISTS " + TABELA;
 
-        sqLiteDatabase.execSQL(sql);
-        onCreate(sqLiteDatabase);
     }
 
     //INSERE LINHA NA TABELA
@@ -81,7 +78,7 @@ public class ProdutosDAO extends SQLiteOpenHelper{
 
         while(cursor.moveToNext()){
             int id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID));
-            int img = cursor.getInt(cursor.getColumnIndexOrThrow(COL_IMG));
+            byte[] img = cursor.getBlob(cursor.getColumnIndexOrThrow(COL_IMG));
             String desc = cursor.getString(cursor.getColumnIndexOrThrow(COL_COMPLEMENTO));
             String marca = cursor.getString(cursor.getColumnIndexOrThrow(COL_MARCA));
             String nome = cursor.getString(cursor.getColumnIndexOrThrow(COL_NOME));
@@ -104,7 +101,7 @@ public class ProdutosDAO extends SQLiteOpenHelper{
         cursor.moveToNext();
 
         int id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID));
-        int img = cursor.getInt(cursor.getColumnIndexOrThrow(COL_IMG));
+        byte[] img = cursor.getBlob(cursor.getColumnIndexOrThrow(COL_IMG));
         String desc = cursor.getString(cursor.getColumnIndexOrThrow(COL_COMPLEMENTO));
         String marca = cursor.getString(cursor.getColumnIndexOrThrow(COL_MARCA));
         String nome = cursor.getString(cursor.getColumnIndexOrThrow(COL_NOME));
@@ -126,7 +123,7 @@ public class ProdutosDAO extends SQLiteOpenHelper{
 
         while(cursor.moveToNext()){
             int id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID));
-            int img = cursor.getInt(cursor.getColumnIndexOrThrow(COL_IMG));
+            byte[] img = cursor.getBlob(cursor.getColumnIndexOrThrow(COL_IMG));
             String desc = cursor.getString(cursor.getColumnIndexOrThrow(COL_COMPLEMENTO));
             String marca = cursor.getString(cursor.getColumnIndexOrThrow(COL_MARCA));
             String nome = cursor.getString(cursor.getColumnIndexOrThrow(COL_NOME));
@@ -141,43 +138,39 @@ public class ProdutosDAO extends SQLiteOpenHelper{
         db.close();
         return produtoArrayList;
     }
-    //ATUALIZA UMA LINHA COM ESCOLHA DOS DADOS
-    public boolean updateProduto(int id, String[] coluna, String[] dados){
+
+    //ATUALIZA TODOS OS DADOS DE UMA LINHA
+    public boolean updateProduto(int id, String nome, String marca, String complemento, Double preco, String medida, int quantidade, String tipo, byte[] imagem){
         ContentValues cv = new ContentValues();
         String selection = COL_ID + " = ?";
         String[] selectionArgs = {String.valueOf(id)};
         SQLiteDatabase db = getWritableDatabase();
 
-        for(int i=0;i< coluna.length;i++){
-            cv.put(coluna[i],dados[i]);
-        }
-        int count = db.update(TABELA,cv,selection,selectionArgs);
+        cv.put(COL_NOME,nome);
+        cv.put(COL_MARCA,marca);
+        cv.put(COL_COMPLEMENTO,complemento);
+        cv.put(COL_PRECO,preco);
+        cv.put(COL_MEDIDA,medida);
+        cv.put(COL_QUANTIDADE,quantidade);
+        cv.put(COL_TIPO,tipo);
+        cv.put(COL_IMG,imagem);
 
+        int count = db.update(TABELA,cv,selection,selectionArgs);
         db.close();
         return count!=0;
-    }
-    //ATUALIZA TODOS OS DADOS DE UMA LINHA
-    public boolean updateProduto(int id, String nome, String marca, String complemento, Double preco, String medida, int quantidade, String tipo, int imagem){
-
-        String qua = String.valueOf(quantidade);
-        String img = String.valueOf(imagem);
-        String pre = String.valueOf(preco);
-
-        return  updateProduto(id, new String[] {COL_NOME,COL_MARCA,COL_COMPLEMENTO,COL_PRECO,COL_MEDIDA,COL_QUANTIDADE,COL_TIPO,COL_IMG}, new String[] {nome,marca,complemento,pre,medida,qua,tipo,img});
     }
     //REDUZ A QUANTIDADE DO PRODUTO TODO TESTE UNITARIO
     public boolean updateReduzQuantidade(int id, int quantidade){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
-        int count= 0;
             Cursor cursor = db.query(TABELA, null, COL_ID + " = ?", new String[] {String.valueOf(id)}, null, null, null);
             cursor.moveToNext();
             int quant = cursor.getInt(cursor.getColumnIndexOrThrow(COL_QUANTIDADE));
 
             quant = quant - quantidade;
             cv.put(COL_QUANTIDADE, quant);
-            count = db.update(TABELA, cv, COL_ID + " = ?", new String[]{String.valueOf(id)});
+            int count = db.update(TABELA, cv, COL_ID + " = ?", new String[]{String.valueOf(id)});
             cursor.close();
 
         db.close();

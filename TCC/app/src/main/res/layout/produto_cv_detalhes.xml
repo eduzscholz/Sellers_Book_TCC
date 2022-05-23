@@ -37,8 +37,8 @@
         android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ImageContrastCheck"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:srcCompat="@drawable/ic_baseline_image_24"
+        tools:ignore="ImageContrastCheck" />
 
     <TextView
         android:id="@+id/nome_produto_detalhes"

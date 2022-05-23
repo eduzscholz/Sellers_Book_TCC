@@ -1,6 +1,8 @@
 package com.example.tcc.vendas.itemPedido;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import com.example.tcc.R;
 import com.example.tcc.produtos.Produto;
 import com.example.tcc.produtos.ProdutosDAO;
 
+import java.io.ByteArrayInputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -38,11 +41,13 @@ public class ItemPedidoAdapter extends RecyclerView.Adapter<ItemPedidoAdapter.It
         ProdutosDAO produtosDAO = new ProdutosDAO(context);
         DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
         Produto p = produtosDAO.readOneProdutoID(itemPedidoArrayList.get(position).getProdutoID());
+        ByteArrayInputStream imagemStream = new ByteArrayInputStream(p.getImg());
+        Bitmap bitmap = BitmapFactory.decodeStream(imagemStream);
 
         holder.valorItemPedido.setText(decimalFormat.format(itemPedidoArrayList.get(position).getPreco()));
         holder.quantidadeItemPedido.setText(String.valueOf(itemPedidoArrayList.get(position).getQuantidade()));
         holder.nomeItemPedido.setText(p.getNome());
-        holder.imagemItemPedido.setImageResource(p.getImg());
+        holder.imagemItemPedido.setImageBitmap(bitmap);
 
     }
 

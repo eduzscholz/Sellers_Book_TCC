@@ -8,16 +8,26 @@ import java.util.Date;
 public class Venda {
     private int IDVenda;
     private Date dataCompra, dataPagamento, previsao;
+    private String nomeCliente;
     private int clienteID;
     private ArrayList<ItemPedido> itemPedidoArrayList;
 
-    public Venda(int IDVenda, Date dataCompra, Date dataPagamento, Date previsao, int clienteID, ArrayList<ItemPedido> itemPedidoArrayList) {
+    public Venda(int IDVenda, String nomeCliente, Date dataCompra, Date dataPagamento, Date previsao, int clienteID, ArrayList<ItemPedido> itemPedidoArrayList) {
         this.IDVenda = IDVenda;
         this.dataCompra = dataCompra;
         this.dataPagamento = dataPagamento;
         this.previsao = previsao;
         this.clienteID = clienteID;
         this.itemPedidoArrayList = itemPedidoArrayList;
+        this.nomeCliente = nomeCliente;
+    }
+
+    public String getNomeCliente() {
+        return nomeCliente;
+    }
+
+    public void setNomeCliente(String nomeCliente) {
+        this.nomeCliente = nomeCliente;
     }
 
     public int getIDVenda() {
