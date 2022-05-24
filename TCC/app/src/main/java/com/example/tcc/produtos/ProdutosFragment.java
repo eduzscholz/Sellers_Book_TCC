@@ -43,8 +43,6 @@ public class ProdutosFragment extends Fragment implements ProdutosAdapter.OnClic
     private RecyclerView.LayoutManager layoutManager;
 
     //COMPONENTES CARDVIEW DE ADICIONAR PRODUTO
-    private Button btnSalvarProduto, btnCancelar;
-    private CardView cvAdcionarProduto;
     private ImageButton btnAdcionarProduto;
     private ImageView imageView;
 
@@ -63,9 +61,6 @@ public class ProdutosFragment extends Fragment implements ProdutosAdapter.OnClic
         //ACHA E CONECTA COM OS COMPONENTES DA TELA
         recyclerView = view.findViewById(R.id.lista_produtos);
         btnAdcionarProduto = view.findViewById(R.id.adcionar_produto);
-        btnSalvarProduto = view.findViewById(R.id.salvar_produto);
-        btnCancelar = view.findViewById(R.id.cancelar_produto);
-        cvAdcionarProduto = view.findViewById(R.id.cardview_adicionar_produto);
 
         tirarFoto = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
@@ -100,8 +95,6 @@ public class ProdutosFragment extends Fragment implements ProdutosAdapter.OnClic
         recyclerView.setAdapter(mAdapter);
         //BOTAO QUE FAZ APARECER O CARDVIEW DE ADICIONAR PRODUTO
         btnAdcionarProduto.setOnClickListener(adicionarProduto);
-        //SALVA O PROUTO NO BANCO DE DADOS
-        btnSalvarProduto.setOnClickListener(salvarProduto);
 
         return view;
     }
@@ -116,68 +109,63 @@ public class ProdutosFragment extends Fragment implements ProdutosAdapter.OnClic
 
             ImageView imageView = dialog.findViewById(R.id.imagem_produto_edicao);
             imageView.setOnClickListener(view1 -> onClickImagem(imageView));
+
             Spinner spinner = dialog.findViewById(R.id.tipo_produto_edicao);
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view.getContext(),R.array.tipo, android.R.layout.simple_spinner_dropdown_item);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(adapter);
-            Button buttonSalvar = dialog.findViewById(R.id.salvar_produto);
-            buttonSalvar.setOnClickListener(salvarProduto);
+
             Button buttonCancelar = dialog.findViewById(R.id.cancelar_produto);
             buttonCancelar.setOnClickListener(view12 -> dialog.cancel());
+            Button buttonSalvar = dialog.findViewById(R.id.salvar_produto);
+            buttonSalvar.setOnClickListener(view13 -> {
+                ProdutosDAO produtosDAO = new ProdutosDAO(view13.getContext());
+
+                EditText txtNomeProduto = dialog.findViewById(R.id.nome_produto_edicao);
+                EditText txtValorProduto = dialog.findViewById(R.id.valor_produto_atras);
+                EditText txtMarcaProduto = dialog.findViewById(R.id.marca_produto_edicao);
+                EditText txtQuantidadeProduto = dialog.findViewById(R.id.quantidade_produto_edicao);
+                EditText txtDescricaoProduto = dialog.findViewById(R.id.complemento_produto_edicao);
+                EditText txtMedidaProduto = dialog.findViewById(R.id.medida_produto_edicao);
+                Spinner spinTipoProduto = dialog.findViewById(R.id.tipo_produto_edicao);
+                ImageView imageViewProduto = dialog.findViewById(R.id.imagem_produto_edicao);
+
+                BitmapDrawable drawable = (BitmapDrawable) imageViewProduto.getDrawable();
+                Bitmap bitmap = drawable.getBitmap();
+
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG,10,stream);
+                byte imagemBytes[] = stream.toByteArray();
+
+                String nome = txtNomeProduto.getText().toString();
+                Double valor = Double.parseDouble(txtValorProduto.getText().toString());
+                String marca = txtMarcaProduto.getText().toString();
+                int quant = Integer.parseInt(txtQuantidadeProduto.getText().toString());
+                String complemento = txtDescricaoProduto.getText().toString();
+                String medida = txtMedidaProduto.getText().toString();
+                String tipo = spinTipoProduto.getSelectedItem().toString();
+                Produto p = new Produto(0,imagemBytes,nome,marca,complemento,medida,valor,quant,tipo);
+                if(produtosDAO.createProduto(p)){
+                    p.setIDProduto(produtosDAO.ultimoID());
+                    produtoArrayList.add(p);
+                    mAdapter.notifyDataSetChanged();
+                }else{
+                    Toast.makeText(view13.getContext(),"Algo deu errado",Toast.LENGTH_LONG);
+                }
+                txtDescricaoProduto.setText("");
+                txtMarcaProduto.setText("");
+                txtMedidaProduto.setText("");
+                txtValorProduto.setText("");
+                txtQuantidadeProduto.setText("");
+                txtNomeProduto.setText("");
+                imageViewProduto.setImageResource(R.drawable.ic_baseline_add_photo_alternate_24);
+                dialog.cancel();
+                mAdapter.notifyDataSetChanged();
+            });
             dialog.create();
             dialog.show();
         }
     };
-
-    private View.OnClickListener salvarProduto = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            ProdutosDAO produtosDAO = new ProdutosDAO(view.getContext());
-
-            EditText txtNomeProduto = cvAdcionarProduto.findViewById(R.id.nome_produto_edicao);
-            EditText txtValorProduto = cvAdcionarProduto.findViewById(R.id.valor_produto_atras);
-            EditText txtMarcaProduto = cvAdcionarProduto.findViewById(R.id.marca_produto_edicao);
-            EditText txtQuantidadeProduto = cvAdcionarProduto.findViewById(R.id.quantidade_produto_edicao);
-            EditText txtDescricaoProduto = cvAdcionarProduto.findViewById(R.id.complemento_produto_edicao);
-            EditText txtMedidaProduto = cvAdcionarProduto.findViewById(R.id.medida_produto_edicao);
-            Spinner spinTipoProduto = cvAdcionarProduto.findViewById(R.id.tipo_produto_edicao);
-            ImageView imageViewProduto = cvAdcionarProduto.findViewById(R.id.imagem_produto_edicao);
-
-            BitmapDrawable drawable = (BitmapDrawable) imageViewProduto.getDrawable();
-            Bitmap bitmap = drawable.getBitmap();
-
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
-            byte imagemBytes[] = stream.toByteArray();
-
-            String nome = txtNomeProduto.getText().toString();
-            Double valor = Double.parseDouble(txtValorProduto.getText().toString());
-            String marca = txtMarcaProduto.getText().toString();
-            int quant = Integer.parseInt(txtQuantidadeProduto.getText().toString());
-            String complemento = txtDescricaoProduto.getText().toString();
-            String medida = txtMedidaProduto.getText().toString();
-            String tipo = spinTipoProduto.getSelectedItem().toString();
-            Produto p = new Produto(0,imagemBytes,nome,marca,complemento,medida,valor,quant,tipo);
-            if(produtosDAO.createProduto(p)){
-                produtoArrayList.add(p);
-                mAdapter.notifyDataSetChanged();
-            }else{
-                Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG);
-            }
-            txtDescricaoProduto.setText("");
-            txtMarcaProduto.setText("");
-            txtMedidaProduto.setText("");
-            txtValorProduto.setText("");
-            txtQuantidadeProduto.setText("");
-            txtNomeProduto.setText("");
-            imageViewProduto.setImageResource(R.drawable.ic_baseline_add_photo_alternate_24);
-            cvAdcionarProduto.setVisibility(View.GONE);
-            btnAdcionarProduto.setVisibility(view.VISIBLE);
-            mAdapter.notifyDataSetChanged();
-        }
-    };
-
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

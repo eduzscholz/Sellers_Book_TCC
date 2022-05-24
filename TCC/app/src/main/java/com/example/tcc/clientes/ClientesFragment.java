@@ -1,5 +1,6 @@
 package com.example.tcc.clientes;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -26,8 +28,6 @@ public class ClientesFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
-    private Button btnSalvarCliente, btnCancelar;
-    private CardView cvAdcionarCliente;
     private ImageButton btnAdcionarCliente;
 
     //ARRAYLIST DE CLIENTES PARA PREENCHER O A LISTA
@@ -43,47 +43,42 @@ public class ClientesFragment extends Fragment {
         //ACHA O RECYCLER VIEW E OS COMPONENTES
         recyclerView = view.findViewById(R.id.lista_cliente);
         btnAdcionarCliente = view.findViewById(R.id.adcionar_cliente);
-        btnSalvarCliente = view.findViewById(R.id.salvar_cliente);
-        cvAdcionarCliente = view.findViewById(R.id.cardview_adcionar_cliente);
-        btnCancelar = view.findViewById(R.id.cancelar_cliente);
 
         //RECOMENDADO PELO GOOGLE
         recyclerView.setHasFixedSize(true);
-
 
         //INICIALIZA E SETA O LAYOUT MANAGER
         layoutManager = new LinearLayoutManager(this.getContext());
         recyclerView.setLayoutManager(layoutManager);
 
         clienteArrayList = clientesDAO.readAllClientes();
+        btnAdcionarCliente.setOnClickListener(adicionarCliente);
 
-        btnAdcionarCliente.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(cvAdcionarCliente.getVisibility()==View.GONE){
-                    cvAdcionarCliente.setVisibility(view.VISIBLE);
-                    btnAdcionarCliente.setVisibility(view.GONE);
-                }
-            }
-        });
+        //CRIA E SETA O ADAPTER
+        mAdapter = new ClientesAdapter(this.getContext(), clienteArrayList);
+        recyclerView.setAdapter(mAdapter);
 
-        btnCancelar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(cvAdcionarCliente.getVisibility()==View.VISIBLE){
-                    cvAdcionarCliente.setVisibility(View.GONE);
-                    btnAdcionarCliente.setVisibility(view.VISIBLE);
-                }
-            }
-        });
+        return view;
+    }
 
-        btnSalvarCliente.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EditText txtNomeCliente = cvAdcionarCliente.findViewById(R.id.nome_cliente_edicao);
-                EditText txtContatoCliente = cvAdcionarCliente.findViewById(R.id.contato_cliente_edicao);
-                EditText txtEnderecoCliente = cvAdcionarCliente.findViewById(R.id.endereco_cliente_edicao);
-                EditText txtCpfCliente = cvAdcionarCliente.findViewById(R.id.cpf_cliente_edicao);
+    private View.OnClickListener adicionarCliente = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            ClientesDAO clientesDAO = new ClientesDAO(getContext());
+
+            Dialog dialog = new Dialog(getContext());
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(true);
+            dialog.setContentView(R.layout.dialog_adicionar_cliente);
+
+            Button buttonCancelar = dialog.findViewById(R.id.cancelar_cliente);
+            buttonCancelar.setOnClickListener(view12 -> dialog.cancel());
+            Button buttonSalvar = dialog.findViewById(R.id.salvar_cliente);
+            buttonSalvar.setOnClickListener(view13 -> {
+                EditText txtNomeCliente = dialog.findViewById(R.id.nome_cliente_edicao);
+                EditText txtContatoCliente = dialog.findViewById(R.id.contato_cliente_edicao);
+                EditText txtEnderecoCliente = dialog.findViewById(R.id.endereco_cliente_edicao);
+                EditText txtCpfCliente = dialog.findViewById(R.id.cpf_cliente_edicao);
 
                 String nome = txtNomeCliente.getText().toString();
                 String contato = txtContatoCliente.getText().toString();
@@ -92,6 +87,7 @@ public class ClientesFragment extends Fragment {
 
                 Cliente c = new Cliente(0,nome,cpf,endereco,contato);
                 if(clientesDAO.createCliente(c)){
+                    c.setID(clientesDAO.ultimoID());
                     clienteArrayList.add(c);
                     mAdapter.notifyDataSetChanged();
                 }else{
@@ -101,18 +97,14 @@ public class ClientesFragment extends Fragment {
                 txtContatoCliente.setText("");
                 txtEnderecoCliente.setText("");
                 txtCpfCliente.setText("");
-                cvAdcionarCliente.setVisibility(View.GONE);
-                btnAdcionarCliente.setVisibility(view.VISIBLE);
+                dialog.cancel();
+
                 mAdapter.notifyDataSetChanged();
-            }
-        });
-
-        //CRIA E SETA O ADAPTER
-        mAdapter = new ClientesAdapter(this.getContext(), clienteArrayList);
-        recyclerView.setAdapter(mAdapter);
-
-        return view;
-    }
+            });
+            dialog.create();
+            dialog.show();
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

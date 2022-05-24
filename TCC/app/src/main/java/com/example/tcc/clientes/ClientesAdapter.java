@@ -109,7 +109,8 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Client
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 if(clientesDAO.deleteOneCliente(clienteArrayList.get(holder.getAdapterPosition()).getID())){
-                                    clienteArrayList = clientesDAO.readAllClientes();
+                                    clienteArrayList.remove(holder.getAdapterPosition());
+
                                     notifyDataSetChanged();
                                 }else{
                                     Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG);

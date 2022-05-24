@@ -78,6 +78,15 @@ public class ClientesDAO extends SQLiteOpenHelper {
         return clienteArrayList;
     }
 
+    public int ultimoID(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM "+TABELA+" WHERE "+COL_ID+" = (SELECT MAX("+COL_ID+")  FROM "+TABELA+");", null);
+
+        cursor.moveToNext();
+
+        return cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID));
+    }
+
     public Cliente readOneClienteID(int buscaID){
         Cliente cli;
         SQLiteDatabase db = this.getReadableDatabase();

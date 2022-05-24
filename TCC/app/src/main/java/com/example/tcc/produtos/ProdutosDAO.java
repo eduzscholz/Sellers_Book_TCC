@@ -92,6 +92,16 @@ public class ProdutosDAO extends SQLiteOpenHelper{
         cursor.close();
         return produtoArrayList;
     }
+
+    public int ultimoID(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM "+TABELA+" WHERE "+COL_ID+" = (SELECT MAX("+COL_ID+")  FROM "+TABELA+");", null);
+
+        cursor.moveToNext();
+
+        return cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID));
+    }
+
     //LE UMA LINHA DA TABELA POR ID
     public Produto readOneProdutoID(int buscaID){
         Produto produto;

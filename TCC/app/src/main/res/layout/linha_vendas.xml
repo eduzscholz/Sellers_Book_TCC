@@ -31,7 +31,7 @@
                 android:layout_marginStart="10dp"
                 android:gravity="center|start"
                 android:textSize="20sp"
-                app:layout_constraintStart_toEndOf="@+id/textView2"
+                app:layout_constraintStart_toEndOf="@+id/id_venda"
                 app:layout_constraintTop_toTopOf="@+id/valor_esta_pago_venda"
                 tools:text="nome_cliente" />
 
@@ -74,6 +74,7 @@
                 android:layout_marginEnd="10dp"
                 android:checked="false"
                 android:clickable="false"
+                android:fontFamily="sans-serif-medium"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="R$: 200,00" />
@@ -141,6 +142,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginBottom="5dp"
                 android:text="@string/pago"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toTopOf="@+id/produtos_venda"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -150,6 +152,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
                 android:text="@string/remover"
+                android:textColor="@color/purple_500"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 app:layout_constraintBottom_toBottomOf="@+id/pago_venda"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -161,7 +165,7 @@
                 app:constraint_referenced_ids="txt_data_compra_venda,txt_previsao_venda,divider3,txt_data_pagamento_venda,data_pagamento_venda,data_previsao_venda,data_compra_venda,produtos_venda,pago_venda,remover_venda" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/id_venda"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/tamanho_textos"
                 android:layout_marginStart="10dp"

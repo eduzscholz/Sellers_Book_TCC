@@ -7,13 +7,17 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.tcc.clientes.ClientesFragment;
 import com.example.tcc.produtos.ProdutosFragment;
+import com.example.tcc.vendas.VendasAdapter;
 import com.example.tcc.vendas.VendasFragment;
 
 //ADAPTADOR DO FRAGMENTO PARA O VIEWPAGER
 public class VPAdapater extends FragmentStateAdapter{
 
-    public VPAdapater(@NonNull FragmentActivity fragmentActivity) {
+    VendasAdapter.Pagamento pagamento;
+
+    public VPAdapater(@NonNull FragmentActivity fragmentActivity, VendasAdapter.Pagamento pagamento) {
         super(fragmentActivity);
+        this.pagamento = pagamento;
     }
 
     //QUANDO CRIADO VAI CRIAR COM CADA FRAGMENTO RESPECTIVA TELA NA RESPECTIVA POSIÇÃO
@@ -29,7 +33,7 @@ public class VPAdapater extends FragmentStateAdapter{
                 fragment = new ProdutosFragment();
                 break;
             case 2:
-                fragment = new VendasFragment();
+                fragment = new VendasFragment(pagamento);
                 break;
             case 3:
                 fragment = new ClientesFragment();

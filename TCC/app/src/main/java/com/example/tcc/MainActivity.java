@@ -8,28 +8,27 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 
+import com.example.tcc.vendas.VendasAdapter;
+import com.example.tcc.vendas.VendasFragment;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements VendasAdapter.Pagamento {
 
     //PARTES DO LAYOUT
     private TabLayout tabLayout;
     private ViewPager2 viewPager;
+    private VPAdapater vpAdapater;
     //TITULOS DAS TABS
     private final String[] titulos = {"INICIO","PRODUTOS","VENDAS","CLIENTES"};
 
-    //todo camera                                       X
     //TODO BARRA DE PESQUISA
-    //TODO ARRUMAR CLIENTE configurar banco             X
-    //TODO NOTIFICAÇÃO
     //TODO TELA INICIAL
+    //TODO NOTIFICAÇÃO
 
-    //TODO CLASSE PARA CRIAR O BANCO
     //TODO ATUALIZAR CLIENTES PAGOS
     //TODO QUANTIDADE ZERO
     //TODO PADROES                                       ?
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +37,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         new CriarBancoSQL(this);
 
-        Toolbar Toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(Toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("Bem-Vindo");
         //ACHA OS COMPONENTES NO LAYOUT
         tabLayout = findViewById(R.id.TabLayout);
         viewPager = findViewById(R.id.view_Pager);
         //INICIALIZA O ADAPTADOR DO VIEWPAGER2
-        VPAdapater vpAdapater = new VPAdapater(this);
+        vpAdapater = new VPAdapater(this, this::atualizaCliente);
         //SETA O ADAPTADOR COM O VIEW PAGER
         viewPager.setAdapter(vpAdapater);
         //viewPager.setOffscreenPageLimit(1);
@@ -52,10 +52,17 @@ public class MainActivity extends AppCompatActivity {
         new TabLayoutMediator(tabLayout,viewPager,(tab, position) -> tab.setText(titulos[position])).attach();
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_principal, menu);
         return true;
+    }
+
+    @Override
+    public void atualizaCliente() {
+        vpAdapater.notifyDataSetChanged();
     }
 }

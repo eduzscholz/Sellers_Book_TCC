@@ -31,14 +31,19 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.VendasView
 
     private ArrayList<Venda> vendaArrayList;
     private ArrayList<ItemPedido> itemPedidoArrayList = new ArrayList<>();
+    private Pagamento pagamento;
 
     Context context;
 
-    public VendasAdapter(Context context, ArrayList<Venda> vendaArrayList) {
+    public VendasAdapter(Context context, ArrayList<Venda> vendaArrayList, Pagamento pagamento) {
         this.context = context;
         this.vendaArrayList = vendaArrayList;
+        this.pagamento = pagamento;
     }
 
+    public interface Pagamento{
+            void atualizaCliente();
+    }
 
     @NonNull
     @Override
@@ -62,17 +67,20 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.VendasView
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-        holder.pagamento.setText(decimalFormat.format(valorTotal));
+        holder.idVenda.setText(String.valueOf(vendaArrayList.get(position).getIDVenda()));
+        holder.pagamento.setText("R$ "+decimalFormat.format(valorTotal));
         holder.dataCompra.setText(simpleDateFormat.format(vendaArrayList.get(position).getDataCompra()));
         holder.dataPrevista.setText(simpleDateFormat.format(vendaArrayList.get(position).getPrevisao()));
         Date date = vendaArrayList.get(position).getDataPagamento();
         if (date==null){
             holder.dataPagamento.setText("Falta Pagamento");
+            holder.pagamento.setChecked(false);
         }else{
             holder.dataPagamento.setText(simpleDateFormat.format(date));
+            holder.pagamento.setChecked(true);
+            holder.btnPagar.setEnabled(false);
         }
         holder.nomeCliente.setText(vendaArrayList.get(position).getNomeCliente());
-        holder.pagamento.setChecked(date!=null ? true : false);
 
         ItemPedidoAdapter mAdapter = new ItemPedidoAdapter(context, itemPedidoArrayList);
 
@@ -116,7 +124,9 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.VendasView
                                 Date date = new Date();
                                 if(vendasDAO.updateVenda(vendaArrayList.get(holder.getAdapterPosition()).getIDVenda(),new String[] {VendasDAO.COL_DATA_PAGAMENTO},new String[] {simpleDateFormat.format(date)})){
                                     vendaArrayList = vendasDAO.readAllVenda();
+                                    holder.btnPagar.setEnabled(false);
                                     notifyDataSetChanged();
+                                    pagamento.atualizaCliente();
                                 }else{
                                     Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG);
                                 }
@@ -134,7 +144,7 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.VendasView
 
     public static class VendasViewHolder extends RecyclerView.ViewHolder{
 
-        private final TextView nomeCliente,  dataPrevista, dataPagamento, dataCompra;
+        private final TextView nomeCliente,  dataPrevista, dataPagamento, dataCompra, idVenda;
         private final CheckBox pagamento;
         private final RecyclerView vendasRV;
         private Button btnRemover, btnPagar;
@@ -149,6 +159,7 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.VendasView
             dataPagamento = itemView.findViewById(R.id.data_pagamento_venda);
             vendasRV = itemView.findViewById(R.id.produtos_venda);
             vendasRV.setHasFixedSize(true);
+            idVenda = itemView.findViewById(R.id.id_venda);
             btnPagar = itemView.findViewById(R.id.pago_venda);
             btnRemover = itemView.findViewById(R.id.remover_venda);
             cvVenda = itemView.findViewById(R.id.cardview_vendas);

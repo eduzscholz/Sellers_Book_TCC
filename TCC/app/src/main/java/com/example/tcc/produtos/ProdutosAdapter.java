@@ -165,7 +165,7 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 if(produtosDAO.deleteOneProduto(produtoArrayList.get(holder.getAdapterPosition()).getIDProduto())){
-                                    produtoArrayList = produtosDAO.readAllProduto();
+                                    produtoArrayList.remove(holder.getAdapterPosition());
                                     notifyDataSetChanged();
                                 }else{
                                     Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG);

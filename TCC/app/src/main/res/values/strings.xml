@@ -60,6 +60,8 @@
     <string name="logo">Logo</string>
     <string name="valor_total">Valor Total: R$</string>
     <string name="textview">TextView</string>
+    <string name="recebimento_atrasado">Recebimento Atrasado:</string>
+    <string name="lucro_previsto">Lucro Previsto:</string>
 
     <dimen name="tamanho_textos">48dp</dimen>
     <dimen name="tamanho_fonte_menor">18sp</dimen>

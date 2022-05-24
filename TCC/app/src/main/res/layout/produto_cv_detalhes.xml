@@ -3,13 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="false">
 
     <TextView
         android:id="@+id/txt_reais_detalhes"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/tamanho_textos"
         android:layout_marginEnd="5dp"
+        android:fontFamily="sans-serif-black"
         android:gravity="center"
         android:text="@string/reais"
         android:textSize="@dimen/tamanho_fonte_maior"
@@ -22,6 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/tamanho_textos"
         android:layout_marginEnd="10dp"
+        android:fontFamily="sans-serif-black"
         android:gravity="center"
         android:textSize="@dimen/tamanho_fonte_maior"
         app:layout_constraintBottom_toBottomOf="@+id/txt_reais_detalhes"
@@ -159,12 +162,14 @@
 
     <Button
         android:id="@+id/remover_produto"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="8dp"
         android:text="@string/remover"
+        android:textColor="@color/purple_500"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_quantidade"
@@ -178,6 +183,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:text="@string/editar"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_tipo"
