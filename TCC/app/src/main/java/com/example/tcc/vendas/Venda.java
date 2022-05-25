@@ -77,4 +77,12 @@ public class Venda {
     public void setItemPedidoArrayList(ArrayList<ItemPedido> itemPedidoArrayList) {
         this.itemPedidoArrayList = itemPedidoArrayList;
     }
+
+    public double getValorTotal() {
+        double valorTotal=0;
+        for(int i=0;i<itemPedidoArrayList.size();i++){
+            valorTotal+=(itemPedidoArrayList.get(i).getPreco()*itemPedidoArrayList.get(i).getQuantidade());
+        }
+        return valorTotal;
+    }
 }

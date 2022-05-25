@@ -59,7 +59,8 @@ public class CriarBancoSQL extends SQLiteOpenHelper {
                         + COL_PRODUTO_ID + " INT, "
                         + COL_VENDA_ID + " INT, "
                         + " FOREIGN KEY (" + COL_PRODUTO_ID + ") REFERENCES produtos(produtoID),"
-                        + " FOREIGN KEY (" + COL_VENDA_ID + ") REFERENCES vendas(vendaID));" ;
+                        + " FOREIGN KEY (" + COL_VENDA_ID + ") REFERENCES vendas(vendaID)"
+                        + " ON DELETE CASCADE);" ;
         sqLiteDatabase.execSQL(createTable);
     }
 

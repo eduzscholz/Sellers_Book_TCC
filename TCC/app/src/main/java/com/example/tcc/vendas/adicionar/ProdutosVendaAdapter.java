@@ -15,6 +15,7 @@ import com.example.tcc.R;
 import com.example.tcc.produtos.Produto;
 
 import java.io.ByteArrayInputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class ProdutosVendaAdapter extends RecyclerView.Adapter<ProdutosVendaAdapter.ProdutoVendaViewHolder> {
@@ -46,10 +47,12 @@ public class ProdutosVendaAdapter extends RecyclerView.Adapter<ProdutosVendaAdap
         ByteArrayInputStream imagemStream = new ByteArrayInputStream(produtos.get(position).getImg());
         Bitmap bitmap = BitmapFactory.decodeStream(imagemStream);
 
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+
         holder.nomeItemPedido.setText(produtos.get(position).getNome());
         holder.imagemItemPedido.setImageBitmap(bitmap);
         holder.quantidadeItemPedido.setText(String.valueOf(produtos.get(position).getQuantidade()));
-        holder.valorItemPedido.setText(String.valueOf(produtos.get(position).getPreco()));
+        holder.valorItemPedido.setText(decimalFormat.format(produtos.get(position).getPreco()));
     }
 
     public static class ProdutoVendaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

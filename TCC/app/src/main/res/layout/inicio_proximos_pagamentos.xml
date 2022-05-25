@@ -32,6 +32,7 @@
             android:layout_margin="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
+            android:textColor="@color/white"
             android:text="@string/pago"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

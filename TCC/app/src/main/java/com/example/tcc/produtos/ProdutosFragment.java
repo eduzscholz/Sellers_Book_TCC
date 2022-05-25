@@ -12,7 +12,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,6 +26,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +41,8 @@ public class ProdutosFragment extends Fragment implements ProdutosAdapter.OnClic
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
+
+    private SearchView searchView;
 
     //COMPONENTES CARDVIEW DE ADICIONAR PRODUTO
     private ImageButton btnAdcionarProduto;
@@ -57,6 +59,9 @@ public class ProdutosFragment extends Fragment implements ProdutosAdapter.OnClic
         //COMPACTA E PEGA O FRAGMENT_PRODUTOS.XML
         View view = inflater.inflate(R.layout.fragment_produtos, container, false);
         ProdutosDAO produtosDAO = new ProdutosDAO(this.getContext());
+
+        searchView = view.findViewById(R.id.sv_produtos);
+        searchView.setOnQueryTextListener(buscaProduto);
 
         //ACHA E CONECTA COM OS COMPONENTES DA TELA
         recyclerView = view.findViewById(R.id.lista_produtos);
@@ -164,6 +169,28 @@ public class ProdutosFragment extends Fragment implements ProdutosAdapter.OnClic
             });
             dialog.create();
             dialog.show();
+        }
+    };
+
+    private SearchView.OnQueryTextListener buscaProduto = new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String s) {
+            ProdutosDAO produtosDAO = new ProdutosDAO(getContext());
+            produtoArrayList.clear();
+            produtoArrayList.addAll(produtosDAO.readProdutoNome(s));
+            mAdapter.notifyDataSetChanged();
+            return false;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String s) {
+            if(s.equals("")){
+                ProdutosDAO produtosDAO = new ProdutosDAO(getContext());
+                produtoArrayList.clear();
+                produtoArrayList.addAll(produtosDAO.readAllProduto());
+                mAdapter.notifyDataSetChanged();
+            }
+            return false;
         }
     };
 

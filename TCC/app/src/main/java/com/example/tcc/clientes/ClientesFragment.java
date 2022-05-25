@@ -15,6 +15,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.tcc.R;
@@ -27,6 +28,8 @@ public class ClientesFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
+
+    private SearchView searchView;
 
     private ImageButton btnAdcionarCliente;
 
@@ -43,6 +46,9 @@ public class ClientesFragment extends Fragment {
         //ACHA O RECYCLER VIEW E OS COMPONENTES
         recyclerView = view.findViewById(R.id.lista_cliente);
         btnAdcionarCliente = view.findViewById(R.id.adcionar_cliente);
+
+        searchView = view.findViewById(R.id.sv_cliente);
+        searchView.setOnQueryTextListener(buscaCliente);
 
         //RECOMENDADO PELO GOOGLE
         recyclerView.setHasFixedSize(true);
@@ -103,6 +109,28 @@ public class ClientesFragment extends Fragment {
             });
             dialog.create();
             dialog.show();
+        }
+    };
+
+    private SearchView.OnQueryTextListener buscaCliente = new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String s) {
+            ClientesDAO clientesDAO = new ClientesDAO(getContext());
+            clienteArrayList.clear();
+            clienteArrayList.addAll(clientesDAO.readClienteNome(s));
+            mAdapter.notifyDataSetChanged();
+            return false;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String s) {
+            if(s.equals("")){
+                ClientesDAO clientesDAO = new ClientesDAO(getContext());
+                clienteArrayList.clear();
+                clienteArrayList.addAll(clientesDAO.readAllClientes());
+                mAdapter.notifyDataSetChanged();
+            }
+            return false;
         }
     };
 

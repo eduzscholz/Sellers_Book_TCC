@@ -55,20 +55,14 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.VendasView
     @Override
     public void onBindViewHolder(@NonNull VendasAdapter.VendasViewHolder holder, int position) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(holder.vendasRV.getContext());
-        double valorTotal=0;
         VendasDAO vendasDAO = new VendasDAO(context);
         itemPedidoArrayList = vendaArrayList.get(position).getItemPedidoArrayList();
         DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
 
-
-        for (int i=0;i<itemPedidoArrayList.size();i++) {
-            valorTotal=valorTotal+(itemPedidoArrayList.get(i).getPreco()*itemPedidoArrayList.get(i).getQuantidade());
-        }
-
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         holder.idVenda.setText(String.valueOf(vendaArrayList.get(position).getIDVenda()));
-        holder.pagamento.setText("R$ "+decimalFormat.format(valorTotal));
+        holder.pagamento.setText("R$ "+decimalFormat.format(vendaArrayList.get(position).getValorTotal()));
         holder.dataCompra.setText(simpleDateFormat.format(vendaArrayList.get(position).getDataCompra()));
         holder.dataPrevista.setText(simpleDateFormat.format(vendaArrayList.get(position).getPrevisao()));
         Date date = vendaArrayList.get(position).getDataPagamento();

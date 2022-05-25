@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.SearchView;
 
 import com.example.tcc.R;
 import com.example.tcc.vendas.adicionar.AdicionarVendaCliente;
@@ -28,6 +29,7 @@ public class VendasFragment extends Fragment {
     private ImageButton adcVenda;
     private VendasAdapter.Pagamento pagamento;
     private ArrayList<Venda>  vendaArrayList = new ArrayList<>();
+    private SearchView searchView;
 
     public VendasFragment(VendasAdapter.Pagamento pagamento){
         super();
@@ -40,6 +42,8 @@ public class VendasFragment extends Fragment {
         VendasDAO vendasDAO = new VendasDAO(this.getContext());
         vendaArrayList = vendasDAO.readAllVenda();
 
+        searchView = view.findViewById(R.id.sv_venda);
+        searchView.setOnQueryTextListener(buscaVenda);
         recyclerView = view.findViewById(R.id.lista_vendas);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this.getContext());
@@ -55,6 +59,28 @@ public class VendasFragment extends Fragment {
 
         return view;
     }
+
+    public SearchView.OnQueryTextListener buscaVenda = new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String s) {
+            VendasDAO vendasDAO = new VendasDAO(getContext());
+            vendaArrayList.clear();
+            vendaArrayList.addAll(vendasDAO.readManyVendaNome(s));
+            mAdapter.notifyDataSetChanged();
+            return false;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String s) {
+            if(s.equals("")){
+                VendasDAO vendasDAO = new VendasDAO(getContext());
+                vendaArrayList.clear();
+                vendaArrayList.addAll(vendasDAO.readAllVenda());
+                mAdapter.notifyDataSetChanged();
+            }
+            return false;
+        }
+    };
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

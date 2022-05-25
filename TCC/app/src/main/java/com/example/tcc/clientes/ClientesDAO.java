@@ -124,8 +124,7 @@ public class ClientesDAO extends SQLiteOpenHelper {
         ArrayList<Cliente> clienteArrayList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABELA, null,COL_NOME + " LIKE ?", new String[] {"%"+buscaNome+"+"}, null, null, COL_NOME + " ASC");
-        db.close();
+        Cursor cursor = db.query(TABELA, null,COL_NOME + " LIKE ?", new String[] {"%"+buscaNome+"%"}, null, null, COL_NOME + " ASC");
 
         while(cursor.moveToNext()){
             int id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID));

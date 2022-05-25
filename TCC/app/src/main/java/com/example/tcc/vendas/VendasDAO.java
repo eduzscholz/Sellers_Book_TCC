@@ -59,7 +59,7 @@ public class VendasDAO extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-DD");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         cv.put(COL_ID_CLIENTE,venda.getClienteID());
         cv.put(COL_DATA_COMPRA,simpleDateFormat.format(venda.getDataCompra()));
@@ -89,9 +89,9 @@ public class VendasDAO extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         ClientesDAO clientesDAO = new ClientesDAO(context);
 
-        Cursor cursor = db.query(TABELA, null, null, null, null, null, COL_DATA_COMPRA + " ASC");
+        Cursor cursor = db.query(TABELA, null, null, null, null, null, COL_ID + " DESC");
         Date dataPagamento, dataCompra, previsao;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-DD");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO(context);
 
         while (cursor.moveToNext()){
@@ -120,10 +120,10 @@ public class VendasDAO extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         ClientesDAO clientesDAO = new ClientesDAO(context);
 
-        Cursor cursor = db.rawQuery("SELECT * FROM "+TABELA+" AS v INNER JOIN clientes AS c ON c.clienteID=v.vendaID AND c.nome LIKE '?'",new String[] {nome});
-        db.close();
+        Cursor cursor = db.rawQuery("SELECT * FROM "+TABELA+" AS v INNER JOIN clientes AS c ON c.clienteID=v.clienteID AND c.nome LIKE ?",new String[] {"%"+nome+"%"});
+
         Date dataPagamento, dataCompra, previsao;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-DD");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO(context);
 
         while (cursor.moveToNext()){
@@ -143,20 +143,6 @@ public class VendasDAO extends SQLiteOpenHelper {
         return vendaArrayList;
     }
 
-    public boolean verificarPagamentoCliente(int buscaID){
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.query(TABELA, null,COL_ID_CLIENTE + " = ?", new String[] {String.valueOf(buscaID)}, null, null, null);
-
-        while (cursor.moveToNext()){
-            if(cursor.getString(cursor.getColumnIndexOrThrow(COL_DATA_PAGAMENTO)).equals("")){
-                return false;
-            }
-        }
-        return true;
-    }
-
-
     public boolean updateVenda(int id, String[] coluna, String[] dados){
         ContentValues cv = new ContentValues();
         String selection = COL_ID + " = ?";
@@ -173,7 +159,7 @@ public class VendasDAO extends SQLiteOpenHelper {
     }
 
     public boolean updateVenda(int id, Date dataCompra, Date previsão, Date dataPagamento, int CID){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-DD");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dtC = simpleDateFormat.format(dataCompra);
         String dtP = simpleDateFormat.format(dataPagamento);
         String pre = simpleDateFormat.format(previsão);
@@ -209,5 +195,45 @@ public class VendasDAO extends SQLiteOpenHelper {
 
         db.close();
         return delete;
+    }
+
+    public boolean verificarPagamentoCliente(int buscaID){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABELA, null,COL_ID_CLIENTE + " = ?", new String[] {String.valueOf(buscaID)}, null, null, null);
+
+        while (cursor.moveToNext()){
+            if(cursor.getString(cursor.getColumnIndexOrThrow(COL_DATA_PAGAMENTO)).equals("")){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public ArrayList<Venda> readVendaMes(String mes){
+        ArrayList<Venda> vendaArrayList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        ClientesDAO clientesDAO = new ClientesDAO(context);
+        Cursor cursor = db.rawQuery("SELECT * FROM "+TABELA+" where strftime('%m', "+COL_DATA_PAGAMENTO+") = '"+mes+"' and strftime('%m', "+COL_PREVISAO+") = '"+mes+"'",null);
+
+        Date dataPagamento, dataCompra, previsao;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO(context);
+
+        while (cursor.moveToNext()){
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID));
+            try {
+                dataCompra = simpleDateFormat.parse(cursor.getString(cursor.getColumnIndexOrThrow(COL_DATA_COMPRA)));
+                dataPagamento = simpleDateFormat.parse(cursor.getString(cursor.getColumnIndexOrThrow(COL_DATA_PAGAMENTO)));
+                previsao = simpleDateFormat.parse(cursor.getString(cursor.getColumnIndexOrThrow(COL_PREVISAO)));
+                int idCliente = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID_CLIENTE));
+                String nomeCliente = clientesDAO.readOneClienteIDNome(idCliente);
+                ArrayList<ItemPedido> itemPedidoArrayList = itemPedidoDAO.readManyItemPedidoVendaID(id);
+                vendaArrayList.add(new Venda(id,nomeCliente,dataCompra,dataPagamento,previsao,idCliente,itemPedidoArrayList));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return vendaArrayList;
     }
 }

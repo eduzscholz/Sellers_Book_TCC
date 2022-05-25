@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SearchView;
+
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.tcc.R;
@@ -25,6 +27,7 @@ public class AdicionarVendaCliente extends AppCompatActivity implements ClienteV
     private ClientesDAO clientesDAO;
     private ArrayList<Cliente> clientes;
     private Button btnCancelar;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,9 @@ public class AdicionarVendaCliente extends AppCompatActivity implements ClienteV
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_add_venda_cliente);
         toolbar.setTitle("Adicionar Venda - Cliente");
+
+        searchView = findViewById(R.id.busca_cliente_venda);
+        searchView.setOnQueryTextListener(buscaCliente);
 
         btnCancelar = findViewById(R.id.cancelar_venda);
         btnCancelar.setOnClickListener(cancelarListener);
@@ -48,12 +54,34 @@ public class AdicionarVendaCliente extends AppCompatActivity implements ClienteV
 
     }
 
+    public SearchView.OnQueryTextListener buscaCliente = new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String s) {
+            ClientesDAO clientesDAO = new ClientesDAO(getBaseContext());
+            clientes.clear();
+            clientes.addAll(clientesDAO.readClienteNome(s));
+            mAdapter.notifyDataSetChanged();
+            return false;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String s) {
+            if(s.equals("")){
+                ClientesDAO clientesDAO = new ClientesDAO(getBaseContext());
+                clientes.clear();
+                clientes.addAll(clientesDAO.readAllClientes());
+                mAdapter.notifyDataSetChanged();
+            }
+            return false;
+        }
+    };
+
     private View.OnClickListener cancelarListener = view -> finish();
 
     @Override
     public void onClickCliente(int position) {
         MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this);
-        dialog .setTitle("Comfimação")
+        dialog .setTitle("Confimação")
                 .setMessage("Selecionar o cliente: "+clientes.get(position).getNome()+"?")
                 .setNegativeButton("Cancelar",null)
                 .setPositiveButton("Continuar", (dialogInterface, i) -> {

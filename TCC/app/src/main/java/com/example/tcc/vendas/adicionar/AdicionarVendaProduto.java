@@ -15,6 +15,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.NumberPicker;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.tcc.MainActivity;
@@ -47,6 +48,7 @@ public class AdicionarVendaProduto extends AppCompatActivity  implements Produto
     private Button voltar, salvar;
     private ProdutosDAO produtosDAO;
     private Toolbar toolbar;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,9 @@ public class AdicionarVendaProduto extends AppCompatActivity  implements Produto
         getCliente();
         toolbar = findViewById(R.id.toolbar_add_venda_produto);
         toolbar.setTitle("Adicionar Venda - Produtos");
+
+        searchView = findViewById(R.id.sv_venda_produto);
+        searchView.setOnQueryTextListener(buscaProduto);
 
         produtosDAO = new ProdutosDAO(this);
         produtos = produtosDAO.readAllProduto();
@@ -71,9 +76,29 @@ public class AdicionarVendaProduto extends AppCompatActivity  implements Produto
         rvItemPedido.setAdapter(adpItemPedido);
         salvar.setOnClickListener(datePicker);
         voltar.setOnClickListener(voltarListener);
-
-
     }
+
+    private SearchView.OnQueryTextListener buscaProduto = new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String s) {
+            ProdutosDAO produtosDAO = new ProdutosDAO(getBaseContext());
+            produtos.clear();
+            produtos.addAll(produtosDAO.readProdutoNome(s));
+            adpProdutos.notifyDataSetChanged();
+            return false;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String s) {
+            if(s.equals("")){
+                ProdutosDAO produtosDAO = new ProdutosDAO(getBaseContext());
+                produtos.clear();
+                produtos.addAll(produtosDAO.readAllProduto());
+                adpProdutos.notifyDataSetChanged();
+            }
+            return false;
+        }
+    };
 
     private View.OnClickListener datePicker = new View.OnClickListener() {
         @Override
@@ -109,9 +134,9 @@ public class AdicionarVendaProduto extends AppCompatActivity  implements Produto
             ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO(getBaseContext());
             Date dataPrevisao = new Date();
             Date dataAtual = new Date();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             try {
-                dataPrevisao = simpleDateFormat.parse(y+"/"+(m+1)+"/"+d);
+                dataPrevisao = simpleDateFormat.parse(y+"-"+(m+1)+"-"+d);
                 Venda v = new Venda(0,cliente.getNome(), dataAtual, null, dataPrevisao, cliente.getID(), null);
                 vendasDAO.createVenda(v);
                 int idVenda= vendasDAO.ultimoID();

@@ -22,13 +22,20 @@ public class MainActivity extends AppCompatActivity implements VendasAdapter.Pag
     //TITULOS DAS TABS
     private final String[] titulos = {"INICIO","PRODUTOS","VENDAS","CLIENTES"};
 
-    //TODO BARRA DE PESQUISA
     //TODO TELA INICIAL
+    //TODO ARRUMAR CASO NAO INSIRA DADOS PRODUTO E CLIENTE
     //TODO NOTIFICAÇÃO
 
     //TODO ATUALIZAR CLIENTES PAGOS
     //TODO QUANTIDADE ZERO
     //TODO PADROES                                       ?
+    //TODO CONSTRASTES
+    //ANIMACOES
+    //ARRUMAR PRODUTOS TABELA QUE NEM CLIENTE PARA VENDA
+
+    //futuro
+    //parcelas
+    //pdf
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements VendasAdapter.Pag
         new CriarBancoSQL(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //setSupportActionBar(toolbar);
         toolbar.setTitle("Bem-Vindo");
         //ACHA OS COMPONENTES NO LAYOUT
         tabLayout = findViewById(R.id.TabLayout);

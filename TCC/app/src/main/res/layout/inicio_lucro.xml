@@ -21,8 +21,8 @@
             android:fontFamily="sans-serif-black"
             android:text="@string/reais"
             android:textSize="@dimen/tamanho_fonte_maior"
-            app:layout_constraintBottom_toBottomOf="@+id/textView36"
-            app:layout_constraintEnd_toStartOf="@+id/textView36" />
+            app:layout_constraintBottom_toBottomOf="@+id/lucro_previsto"
+            app:layout_constraintEnd_toStartOf="@+id/lucro_previsto" />
 
         <TextView
             android:id="@+id/textView28"
@@ -35,7 +35,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView29"
+            android:id="@+id/lucro_mes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -53,15 +53,15 @@
             android:fontFamily="sans-serif-black"
             android:text="@string/reais"
             android:textSize="@dimen/tamanho_fonte_maior"
-            app:layout_constraintBottom_toBottomOf="@+id/textView29"
-            app:layout_constraintEnd_toStartOf="@+id/textView29" />
+            app:layout_constraintBottom_toBottomOf="@+id/lucro_mes"
+            app:layout_constraintEnd_toStartOf="@+id/lucro_mes" />
 
         <TextView
             android:id="@+id/textView31"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="@string/lucro_previsto"
+            android:text="@string/recebimento_atrasado"
             android:textSize="@dimen/tamanho_fonte_maior"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView28" />
@@ -74,18 +74,18 @@
             android:fontFamily="sans-serif-black"
             android:text="@string/reais"
             android:textSize="@dimen/tamanho_fonte_maior"
-            app:layout_constraintBottom_toBottomOf="@+id/textView33"
-            app:layout_constraintEnd_toStartOf="@+id/textView33" />
+            app:layout_constraintBottom_toBottomOf="@+id/recebimento_atrasado"
+            app:layout_constraintEnd_toStartOf="@+id/recebimento_atrasado" />
 
         <TextView
-            android:id="@+id/textView33"
+            android:id="@+id/recebimento_atrasado"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:fontFamily="sans-serif-black"
             android:textSize="@dimen/tamanho_fonte_maior"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView29"
+            app:layout_constraintTop_toBottomOf="@+id/lucro_mes"
             tools:text="100,00" />
 
         <TextView
@@ -93,21 +93,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="@string/recebimento_atrasado"
+            android:text="@string/lucro_previsto"
             android:textSize="@dimen/tamanho_fonte_maior"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView31" />
+            app:layout_constraintTop_toBottomOf="@+id/textView31"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/textView36"
+            android:id="@+id/lucro_previsto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:fontFamily="sans-serif-black"
             android:textSize="@dimen/tamanho_fonte_maior"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView33"
+            app:layout_constraintTop_toBottomOf="@+id/recebimento_atrasado"
             tools:text="300,00" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
