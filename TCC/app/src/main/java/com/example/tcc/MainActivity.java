@@ -8,12 +8,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 
-import com.example.tcc.vendas.VendasAdapter;
-import com.example.tcc.vendas.VendasFragment;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-public class MainActivity extends AppCompatActivity implements VendasAdapter.Pagamento {
+public class MainActivity extends AppCompatActivity implements Pagamento {
 
     //PARTES DO LAYOUT
     private TabLayout tabLayout;
@@ -22,14 +20,12 @@ public class MainActivity extends AppCompatActivity implements VendasAdapter.Pag
     //TITULOS DAS TABS
     private final String[] titulos = {"INICIO","PRODUTOS","VENDAS","CLIENTES"};
 
-    //TODO TELA INICIAL
-    //TODO ARRUMAR CASO NAO INSIRA DADOS PRODUTO E CLIENTE
-    //TODO NOTIFICAÇÃO
+    //TODO ARMOR CASO NAO INSIRA DADOS PRODUTO E CLIENTE
 
-    //TODO ATUALIZAR CLIENTES PAGOS
-    //TODO QUANTIDADE ZERO
+    //TODO QUANTIDADE ZERO produtos
     //TODO PADROES                                       ?
     //TODO CONSTRASTES
+    //TODO NOTIFICAÇÃO
     //ANIMACOES
     //ARRUMAR PRODUTOS TABELA QUE NEM CLIENTE PARA VENDA
 
@@ -45,16 +41,14 @@ public class MainActivity extends AppCompatActivity implements VendasAdapter.Pag
         new CriarBancoSQL(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
         toolbar.setTitle("Bem-Vindo");
         //ACHA OS COMPONENTES NO LAYOUT
         tabLayout = findViewById(R.id.TabLayout);
         viewPager = findViewById(R.id.view_Pager);
         //INICIALIZA O ADAPTADOR DO VIEWPAGER2
-        vpAdapater = new VPAdapater(this, this::atualizaCliente);
+        vpAdapater = new VPAdapater(this, this::atualizaViewPager);
         //SETA O ADAPTADOR COM O VIEW PAGER
         viewPager.setAdapter(vpAdapater);
-        //viewPager.setOffscreenPageLimit(1);
         //CONECTA O VIEWPAGER2 COM O TABLAYOUT
         new TabLayoutMediator(tabLayout,viewPager,(tab, position) -> tab.setText(titulos[position])).attach();
     }
@@ -69,7 +63,14 @@ public class MainActivity extends AppCompatActivity implements VendasAdapter.Pag
     }
 
     @Override
-    public void atualizaCliente() {
-        vpAdapater.notifyDataSetChanged();
+    public void atualizaViewPager(int position) {
+
+        if(position==0){
+            vpAdapater.notifyItemChanged(2);
+            vpAdapater.notifyItemChanged(3);
+        }else if(position==2) {
+            vpAdapater.notifyItemChanged(0);
+            vpAdapater.notifyItemChanged(3);
+        }
     }
 }

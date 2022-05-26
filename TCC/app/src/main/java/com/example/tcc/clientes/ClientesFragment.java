@@ -3,7 +3,6 @@ package com.example.tcc.clientes;
 import android.app.Dialog;
 import android.os.Bundle;
 
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,12 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.tcc.R;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 
@@ -81,10 +80,10 @@ public class ClientesFragment extends Fragment {
             buttonCancelar.setOnClickListener(view12 -> dialog.cancel());
             Button buttonSalvar = dialog.findViewById(R.id.salvar_cliente);
             buttonSalvar.setOnClickListener(view13 -> {
-                EditText txtNomeCliente = dialog.findViewById(R.id.nome_cliente_edicao);
-                EditText txtContatoCliente = dialog.findViewById(R.id.contato_cliente_edicao);
-                EditText txtEnderecoCliente = dialog.findViewById(R.id.endereco_cliente_edicao);
-                EditText txtCpfCliente = dialog.findViewById(R.id.cpf_cliente_edicao);
+                TextInputEditText txtNomeCliente = dialog.findViewById(R.id.nome_cliente_edicao);
+                TextInputEditText txtContatoCliente = dialog.findViewById(R.id.contato_cliente_edicao);
+                TextInputEditText txtEnderecoCliente = dialog.findViewById(R.id.endereco_cliente_edicao);
+                TextInputEditText txtCpfCliente = dialog.findViewById(R.id.cpf_cliente_edicao);
 
                 String nome = txtNomeCliente.getText().toString();
                 String contato = txtContatoCliente.getText().toString();

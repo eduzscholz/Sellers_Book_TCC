@@ -1,36 +1,29 @@
 package com.example.tcc.produtos;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.tcc.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -101,58 +94,67 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
                     holder.nomeProdutoa.setText(produtoArrayList.get(holder.getAdapterPosition()).getNome());
                     holder.precoProdutoa.setText(String.valueOf(produtoArrayList.get(holder.getAdapterPosition()).getPreco()));
                     holder.descricaoa.setText(produtoArrayList.get(holder.getAdapterPosition()).getComplemento());
-                    holder.unidadea.setText(String.valueOf(produtoArrayList.get(holder.getAdapterPosition()).getMedida()));
+                    holder.medida.setText(String.valueOf(produtoArrayList.get(holder.getAdapterPosition()).getMedida()));
                     holder.qntProdutoa.setText(String.valueOf(produtoArrayList.get(holder.getAdapterPosition()).getQuantidade()));
                     ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view.getContext(),R.array.tipo, android.R.layout.simple_spinner_dropdown_item);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    holder.tipoa.setText(holder.tipof.getText());
                     holder.tipoa.setAdapter(adapter);
                 }
             }
         });
         //SALVA AS MUDANCAS FEITAS
-        holder.btnSalvarEdicao.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
-                dialog .setTitle("Deseja editar esse cliente?")
-                        .setNegativeButton("Não",null)
-                        .setPositiveButton("Sim", new DialogInterface.OnClickListener(){
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                EditText txtNomeProduto = holder.cardViewAtras.findViewById(R.id.nome_produto_edicao);
-                                EditText txtValorProduto = holder.cardViewAtras.findViewById(R.id.valor_produto_atras);
-                                EditText txtMarcaProduto = holder.cardViewAtras.findViewById(R.id.marca_produto_edicao);
-                                EditText txtQuantidadeProduto = holder.cardViewAtras.findViewById(R.id.quantidade_produto_edicao);
-                                EditText txtDescricaoProduto = holder.cardViewAtras.findViewById(R.id.complemento_produto_edicao);
-                                EditText txtMedidaProduto = holder.cardViewAtras.findViewById(R.id.medida_produto_edicao);
-                                Spinner spinTipoAtras = holder.cardViewAtras.findViewById(R.id.tipo_produto_edicao);
-                                ImageView imageViewProduto = holder.cardViewAtras.findViewById(R.id.imagem_produto_edicao);
-
-                                BitmapDrawable drawable = (BitmapDrawable) imageViewProduto.getDrawable();
-                                Bitmap bitmap = drawable.getBitmap();
-
-                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                                bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
-                                byte imagemBytes[] = stream.toByteArray();
-
-                                String nome = txtNomeProduto.getText().toString();
-                                Double valor = Double.parseDouble(txtValorProduto.getText().toString());
-                                String marca = txtMarcaProduto.getText().toString();
-                                int quant = Integer.parseInt(txtQuantidadeProduto.getText().toString());
-                                String complemento = txtDescricaoProduto.getText().toString();
-                                String medida = txtMedidaProduto.getText().toString();
-                                String tipo = spinTipoAtras.getSelectedItem().toString();
-                                if(produtosDAO.updateProduto(produtoArrayList.get(holder.getAdapterPosition()).getIDProduto(),nome,marca,complemento,valor,medida,quant,tipo,imagemBytes)){
-                                    produtoArrayList = produtosDAO.readAllProduto();
-                                    notifyDataSetChanged();
-                                }else{
-                                    Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG);
-                                }
-                                holder.cardViewAtras.setVisibility(View.GONE);
-                            }
-                        });
-                    dialog.show();
+        holder.btnSalvarEdicao.setOnClickListener(view -> {
+            boolean teste = false;
+            if(holder.nomeProdutoa.getText().toString().equals("") || holder.nomeProdutoa.getText().equals(null)){
+                holder.nomeProdutoa.setError("O produto precisa de um nome");
+                teste=true;
+            }if(holder.precoProdutoa.getText().toString().equals("") || holder.precoProdutoa.getText().toString().equals(null)){
+                holder.precoProdutoa.setError("O produto precisa de um preço");
+                teste=true;
+            }if(holder.qntProdutoa.getText().toString().equals("") || holder.qntProdutoa.getText().toString().equals(null)){
+                holder.qntProdutoa.setError("O produto precisa de uma quantidade");
+                teste=true;
+            }try{
+                holder.imgProdutoa.getDrawable();
+            }catch(Exception e){
+                Toast.makeText(view.getContext(), "O Produto precisa de uma imagem", Toast.LENGTH_LONG);
+                return;
             }
+            if(teste){
+                return;
+            }
+            MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
+            dialog .setTitle("Deseja editar esse cliente?")
+                    .setNegativeButton("Não",null)
+                    .setPositiveButton("Sim", new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            BitmapDrawable drawable =(BitmapDrawable) holder.imgProdutoa.getDrawable();
+                            Bitmap bitmap1 = drawable.getBitmap();
+
+                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                            bitmap1.compress(Bitmap.CompressFormat.JPEG,10,stream);
+                            byte imagemBytes[] = stream.toByteArray();
+
+                            String nome = holder.nomeProdutoa.getText().toString();
+                            Double valor = Double.parseDouble(holder.precoProdutoa.getText().toString());
+                            String marca = holder.marcaProdutoa.getText().toString();
+                            int quant = Integer.parseInt(holder.qntProdutoa.getText().toString());
+                            String complemento = holder.descricaoa.getText().toString();
+                            String medida = holder.medida.getText().toString();
+                            String tipo = holder.tipoa.getText().toString();
+                            if(produtosDAO.updateProduto(produtoArrayList.get(holder.getAdapterPosition()).getIDProduto(),nome,marca,complemento,valor,medida,quant,tipo,imagemBytes)){
+                                produtoArrayList = produtosDAO.readAllProduto();
+                                notifyDataSetChanged();
+                            }else{
+                                Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG);
+                            }
+                            holder.cardViewAtras.setVisibility(View.GONE);
+                        }
+                    });
+                dialog.show();
         });
         //APAGA O PRODUTO DO BANCO
         holder.btnRemover.setOnClickListener(new View.OnClickListener() {
@@ -192,8 +194,9 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
         private final TextView qntProdutof,  precoProdutof, marcaProdutof, nomeProdutof, descricaof, tipof, unidadef;
         private final CardView cardViewAtras;
         private final Button btnEditar,btnCancelar, btnRemover, btnSalvarEdicao;
-        private final EditText  precoProdutoa, marcaProdutoa, nomeProdutoa, descricaoa, qntProdutoa, unidadea;
-        private final Spinner tipoa;
+        private final TextInputEditText nomeProdutoa, precoProdutoa, marcaProdutoa, descricaoa, qntProdutoa, medida;
+        private final TextInputLayout textInputLayout;
+        private final AutoCompleteTextView tipoa;
         private OnClickImagemListener onClickImagemListener;
 
 
@@ -201,6 +204,7 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
         public ProdutosViewHolder(@NonNull View itemView, OnClickImagemListener onClickImagemListener) {
             super(itemView);
             this.onClickImagemListener = onClickImagemListener;
+            textInputLayout = itemView.findViewById(R.id.txt_inpt_nome_produto_edicao);
             imgProdutof = itemView.findViewById(R.id.imagem_produto_detalhes);
             qntProdutof = itemView.findViewById(R.id.quantidade_produto_detalhes);
             precoProdutof = itemView.findViewById(R.id.valor_produto_detalhes);
@@ -217,7 +221,7 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
             nomeProdutoa = itemView.findViewById(R.id.nome_produto_edicao);
             descricaoa = itemView.findViewById(R.id.complemento_produto_edicao);
             tipoa = itemView.findViewById(R.id.tipo_produto_edicao);
-            unidadea = itemView.findViewById(R.id.medida_produto_edicao);
+            medida = itemView.findViewById(R.id.medida_produto_edicao);
             btnEditar = itemView.findViewById(R.id.editar_produto);
             btnCancelar = itemView.findViewById(R.id.cancelar_produto);
             btnRemover = itemView.findViewById(R.id.remover_produto);

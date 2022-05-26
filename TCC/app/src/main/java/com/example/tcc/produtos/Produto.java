@@ -1,7 +1,5 @@
 package com.example.tcc.produtos;
 
-import android.graphics.Bitmap;
-
 //CLASSE DOS PRODUTOS
 public class Produto {
     private byte[] img;    //IMAGEM DO PRODUTO

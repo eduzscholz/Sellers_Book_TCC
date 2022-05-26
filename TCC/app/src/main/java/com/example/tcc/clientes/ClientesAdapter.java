@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tcc.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 
@@ -60,66 +61,53 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Client
                 }
             }
         });
-        holder.btnCancelar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(holder.cardViewAtras.getVisibility()!=view.GONE) {
-                    holder.cardViewAtras.setVisibility(view.GONE);
-                }
+        holder.btnCancelar.setOnClickListener(view -> {
+            if(holder.cardViewAtras.getVisibility()!=view.GONE) {
+                holder.cardViewAtras.setVisibility(view.GONE);
             }
         });
-        holder.btnSalvarEdicao.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
-                dialog .setTitle("Deseja editar esse cliente?")
-                        .setNegativeButton("Não",null)
-                        .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                EditText txtNomeCliente = holder.cardViewAtras.findViewById(R.id.nome_cliente_edicao);
-                                EditText txtContatoCliente = holder.cardViewAtras.findViewById(R.id.contato_cliente_edicao);
-                                EditText txtEnderecoCliente = holder.cardViewAtras.findViewById(R.id.endereco_cliente_edicao);
-                                EditText txtCPFCliente = holder.cardViewAtras.findViewById(R.id.cpf_cliente_edicao);
-
-                                String nome = txtNomeCliente.getText().toString();
-                                String contato = txtContatoCliente.getText().toString();
-                                String endereco = txtEnderecoCliente.getText().toString();
-                                String cpf = txtCPFCliente.getText().toString();
-
-                                if(clientesDAO.updateCliente(clienteArrayList.get(holder.getAdapterPosition()).getID(),nome,contato,endereco,cpf)){
-                                    clienteArrayList = clientesDAO.readAllClientes();
-                                    notifyDataSetChanged();
-                                }else{
-                                    Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG);
-                                }
-                                holder.cardViewAtras.setVisibility(View.GONE);
-                            }
-                        });
-                dialog.show();
+        holder.btnSalvarEdicao.setOnClickListener(view -> {
+            if(holder.nomeClienteAtras.getText().toString().equals("") || holder.nomeClienteAtras.getText().toString().equals(null)){
+                holder.nomeClienteAtras.setError("O cliente precisa de um nome");
+                return;
             }
+            MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
+            dialog .setTitle("Deseja editar esse cliente?")
+                    .setNegativeButton("Não",null)
+                    .setPositiveButton("Sim", (dialogInterface, i) -> {
+                        String nome = holder.nomeClienteAtras.getText().toString();
+                        String contato = holder.contatoClienteAtras.getText().toString();
+                        String endereco = holder.enderecoClienteAtras.getText().toString();
+                        String cpf = holder.cpfClienteAtras.getText().toString();
+
+                        if(clientesDAO.updateCliente(clienteArrayList.get(holder.getAdapterPosition()).getID(),nome,contato,endereco,cpf)){
+                            clienteArrayList = clientesDAO.readAllClientes();
+                            notifyDataSetChanged();
+                        }else{
+                            Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG);
+                        }
+                        holder.cardViewAtras.setVisibility(View.GONE);
+                    });
+            dialog.show();
         });
-        holder.btnRemover.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
-                dialog .setTitle("Deseja remover esse cliente?")
-                        .setNegativeButton("Não",null)
-                        .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                if(clientesDAO.deleteOneCliente(clienteArrayList.get(holder.getAdapterPosition()).getID())){
-                                    clienteArrayList.remove(holder.getAdapterPosition());
+        holder.btnRemover.setOnClickListener(view -> {
+            MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
+            dialog .setTitle("Deseja remover esse cliente?")
+                    .setNegativeButton("Não",null)
+                    .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            if(clientesDAO.deleteOneCliente(clienteArrayList.get(holder.getAdapterPosition()).getID())){
+                                clienteArrayList.remove(holder.getAdapterPosition());
 
-                                    notifyDataSetChanged();
-                                }else{
-                                    Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG);
-                                }
-                                holder.cardViewAtras.setVisibility(View.GONE);
+                                notifyDataSetChanged();
+                            }else{
+                                Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG);
                             }
-                        });
-                dialog.show();
-            }
+                            holder.cardViewAtras.setVisibility(View.GONE);
+                        }
+                    });
+            dialog.show();
         });
     }
 
@@ -131,10 +119,9 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Client
     public static class ClientesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final CardView cardViewAtras;
-        private final TextView nomeClienteFrente,contatoClienteFrente, enderecoClienteFrente, cpfClienteFrente, nomeClienteAtras, contatoClienteAtras, enderecoClienteAtras, cpfClienteAtras;
-        private final TextView pagamentoFrente;
+        private final TextView nomeClienteFrente, pagamentoFrente, contatoClienteFrente, enderecoClienteFrente, cpfClienteFrente;
+        private final TextInputEditText nomeClienteAtras, contatoClienteAtras, enderecoClienteAtras, cpfClienteAtras;
         private final Button btnEditar, btnCancelar, btnSalvarEdicao, btnRemover;
-
 
         public ClientesViewHolder(@NonNull View itemView) {
             super(itemView);

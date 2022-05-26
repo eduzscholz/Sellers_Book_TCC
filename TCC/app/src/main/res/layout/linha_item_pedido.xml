@@ -1,97 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cv_item_pedido"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginBottom="5dp"
+    app:cardCornerRadius="5dp">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_item_pedido"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="5dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="4dp"
-        app:cardMaxElevation="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/nome_item_pedido"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginStart="10dp"
+            android:gravity="center|start"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imagem_item_pedido"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="nome_produto" />
 
-            <TextView
-                android:id="@+id/nome_item_pedido"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:layout_marginStart="10dp"
-                android:gravity="center|start"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imagem_item_pedido"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="nome_produto" />
+        <ImageView
+            android:id="@+id/imagem_item_pedido"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:contentDescription="@string/produto_da_venda"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ImageContrastCheck"
+            tools:srcCompat="@tools:sample/avatars" />
 
-            <ImageView
-                android:id="@+id/imagem_item_pedido"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:contentDescription="@string/produto_da_venda"
-                android:scaleType="centerCrop"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="ImageContrastCheck"
-                tools:srcCompat="@tools:sample/avatars" />
+        <TextView
+            android:id="@+id/txt_reais"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:fontFamily="sans-serif"
+            android:text="@string/reais"
+            android:textSize="@dimen/tamanho_fonte_menor"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/preco_item_pedido"
+            app:layout_constraintTop_toTopOf="@+id/nome_item_pedido" />
 
-            <TextView
-                android:id="@+id/txt_reais"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:fontFamily="sans-serif-black"
-                android:text="@string/reais"
-                android:textSize="@dimen/tamanho_fonte_menor"
-                app:layout_constraintEnd_toStartOf="@+id/preco_item_pedido"
-                app:layout_constraintTop_toTopOf="@+id/nome_item_pedido" />
+        <TextView
+            android:id="@+id/preco_item_pedido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="sans-serif"
+            android:textSize="@dimen/tamanho_fonte_menor"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/txt_reais"
+            tools:text="200,00" />
 
-            <TextView
-                android:id="@+id/preco_item_pedido"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:fontFamily="sans-serif-black"
-                android:textSize="@dimen/tamanho_fonte_menor"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/txt_reais"
-                tools:text="200,00" />
+        <TextView
+            android:id="@+id/txt_quantidade_item_pedido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:text="@string/quantidade"
+            android:textSize="@dimen/tamanho_fonte_menor"
+            app:layout_constraintBottom_toBottomOf="@+id/nome_item_pedido"
+            app:layout_constraintEnd_toStartOf="@+id/quantidade_item_pedido" />
 
-            <TextView
-                android:id="@+id/txt_quantidade_item_pedido"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:text="@string/quantidade"
-                android:textSize="@dimen/tamanho_fonte_menor"
-                app:layout_constraintBottom_toBottomOf="@+id/nome_item_pedido"
-                app:layout_constraintEnd_toStartOf="@+id/quantidade_item_pedido" />
+        <TextView
+            android:id="@+id/quantidade_item_pedido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:textSize="@dimen/tamanho_fonte_menor"
+            app:layout_constraintBottom_toBottomOf="@+id/txt_quantidade_item_pedido"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="5" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/quantidade_item_pedido"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:textSize="@dimen/tamanho_fonte_menor"
-                app:layout_constraintBottom_toBottomOf="@+id/txt_quantidade_item_pedido"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:text="5" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.cardview.widget.CardView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -31,6 +32,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.tcc.R;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -115,25 +117,46 @@ public class ProdutosFragment extends Fragment implements ProdutosAdapter.OnClic
             ImageView imageView = dialog.findViewById(R.id.imagem_produto_edicao);
             imageView.setOnClickListener(view1 -> onClickImagem(imageView));
 
-            Spinner spinner = dialog.findViewById(R.id.tipo_produto_edicao);
+            AutoCompleteTextView spinner = dialog.findViewById(R.id.tipo_produto_edicao);
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view.getContext(),R.array.tipo, android.R.layout.simple_spinner_dropdown_item);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(adapter);
 
             Button buttonCancelar = dialog.findViewById(R.id.cancelar_produto);
             buttonCancelar.setOnClickListener(view12 -> dialog.cancel());
+
             Button buttonSalvar = dialog.findViewById(R.id.salvar_produto);
             buttonSalvar.setOnClickListener(view13 -> {
-                ProdutosDAO produtosDAO = new ProdutosDAO(view13.getContext());
 
-                EditText txtNomeProduto = dialog.findViewById(R.id.nome_produto_edicao);
-                EditText txtValorProduto = dialog.findViewById(R.id.valor_produto_atras);
-                EditText txtMarcaProduto = dialog.findViewById(R.id.marca_produto_edicao);
-                EditText txtQuantidadeProduto = dialog.findViewById(R.id.quantidade_produto_edicao);
-                EditText txtDescricaoProduto = dialog.findViewById(R.id.complemento_produto_edicao);
-                EditText txtMedidaProduto = dialog.findViewById(R.id.medida_produto_edicao);
-                Spinner spinTipoProduto = dialog.findViewById(R.id.tipo_produto_edicao);
+                TextInputEditText txtNomeProduto = dialog.findViewById(R.id.nome_produto_edicao);
+                TextInputEditText txtValorProduto = dialog.findViewById(R.id.valor_produto_atras);
+                TextInputEditText txtMarcaProduto = dialog.findViewById(R.id.marca_produto_edicao);
+                TextInputEditText txtQuantidadeProduto = dialog.findViewById(R.id.quantidade_produto_edicao);
+                TextInputEditText txtDescricaoProduto = dialog.findViewById(R.id.complemento_produto_edicao);
+                TextInputEditText txtMedidaProduto = dialog.findViewById(R.id.medida_produto_edicao);
+                AutoCompleteTextView spinTipoProduto = dialog.findViewById(R.id.tipo_produto_edicao);
                 ImageView imageViewProduto = dialog.findViewById(R.id.imagem_produto_edicao);
+
+                boolean teste = false;
+                if(txtNomeProduto.getText().toString().equals("") || txtNomeProduto.getText().equals(null)){
+                    txtNomeProduto.setError("Este campo precisa estar preenchido");
+                    teste=true;
+                }if(txtValorProduto.getText().toString().equals("") || txtValorProduto.getText().toString().equals(null)){
+                    txtValorProduto.setError("Este campo precisa estar preenchido");
+                    teste=true;
+                }if(txtQuantidadeProduto.getText().toString().equals("") || txtQuantidadeProduto.getText().toString().equals(null)){
+                    txtQuantidadeProduto.setError("Este campo precisa estar preenchido");
+                    teste=true;
+                }try{
+                    imageViewProduto.getDrawable();
+                }catch(Exception e){
+                    Toast.makeText(view.getContext(), "O Produto precisa de uma imagem", Toast.LENGTH_LONG);
+                    return;
+                }
+                if(teste){
+                    return;
+                }
+                ProdutosDAO produtosDAO = new ProdutosDAO(view13.getContext());
 
                 BitmapDrawable drawable = (BitmapDrawable) imageViewProduto.getDrawable();
                 Bitmap bitmap = drawable.getBitmap();
@@ -148,7 +171,7 @@ public class ProdutosFragment extends Fragment implements ProdutosAdapter.OnClic
                 int quant = Integer.parseInt(txtQuantidadeProduto.getText().toString());
                 String complemento = txtDescricaoProduto.getText().toString();
                 String medida = txtMedidaProduto.getText().toString();
-                String tipo = spinTipoProduto.getSelectedItem().toString();
+                String tipo = spinTipoProduto.getText().toString();
                 Produto p = new Produto(0,imagemBytes,nome,marca,complemento,medida,valor,quant,tipo);
                 if(produtosDAO.createProduto(p)){
                     p.setIDProduto(produtosDAO.ultimoID());

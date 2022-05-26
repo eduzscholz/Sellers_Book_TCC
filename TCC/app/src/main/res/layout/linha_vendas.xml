@@ -1,182 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cv_venda_detalhes"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginBottom="5dp"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="4dp"
+    app:cardMaxElevation="4dp">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardview_vendas"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="5dp"
-        app:cardCornerRadius="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:minHeight="70dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/nome_cliente_vendas"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/tamanho_textos"
+            android:layout_marginStart="10dp"
+            android:gravity="center|start"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/valor_esta_pago_venda"
+            app:layout_constraintStart_toEndOf="@+id/id_venda"
+            app:layout_constraintTop_toTopOf="@+id/valor_esta_pago_venda"
+            tools:text="nome_cliente" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/produtos_venda"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:minHeight="70dp">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:itemCount="3"
+            tools:listitem="@layout/linha_item_pedido" />
 
-            <TextView
-                android:id="@+id/nome_cliente_vendas"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/tamanho_textos"
-                android:layout_marginStart="10dp"
-                android:gravity="center|start"
-                android:textSize="20sp"
-                app:layout_constraintStart_toEndOf="@+id/id_venda"
-                app:layout_constraintTop_toTopOf="@+id/valor_esta_pago_venda"
-                tools:text="nome_cliente" />
+        <TextView
+            android:id="@+id/data_compra_venda"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:textSize="@dimen/tamanho_fonte_menor"
+            app:layout_constraintStart_toEndOf="@+id/txt_data_compra_venda"
+            app:layout_constraintTop_toTopOf="@+id/txt_data_compra_venda"
+            tools:text="22/04/2022" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/produtos_venda"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:itemCount="3"
-                tools:listitem="@layout/linha_item_pedido" />
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="70dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/data_compra_venda"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:textSize="@dimen/tamanho_fonte_menor"
-                app:layout_constraintStart_toEndOf="@+id/txt_data_compra_venda"
-                app:layout_constraintTop_toTopOf="@+id/txt_data_compra_venda"
-                tools:text="22/04/2022" />
+        <CheckBox
+            android:id="@+id/valor_esta_pago_venda"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:checked="false"
+            android:clickable="false"
+            android:focusable="false"
+            android:fontFamily="sans-serif-medium"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="R$: 200,00" />
 
-            <View
-                android:id="@+id/divider3"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="70dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/txt_data_compra_venda"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/data_da_compra"
+            android:textSize="@dimen/tamanho_fonte_menor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
-            <CheckBox
-                android:id="@+id/valor_esta_pago_venda"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:checked="false"
-                android:clickable="false"
-                android:fontFamily="sans-serif-medium"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="R$: 200,00" />
+        <TextView
+            android:id="@+id/txt_previsao_venda"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/data_prevista"
+            android:textSize="@dimen/tamanho_fonte_menor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_data_compra_venda" />
 
-            <TextView
-                android:id="@+id/txt_data_compra_venda"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/data_da_compra"
-                android:textSize="@dimen/tamanho_fonte_menor"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider3" />
+        <TextView
+            android:id="@+id/txt_data_pagamento_venda"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/data_de_pagamento"
+            android:textSize="@dimen/tamanho_fonte_menor"
+            app:layout_constraintBottom_toTopOf="@+id/pago_venda"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_previsao_venda"
+            app:layout_constraintVertical_bias="1.0" />
 
-            <TextView
-                android:id="@+id/txt_previsao_venda"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/data_prevista"
-                android:textSize="@dimen/tamanho_fonte_menor"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_data_compra_venda" />
+        <TextView
+            android:id="@+id/data_previsao_venda"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:textSize="@dimen/tamanho_fonte_menor"
+            app:layout_constraintStart_toEndOf="@+id/txt_previsao_venda"
+            app:layout_constraintTop_toTopOf="@+id/txt_previsao_venda"
+            tools:text="05/05/2022" />
 
-            <TextView
-                android:id="@+id/txt_data_pagamento_venda"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:text="@string/data_de_pagamento"
-                android:textSize="@dimen/tamanho_fonte_menor"
-                app:layout_constraintBottom_toTopOf="@+id/pago_venda"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_previsao_venda"
-                app:layout_constraintVertical_bias="1.0" />
+        <TextView
+            android:id="@+id/data_pagamento_venda"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:textSize="@dimen/tamanho_fonte_menor"
+            app:layout_constraintStart_toEndOf="@+id/txt_data_pagamento_venda"
+            app:layout_constraintTop_toTopOf="@+id/txt_data_pagamento_venda"
+            tools:text="--/--/----" />
 
-            <TextView
-                android:id="@+id/data_previsao_venda"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:textSize="@dimen/tamanho_fonte_menor"
-                app:layout_constraintStart_toEndOf="@+id/txt_previsao_venda"
-                app:layout_constraintTop_toTopOf="@+id/txt_previsao_venda"
-                tools:text="05/05/2022" />
+        <Button
+            android:id="@+id/pago_venda"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="5dp"
+            android:text="@string/pago"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/produtos_venda"
+            app:layout_constraintStart_toStartOf="parent" />
 
-            <TextView
-                android:id="@+id/data_pagamento_venda"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:textSize="@dimen/tamanho_fonte_menor"
-                app:layout_constraintStart_toEndOf="@+id/txt_data_pagamento_venda"
-                app:layout_constraintTop_toTopOf="@+id/txt_data_pagamento_venda"
-                tools:text="--/--/----" />
+        <Button
+            android:id="@+id/remover_venda"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:text="@string/remover"
+            android:textColor="@color/purple_500"
+            app:layout_constraintBottom_toBottomOf="@+id/pago_venda"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-            <Button
-                android:id="@+id/pago_venda"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginBottom="5dp"
-                android:text="@string/pago"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/produtos_venda"
-                app:layout_constraintStart_toStartOf="parent" />
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/detalhes_venda"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="txt_data_compra_venda,txt_previsao_venda,divider3,txt_data_pagamento_venda,data_pagamento_venda,data_previsao_venda,data_compra_venda,produtos_venda,pago_venda,remover_venda" />
 
-            <Button
-                android:id="@+id/remover_venda"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:text="@string/remover"
-                android:textColor="@color/purple_500"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                app:layout_constraintBottom_toBottomOf="@+id/pago_venda"
-                app:layout_constraintEnd_toEndOf="parent" />
+        <TextView
+            android:id="@+id/id_venda"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/tamanho_textos"
+            android:layout_marginStart="10dp"
+            android:gravity="center|start"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/nome_cliente_vendas"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/nome_cliente_vendas"
+            tools:text="ID_venda" />
 
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/detalhes_venda"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:constraint_referenced_ids="txt_data_compra_venda,txt_previsao_venda,divider3,txt_data_pagamento_venda,data_pagamento_venda,data_previsao_venda,data_compra_venda,produtos_venda,pago_venda,remover_venda" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/id_venda"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/tamanho_textos"
-                android:layout_marginStart="10dp"
-                android:gravity="center|start"
-                android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/nome_cliente_vendas"
-                tools:text="ID_venda" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.cardview.widget.CardView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

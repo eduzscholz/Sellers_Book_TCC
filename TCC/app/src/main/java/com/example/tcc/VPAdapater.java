@@ -7,15 +7,14 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.tcc.clientes.ClientesFragment;
 import com.example.tcc.produtos.ProdutosFragment;
-import com.example.tcc.vendas.VendasAdapter;
 import com.example.tcc.vendas.VendasFragment;
 
 //ADAPTADOR DO FRAGMENTO PARA O VIEWPAGER
 public class VPAdapater extends FragmentStateAdapter{
 
-    VendasAdapter.Pagamento pagamento;
+    Pagamento pagamento;
 
-    public VPAdapater(@NonNull FragmentActivity fragmentActivity, VendasAdapter.Pagamento pagamento) {
+    public VPAdapater(@NonNull FragmentActivity fragmentActivity, Pagamento pagamento) {
         super(fragmentActivity);
         this.pagamento = pagamento;
     }
@@ -27,7 +26,7 @@ public class VPAdapater extends FragmentStateAdapter{
         Fragment fragment;
         switch (position){
             case 0:
-                fragment = new FragInicio();
+                fragment = new FragInicio(pagamento);
                 break;
             case 1:
                 fragment = new ProdutosFragment();

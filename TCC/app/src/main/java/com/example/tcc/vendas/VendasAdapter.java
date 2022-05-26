@@ -15,6 +15,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tcc.Pagamento;
 import com.example.tcc.R;
 import com.example.tcc.vendas.itemPedido.ItemPedido;
 import com.example.tcc.vendas.itemPedido.ItemPedidoAdapter;
@@ -39,10 +40,6 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.VendasView
         this.context = context;
         this.vendaArrayList = vendaArrayList;
         this.pagamento = pagamento;
-    }
-
-    public interface Pagamento{
-            void atualizaCliente();
     }
 
     @NonNull
@@ -120,7 +117,7 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.VendasView
                                     vendaArrayList = vendasDAO.readAllVenda();
                                     holder.btnPagar.setEnabled(false);
                                     notifyDataSetChanged();
-                                    pagamento.atualizaCliente();
+                                    pagamento.atualizaViewPager(2);
                                 }else{
                                     Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG);
                                 }
@@ -136,7 +133,7 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.VendasView
         return vendaArrayList.size();
     }
 
-    public static class VendasViewHolder extends RecyclerView.ViewHolder{
+    public static class VendasViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final TextView nomeCliente,  dataPrevista, dataPagamento, dataCompra, idVenda;
         private final CheckBox pagamento;
@@ -156,17 +153,17 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.VendasView
             idVenda = itemView.findViewById(R.id.id_venda);
             btnPagar = itemView.findViewById(R.id.pago_venda);
             btnRemover = itemView.findViewById(R.id.remover_venda);
-            cvVenda = itemView.findViewById(R.id.cardview_vendas);
-            cvVenda.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(view.findViewById(R.id.detalhes_venda).getVisibility()==View.VISIBLE){
-                        view.findViewById(R.id.detalhes_venda).setVisibility(View.GONE);
-                    }else{
-                        view.findViewById(R.id.detalhes_venda).setVisibility(View.VISIBLE);
-                    }
-                }
-            });
+            cvVenda = idVenda.findViewById(R.id.cv_venda_detalhes);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if(view.findViewById(R.id.detalhes_venda).getVisibility()==View.VISIBLE){
+                view.findViewById(R.id.detalhes_venda).setVisibility(View.GONE);
+            }else{
+                view.findViewById(R.id.detalhes_venda).setVisibility(View.VISIBLE);
+            }
         }
     }
 }

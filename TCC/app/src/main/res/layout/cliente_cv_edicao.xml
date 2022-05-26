@@ -4,21 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/nome_cliente_edicao"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txt_inpt_nome_cliente_edicao"
         android:layout_width="0dp"
         android:layout_height="@dimen/tamanho_textos"
+        android:hint="@string/nome_do_cliente"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:hint="@string/nome_do_cliente"
-        android:inputType="textPersonName"
-        android:textColorHint="#757575"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/nome_cliente_edicao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:inputType="textPersonName"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingEnd="10dp"
+            android:paddingRight="10dp"
+            android:textColorHint="#616161" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <View
         android:id="@+id/divider2"
@@ -28,91 +39,84 @@
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nome_cliente_edicao" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_inpt_nome_cliente_edicao" />
 
-    <EditText
-        android:id="@+id/contato_cliente_edicao"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txt_inpt_contato_cliente_edicao"
         android:layout_width="0dp"
         android:layout_height="@dimen/tamanho_textos"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:autofillHints=""
-        android:ems="10"
         android:hint="@string/contato_do_cliente"
-        android:inputType="textPersonName"
-        android:textColorHint="#757575"
-        android:textSize="@dimen/tamanho_fonte_menor"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txt_contato_edicao"
-        app:layout_constraintTop_toTopOf="@+id/txt_contato_edicao" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider2"
+        >
 
-    <EditText
-        android:id="@+id/endereco_cliente_edicao"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/contato_cliente_edicao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:inputType="textPersonName"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingEnd="10dp"
+            android:paddingRight="10dp"
+            android:textColorHint="#616161" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txt_inpt_endereco_cliente_edicao"
         android:layout_width="0dp"
         android:layout_height="@dimen/tamanho_textos"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:autofillHints=""
-        android:ems="10"
         android:hint="@string/endere_o_do_cliente"
-        android:inputType="textPersonName"
-        android:textColorHint="#757575"
-        android:textSize="@dimen/tamanho_fonte_menor"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txt_endereco_edicao"
-        app:layout_constraintTop_toTopOf="@+id/txt_endereco_edicao" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_inpt_contato_cliente_edicao" >
 
-    <EditText
-        android:id="@+id/cpf_cliente_edicao"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/endereco_cliente_edicao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:inputType="textPersonName"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textColorHint="#616161" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txt_inpt_cpf_cliente_edicao"
         android:layout_width="0dp"
         android:layout_height="@dimen/tamanho_textos"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:autofillHints=""
-        android:ems="10"
         android:hint="@string/cpf_do_cliente"
-        android:inputType="textPersonName"
-        android:textColorHint="#757575"
-        android:textSize="@dimen/tamanho_fonte_menor"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txt_cpf_edicao"
-        app:layout_constraintTop_toTopOf="@+id/txt_cpf_edicao" />
-
-    <TextView
-        android:id="@+id/txt_contato_edicao"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/tamanho_textos"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center|start"
-        android:text="@string/contato"
-        android:textSize="@dimen/tamanho_fonte_menor"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider2" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_inpt_endereco_cliente_edicao"
+        >
 
-    <TextView
-        android:id="@+id/txt_endereco_edicao"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/tamanho_textos"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center|start"
-        android:text="@string/endere_o"
-        android:textSize="@dimen/tamanho_fonte_menor"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_contato_edicao" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/cpf_cliente_edicao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:inputType="textPersonName"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingEnd="10dp"
+            android:paddingRight="10dp"
+            android:textColorHint="#616161" />
 
-    <TextView
-        android:id="@+id/txt_cpf_edicao"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/tamanho_textos"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center|start"
-        android:text="@string/cpf"
-        android:textSize="@dimen/tamanho_fonte_menor"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_endereco_edicao" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/salvar_cliente"
@@ -121,11 +125,11 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:textColor="@color/white"
         android:text="@string/salvar"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_cpf_edicao" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_inpt_cpf_cliente_edicao" />
 
     <Button
         android:id="@+id/cancelar_cliente"
@@ -138,6 +142,6 @@
         style="@style/Widget.MaterialComponents.Button.TextButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cpf_cliente_edicao" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_inpt_cpf_cliente_edicao" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

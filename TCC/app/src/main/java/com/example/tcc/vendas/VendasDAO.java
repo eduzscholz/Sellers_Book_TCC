@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.tcc.CriarBancoSQL;
 import com.example.tcc.clientes.ClientesDAO;
 import com.example.tcc.vendas.itemPedido.ItemPedido;
 import com.example.tcc.vendas.itemPedido.ItemPedidoDAO;
@@ -28,6 +29,7 @@ public class VendasDAO extends SQLiteOpenHelper {
     public static final String COL_ID_CLIENTE= "clienteID";
     public static final String COL_DATA_PAGAMENTO = "dataPagamento";
     public static final String COL_PREVISAO = "previsaoPagamento";
+    public static final String COL_NOME_CLIENTE = "nomeCliente";
 
     private static final String TABELA_CLIENTE = "clientes";
     private static final String FKID_CLIENTE = "clienteID";
@@ -41,19 +43,12 @@ public class VendasDAO extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String createTable = "CREATE TABLE " + TABELA + " (" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                                                             + COL_ID_CLIENTE + " INT, "
-                                                             + COL_DATA_COMPRA + " DATE, "
-                                                             + COL_DATA_PAGAMENTO + " DATE, "
-                                                             + COL_PREVISAO + " DATE, "
-                                                             + " FOREIGN KEY (" + COL_ID_CLIENTE + ") REFERENCES " + TABELA_CLIENTE + " (" + FKID_CLIENTE + "));" ;
-        sqLiteDatabase.execSQL(createTable);
+        CriarBancoSQL criarBancoSQL = new CriarBancoSQL(context);
+        criarBancoSQL.criaVenda(sqLiteDatabase);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
-    }
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {}
 
     public boolean createVenda(Venda venda){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -63,6 +58,7 @@ public class VendasDAO extends SQLiteOpenHelper {
 
         cv.put(COL_ID_CLIENTE,venda.getClienteID());
         cv.put(COL_DATA_COMPRA,simpleDateFormat.format(venda.getDataCompra()));
+        cv.put(COL_NOME_CLIENTE,venda.getNomeCliente());
         if(venda.getDataPagamento()==null){
             cv.put(COL_DATA_PAGAMENTO, "");
         }else {
@@ -158,14 +154,14 @@ public class VendasDAO extends SQLiteOpenHelper {
         return count!=0;
     }
 
-    public boolean updateVenda(int id, Date dataCompra, Date previsão, Date dataPagamento, int CID){
+    public boolean updateVenda(int id, Date dataCompra, Date previsão, Date dataPagamento, int CID, String nomeCliente){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dtC = simpleDateFormat.format(dataCompra);
         String dtP = simpleDateFormat.format(dataPagamento);
         String pre = simpleDateFormat.format(previsão);
         String cid = String.valueOf(CID);
 
-        return updateVenda(id, new String[] {COL_DATA_COMPRA,COL_PREVISAO,COL_DATA_PAGAMENTO,COL_ID_CLIENTE}, new String[] {dtC,pre,dtP,cid});
+        return updateVenda(id, new String[] {COL_DATA_COMPRA,COL_PREVISAO,COL_DATA_PAGAMENTO,COL_ID_CLIENTE,COL_NOME_CLIENTE}, new String[] {dtC,pre,dtP,cid,nomeCliente});
     }
 
     public boolean deleteOneVenda(int id){
@@ -214,7 +210,10 @@ public class VendasDAO extends SQLiteOpenHelper {
         ArrayList<Venda> vendaArrayList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         ClientesDAO clientesDAO = new ClientesDAO(context);
-        Cursor cursor = db.rawQuery("SELECT * FROM "+TABELA+" where strftime('%m', "+COL_DATA_PAGAMENTO+") = '"+mes+"' and strftime('%m', "+COL_PREVISAO+") = '"+mes+"'",null);
+        String query = "SELECT * FROM "+TABELA+" where strftime('%m', "+COL_DATA_PAGAMENTO+") = '"+mes+"' " +
+                        "OR strftime('%m', "+COL_PREVISAO+") = '"+mes+"' " +
+                        "OR ("+COL_PREVISAO+" < date('now') and "+COL_DATA_PAGAMENTO+" = null) ORDER BY "+COL_PREVISAO+" ASC;";
+        Cursor cursor = db.rawQuery(query,null);
 
         Date dataPagamento, dataCompra, previsao;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -224,7 +223,11 @@ public class VendasDAO extends SQLiteOpenHelper {
             int id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID));
             try {
                 dataCompra = simpleDateFormat.parse(cursor.getString(cursor.getColumnIndexOrThrow(COL_DATA_COMPRA)));
-                dataPagamento = simpleDateFormat.parse(cursor.getString(cursor.getColumnIndexOrThrow(COL_DATA_PAGAMENTO)));
+                if(cursor.getString(cursor.getColumnIndexOrThrow(COL_DATA_PAGAMENTO)).equals("")){
+                    dataPagamento = null;
+                }else {
+                    dataPagamento = simpleDateFormat.parse(cursor.getString(cursor.getColumnIndexOrThrow(COL_DATA_PAGAMENTO)));
+                }
                 previsao = simpleDateFormat.parse(cursor.getString(cursor.getColumnIndexOrThrow(COL_PREVISAO)));
                 int idCliente = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID_CLIENTE));
                 String nomeCliente = clientesDAO.readOneClienteIDNome(idCliente);

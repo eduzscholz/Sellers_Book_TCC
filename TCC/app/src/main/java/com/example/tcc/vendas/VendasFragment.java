@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 
+import com.example.tcc.Pagamento;
 import com.example.tcc.R;
 import com.example.tcc.vendas.adicionar.AdicionarVendaCliente;
 
@@ -27,11 +28,11 @@ public class VendasFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private ImageButton adcVenda;
-    private VendasAdapter.Pagamento pagamento;
+    private Pagamento pagamento;
     private ArrayList<Venda>  vendaArrayList = new ArrayList<>();
     private SearchView searchView;
 
-    public VendasFragment(VendasAdapter.Pagamento pagamento){
+    public VendasFragment(Pagamento pagamento){
         super();
         this.pagamento = pagamento;
     }
@@ -81,6 +82,8 @@ public class VendasFragment extends Fragment {
             return false;
         }
     };
+
+    
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

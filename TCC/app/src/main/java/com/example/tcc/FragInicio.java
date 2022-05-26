@@ -3,6 +3,8 @@ package com.example.tcc;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,14 +22,34 @@ import java.util.Date;
 public class FragInicio extends Fragment {
 
     VendasDAO vendasDAO;
-    ArrayList<Venda> vendaArrayList;
+    ArrayList<Venda> vendaArrayList, pagamentoEmAberto;
     TextView lucroDoMes, lucroPrevisto, recebimentoAtrasado;
+
+    RecyclerView recyclerView;
+    RecyclerView.Adapter mAdapter;
+    RecyclerView.LayoutManager layoutManager;
+    Pagamento pagamento;
+
+    public FragInicio(Pagamento pagamento) {
+        this.pagamento = pagamento;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_inicio, container, false);
 
+        pagamentoEmAberto = new ArrayList<>();
+
         preencheTV(view);
+
+        recyclerView = view.findViewById(R.id.proximos_pagamentos);
+        recyclerView.setHasFixedSize(true);
+
+        layoutManager = new LinearLayoutManager(this.getContext());
+        recyclerView.setLayoutManager(layoutManager);
+
+        mAdapter = new InicioAdapter(this.getContext(), pagamentoEmAberto, pagamento);
+        recyclerView.setAdapter(mAdapter);
 
         return view;
     }
@@ -51,6 +73,7 @@ public class FragInicio extends Fragment {
             double valor = vendaArrayList.get(i).getValorTotal();
             if(date==null){
                 atrasado+=valor;
+                pagamentoEmAberto.add(vendaArrayList.get(i));
             }else{
                 lucro+=valor;
             }

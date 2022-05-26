@@ -21,7 +21,7 @@
     <string name="remover_cliente">Remover Cliente</string>
     <string name="configuraçoes">Configurações</string>
     <string name="selecionar_varios">Selecionar Vários</string>
-    <string name="valor">Valor</string>
+    <string name="valor">R$ Valor</string>
     <string name="nome_do_produto">Nome do Produto</string>
     <string name="marca">Marca</string>
     <string name="volume_peso">Volume/Peso</string>
@@ -43,7 +43,7 @@
     <string name="data_da_compra">Data da compra:</string>
     <string name="data_prevista">Data prevista:</string>
     <string name="data_de_pagamento">Data de pagamento:</string>
-    <string name="quantidade_produto">Quantidade:</string>
+    <string name="quantidade_produto">Quantidade</string>
     <string name="pesquisa">Pesquisa</string>
     <string name="selecione_o_cliente">Selecione o Cliente</string>
     <string name="proximo">Proximo</string>
@@ -62,8 +62,9 @@
     <string name="textview">TextView</string>
     <string name="recebimento_atrasado">Recebimento Atrasado:</string>
     <string name="lucro_previsto">Lucro Previsto:</string>
+    <string name="proximos_pagamentos">PROXIMOS PAGAMENTOS:</string>
 
-    <dimen name="tamanho_textos">48dp</dimen>
+    <dimen name="tamanho_textos">55dp</dimen>
     <dimen name="tamanho_fonte_menor">18sp</dimen>
     <dimen name="tamanho_fonte_maior">20sp</dimen>
 
@@ -72,5 +73,6 @@
         <item>Alimenticio</item>
         <item>Roupas</item>
         <item>Artesanato</item>
+        <item>Outro</item>
     </string-array>
 </resources>
