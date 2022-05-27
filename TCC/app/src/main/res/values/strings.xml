@@ -60,7 +60,7 @@
     <string name="logo">Logo</string>
     <string name="valor_total">Valor Total: R$</string>
     <string name="textview">TextView</string>
-    <string name="recebimento_atrasado">Recebimento Atrasado:</string>
+    <string name="recebimento_atrasado">Atrasado:</string>
     <string name="lucro_previsto">Lucro Previsto:</string>
     <string name="proximos_pagamentos">PROXIMOS PAGAMENTOS:</string>
 

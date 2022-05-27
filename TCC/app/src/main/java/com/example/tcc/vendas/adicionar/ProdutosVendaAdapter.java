@@ -44,13 +44,17 @@ public class ProdutosVendaAdapter extends RecyclerView.Adapter<ProdutosVendaAdap
 
     @Override
     public void onBindViewHolder(@NonNull ProdutosVendaAdapter.ProdutoVendaViewHolder holder, int position) {
-        ByteArrayInputStream imagemStream = new ByteArrayInputStream(produtos.get(position).getImg());
-        Bitmap bitmap = BitmapFactory.decodeStream(imagemStream);
+        try {
+            ByteArrayInputStream imagemStream = new ByteArrayInputStream(produtos.get(position).getImg());
+            Bitmap bitmap = BitmapFactory.decodeStream(imagemStream);
+            holder.imagemItemPedido.setImageBitmap(bitmap);
+        }catch(Exception e){
+            holder.imagemItemPedido.setImageResource(R.drawable.ic_baseline_image_24);
+        }
 
         DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
 
         holder.nomeItemPedido.setText(produtos.get(position).getNome());
-        holder.imagemItemPedido.setImageBitmap(bitmap);
         holder.quantidadeItemPedido.setText(String.valueOf(produtos.get(position).getQuantidade()));
         holder.valorItemPedido.setText(decimalFormat.format(produtos.get(position).getPreco()));
     }

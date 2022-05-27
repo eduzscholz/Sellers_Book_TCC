@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true">
 
     <ImageView
         android:id="@+id/imagem_produto_edicao"
@@ -14,8 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_add_photo_alternate_24"
-        tools:ignore="ImageContrastCheck"
-        />
+        tools:ignore="ImageContrastCheck" />
 
 
     <com.google.android.material.textfield.TextInputLayout
@@ -76,12 +76,11 @@
         android:id="@+id/txt_inpt_medida_produto_edicao"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/tamanho_textos"
-        android:hint="@string/volume_peso"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
+        android:hint="@string/volume_peso"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_inpt_complemento_produto_edicao"
-        >
+        app:layout_constraintTop_toBottomOf="@+id/txt_inpt_complemento_produto_edicao">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/medida_produto_edicao"
@@ -104,8 +103,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_inpt_marca_produto_edicao"
-        >
+        app:layout_constraintTop_toBottomOf="@+id/txt_inpt_marca_produto_edicao">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/complemento_produto_edicao"
@@ -151,11 +149,10 @@
         android:id="@+id/txt_inpt_quantidade_produto_edicao"
         android:layout_width="120sp"
         android:layout_height="@dimen/tamanho_textos"
-        android:hint="@string/quantidade_produto"
         android:layout_marginEnd="10dp"
+        android:hint="@string/quantidade_produto"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txt_inpt_marca_produto_edicao"
-        >
+        app:layout_constraintTop_toTopOf="@+id/txt_inpt_marca_produto_edicao">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/quantidade_produto_edicao"
@@ -167,8 +164,7 @@
             android:paddingLeft="10dp"
             android:paddingEnd="10dp"
             android:paddingRight="10dp"
-            android:textColorHint="#616161"
-            />
+            android:textColorHint="#616161" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -215,15 +211,17 @@
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
+        tools:ignore="TextContrastCheck" />
 
     <Button
         android:id="@+id/cancelar_produto"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
         android:text="@string/cancelar"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:textColor="?attr/colorPrimaryVariant"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/salvar_produto" />
 

@@ -39,13 +39,16 @@ public class ItemPedidoVendaAdapter  extends RecyclerView.Adapter<ItemPedidoVend
 
     @Override
     public void onBindViewHolder(@NonNull ItemPedidoVendaAdapter.ItemPedidoVendaViewHolder holder, int position) {
-        ByteArrayInputStream imagemStream = new ByteArrayInputStream(carrinho.get(position).getImg());
-        Bitmap bitmap = BitmapFactory.decodeStream(imagemStream);
-
+        try {
+            ByteArrayInputStream imagemStream = new ByteArrayInputStream(carrinho.get(position).getImg());
+            Bitmap bitmap = BitmapFactory.decodeStream(imagemStream);
+            holder.imagemItemPedido.setImageBitmap(bitmap);
+        }catch(Exception e){
+            holder.imagemItemPedido.setImageResource(R.drawable.ic_baseline_image_24);
+        }
         DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
 
         holder.nomeItemPedido.setText(carrinho.get(position).getNome());
-        holder.imagemItemPedido.setImageBitmap(bitmap);
         holder.quantidadeItemPedido.setText(String.valueOf(carrinho.get(position).getQuantidade()));
         holder.valorItemPedido.setText(decimalFormat.format(carrinho.get(position).getPreco()));
     }

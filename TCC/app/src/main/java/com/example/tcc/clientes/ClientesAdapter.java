@@ -50,7 +50,7 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Client
         holder.nomeClienteFrente.setText(clienteArrayList.get(position).getNome());
         holder.contatoClienteFrente.setText(clienteArrayList.get(position).getContato());
         holder.enderecoClienteFrente.setText(clienteArrayList.get(position).getEndereço());
-        holder.pagamentoFrente.setText(pagamento ? "" : "Atrasado" );
+        holder.pagamentoFrente.setText(pagamento ? "" : "Em Aberto" );
         holder.cpfClienteFrente.setText(clienteArrayList.get(position).getCPF());
         holder.btnEditar.setOnClickListener(view -> {
             if(holder.cardViewAtras.getVisibility()!=view.VISIBLE) {

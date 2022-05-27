@@ -9,6 +9,7 @@
     android:layout_marginTop="5dp"
     android:layout_marginEnd="20dp"
     android:layout_marginBottom="5dp"
+    android:animateLayoutChanges="true"
     app:cardCornerRadius="5dp"
     app:cardElevation="4dp"
     app:cardMaxElevation="4dp">
@@ -16,6 +17,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
         android:minHeight="70dp">
 
         <TextView
@@ -65,16 +67,21 @@
             android:id="@+id/valor_esta_pago_venda"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:layout_marginStart="-125dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:button="@drawable/check_box_personalizado"
             android:checked="false"
             android:clickable="false"
             android:focusable="false"
             android:fontFamily="sans-serif-medium"
+            android:includeFontPadding="false"
+            android:padding="5dp"
+            android:textColor="?attr/colorSecondary"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:useMaterialThemeColors="false"
             tools:text="R$: 200,00" />
 
         <TextView
@@ -151,7 +158,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="15dp"
             android:text="@string/remover"
-            android:textColor="@color/purple_500"
+            android:textColor="?attr/colorPrimaryVariant"
             app:layout_constraintBottom_toBottomOf="@+id/pago_venda"
             app:layout_constraintEnd_toEndOf="parent" />
 

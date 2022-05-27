@@ -34,7 +34,7 @@ public class AdicionarVendaCliente extends AppCompatActivity implements ClienteV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_venda_cliente);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_add_venda_cliente);
+        Toolbar toolbar = findViewById(R.id.toolbar_add_venda_cliente);
         toolbar.setTitle("Adicionar Venda - Cliente");
 
         searchView = findViewById(R.id.busca_cliente_venda);

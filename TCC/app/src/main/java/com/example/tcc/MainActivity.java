@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements Pagamento {
 
     //TODO PADROES                                       ?
     //TODO CONSTRASTES
+    //TODO TESTES UNITARIOS
     //TODO NOTIFICAÇÃO
     //todo ANIMACOES
 

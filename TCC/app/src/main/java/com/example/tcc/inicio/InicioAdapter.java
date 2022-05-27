@@ -18,6 +18,7 @@ import com.example.tcc.vendas.Venda;
 import com.example.tcc.vendas.VendasDAO;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,11 +45,12 @@ public class InicioAdapter extends RecyclerView.Adapter<InicioAdapter.InicioView
     public void onBindViewHolder(@NonNull InicioViewHolder holder, int position) {
         VendasDAO vendasDAO = new VendasDAO(context);
         Date date = new Date();
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         holder.dataCompra.setText(simpleDateFormat.format(vendaArrayList.get(position).getDataCompra()));
         holder.dataPrevista.setText(simpleDateFormat.format(vendaArrayList.get(position).getPrevisao()));
         holder.nomeCli.setText(vendaArrayList.get(position).getNomeCliente());
-        holder.valorTotal.setText(String.valueOf(vendaArrayList.get(position).getValorTotal()));
+        holder.valorTotal.setText(decimalFormat.format(vendaArrayList.get(position).getValorTotal()));
 
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override

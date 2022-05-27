@@ -63,10 +63,13 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
         ProdutosDAO produtosDAO = new ProdutosDAO(context);
         DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
 
-        ByteArrayInputStream imageStream = new ByteArrayInputStream(produtoArrayList.get(position).getImg());
-        Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
-
-        holder.imgProdutof.setImageBitmap(bitmap);
+        if(produtoArrayList.get(position).getImg()!=null) {
+            ByteArrayInputStream imageStream = new ByteArrayInputStream(produtoArrayList.get(position).getImg());
+            Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
+            holder.imgProdutof.setImageBitmap(bitmap);
+        }else{
+            holder.imgProdutof.setImageResource(R.drawable.ic_baseline_image_24);
+        }
         holder.marcaProdutof.setText(produtoArrayList.get(position).getMarca());
         holder.nomeProdutof.setText(produtoArrayList.get(position).getNome());
         holder.precoProdutof.setText(decimalFormat.format(produtoArrayList.get(position).getPreco()));
@@ -90,11 +93,16 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
             @Override
             public void onClick(View view) {
                 if(holder.cardViewAtras.getVisibility()!=view.VISIBLE) {
-                    ByteArrayInputStream imageStream = new ByteArrayInputStream(produtoArrayList.get(holder.getAdapterPosition()).getImg());
-                    Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
+
+                    if(produtoArrayList.get(holder.getAdapterPosition()).getImg()!=null) {
+                        ByteArrayInputStream imageStream = new ByteArrayInputStream(produtoArrayList.get(holder.getAdapterPosition()).getImg());
+                        Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
+                        holder.imgProdutof.setImageBitmap(bitmap);
+                    }else{
+                        holder.imgProdutof.setImageResource(R.drawable.ic_baseline_image_24);
+                    }
                     sumirBotaoAdc.sumir();
                     holder.cardViewAtras.setVisibility(view.VISIBLE);
-                    holder.imgProdutoa.setImageBitmap(bitmap);
                     holder.marcaProdutoa.setText(produtoArrayList.get(holder.getAdapterPosition()).getMarca());
                     holder.nomeProdutoa.setText(produtoArrayList.get(holder.getAdapterPosition()).getNome());
                     holder.precoProdutoa.setText(String.valueOf(produtoArrayList.get(holder.getAdapterPosition()).getPreco()));
@@ -117,14 +125,9 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
             }if(holder.precoProdutoa.getText().toString().equals("") || holder.precoProdutoa.getText().toString().equals(null)){
                 holder.precoProdutoa.setError("O produto precisa de um preço");
                 teste=true;
-            }if(holder.qntProdutoa.getText().toString().equals("") || holder.qntProdutoa.getText().toString().equals(null)){
+            }if(holder.qntProdutoa.getText().toString().equals("") || holder.qntProdutoa.getText().toString().equals(null)) {
                 holder.qntProdutoa.setError("O produto precisa de uma quantidade");
-                teste=true;
-            }try{
-                holder.imgProdutoa.getDrawable();
-            }catch(Exception e){
-                Toast.makeText(view.getContext(), "O Produto precisa de uma imagem", Toast.LENGTH_LONG);
-                return;
+                teste = true;
             }
             if(teste){
                 return;
@@ -135,14 +138,17 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
                     .setPositiveButton("Sim", new DialogInterface.OnClickListener(){
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            byte imagemBytes[];
+                            try{
+                                BitmapDrawable drawable = (BitmapDrawable) holder.imgProdutoa.getDrawable();
+                                Bitmap bitmap = drawable.getBitmap();
 
-                            BitmapDrawable drawable =(BitmapDrawable) holder.imgProdutoa.getDrawable();
-                            Bitmap bitmap1 = drawable.getBitmap();
-
-                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                            bitmap1.compress(Bitmap.CompressFormat.JPEG,10,stream);
-                            byte imagemBytes[] = stream.toByteArray();
-
+                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                bitmap.compress(Bitmap.CompressFormat.JPEG,10,stream);
+                                imagemBytes = stream.toByteArray();
+                            }catch(Exception e){
+                                imagemBytes=null;
+                            }
                             String nome = holder.nomeProdutoa.getText().toString();
                             Double valor = Double.parseDouble(holder.precoProdutoa.getText().toString());
                             String marca = holder.marcaProdutoa.getText().toString();
@@ -151,6 +157,7 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
                             String medida = holder.medida.getText().toString();
                             String tipo = holder.tipoa.getText().toString();
                             if(produtosDAO.updateProduto(produtoArrayList.get(holder.getAdapterPosition()).getIDProduto(),nome,marca,complemento,valor,medida,quant,tipo,imagemBytes)){
+                                sumirBotaoAdc.sumir();
                                 produtoArrayList = produtosDAO.readAllProduto();
                                 notifyDataSetChanged();
                             }else{

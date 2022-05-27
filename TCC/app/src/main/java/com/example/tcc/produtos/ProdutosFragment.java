@@ -136,6 +136,7 @@ public class ProdutosFragment extends Fragment implements ProdutosAdapter.OnClic
                 AutoCompleteTextView spinTipoProduto = dialog.findViewById(R.id.tipo_produto_edicao);
                 ImageView imageViewProduto = dialog.findViewById(R.id.imagem_produto_edicao);
 
+                byte imagemBytes[] = null;
                 boolean teste = false;
                 if(txtNomeProduto.getText().toString().equals("") || txtNomeProduto.getText().equals(null)){
                     txtNomeProduto.setError("Este campo precisa estar preenchido");
@@ -147,22 +148,19 @@ public class ProdutosFragment extends Fragment implements ProdutosAdapter.OnClic
                     txtQuantidadeProduto.setError("Este campo precisa estar preenchido");
                     teste=true;
                 }try{
-                    BitmapDrawable d = (BitmapDrawable) imageViewProduto.getDrawable();
+                    BitmapDrawable drawable = (BitmapDrawable) imageViewProduto.getDrawable();
+                    Bitmap bitmap = drawable.getBitmap();
+
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG,10,stream);
+                    imagemBytes = stream.toByteArray();
                 }catch(Exception e){
-                    Toast.makeText(view.getContext(), "O Produto precisa de uma imagem", Toast.LENGTH_LONG).show();
-                    return;
+                    imagemBytes=null;
                 }
                 if(teste){
                     return;
                 }
                 ProdutosDAO produtosDAO = new ProdutosDAO(view13.getContext());
-
-                BitmapDrawable drawable = (BitmapDrawable) imageViewProduto.getDrawable();
-                Bitmap bitmap = drawable.getBitmap();
-
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG,10,stream);
-                byte imagemBytes[] = stream.toByteArray();
 
                 String nome = txtNomeProduto.getText().toString();
                 Double valor = Double.parseDouble(txtValorProduto.getText().toString());

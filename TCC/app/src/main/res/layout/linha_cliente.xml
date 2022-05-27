@@ -4,9 +4,9 @@
     android:id="@+id/cardview_cliente_detalhes"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="20dp"
+    android:layout_marginStart="10dp"
     android:layout_marginTop="5dp"
-    android:layout_marginEnd="20dp"
+    android:layout_marginEnd="10dp"
     android:layout_marginBottom="5dp"
     android:animateLayoutChanges="true"
     android:background="@color/white"
@@ -22,7 +22,8 @@
 
     <include
         android:id="@+id/detalhes"
-        layout="@layout/cliente_cv_detalhes" />
+        layout="@layout/cliente_cv_detalhes"
+        android:animateLayoutChanges="true" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardview_cliente_edicao"

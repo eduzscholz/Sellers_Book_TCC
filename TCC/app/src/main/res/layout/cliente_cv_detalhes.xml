@@ -5,6 +5,7 @@
     android:id="@+id/constraint"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
     android:minHeight="70dp">
 
     <TextView
@@ -110,6 +111,7 @@
         android:id="@+id/detalhes_cliente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:constraint_referenced_ids="txt_contato_detalhes,txt_endereco_detalhes,contato_cliente_detalhes,endereco_cliente_detalhes,txt_cpf_detalhes,cpf_cliente_detalhes,editar_cliente,remover_cliente,divider" />
 
     <Button
@@ -132,7 +134,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         android:text="@string/remover"
-        android:textColor="@color/design_default_color_primary"
+        android:textColor="?attr/colorPrimaryVariant"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cpf_cliente_detalhes" />
@@ -143,7 +145,7 @@
         android:layout_height="@dimen/tamanho_textos"
         android:layout_marginEnd="10dp"
         android:gravity="center|start"
-        android:textColor="#DD2C00"
+        android:textColor="#a00"
         android:textSize="@dimen/tamanho_fonte_menor"
         app:layout_constraintBottom_toBottomOf="@+id/nome_cliente_detalhes"
         app:layout_constraintEnd_toEndOf="parent"
