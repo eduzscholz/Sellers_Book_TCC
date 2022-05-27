@@ -50,16 +50,17 @@ public class CriarBancoSQL extends SQLiteOpenHelper {
         String COL_PRECO = "preco";
         String COL_PRODUTO_ID = "produtoID";
         String COL_VENDA_ID =  "vendaID";
+        String COL_NOME_PRODUTO = "nomeProduto";
 
         String createTable =
                 "CREATE TABLE IF NOT EXISTS " + TABELA + " ("
                         + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                        + COL_NOME_PRODUTO + " TEXT, "
                         + COL_QUANTIDADE + " INT, "
                         + COL_PRECO + " REAL, "
                         + COL_PRODUTO_ID + " INT, "
                         + COL_VENDA_ID + " INT, "
-                        + " FOREIGN KEY (" + COL_PRODUTO_ID + ") REFERENCES produtos(produtoID),"
-                        + " FOREIGN KEY (" + COL_VENDA_ID + ") REFERENCES vendas(vendaID)"
+                        + " FOREIGN KEY (" + COL_VENDA_ID + ") REFERENCES vendas (vendaID)"
                         + " ON DELETE CASCADE);" ;
         sqLiteDatabase.execSQL(createTable);
     }

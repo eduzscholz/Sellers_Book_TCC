@@ -24,20 +24,19 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SearchView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.tcc.R;
+import com.example.tcc.sumirBotaoAdc;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
-public class ProdutosFragment extends Fragment implements ProdutosAdapter.OnClickImagemListener{
+public class ProdutosFragment extends Fragment implements ProdutosAdapter.OnClickImagemListener, sumirBotaoAdc {
 
     //RECYCLER VIEW E ADAPTER
     private RecyclerView recyclerView;
@@ -98,7 +97,7 @@ public class ProdutosFragment extends Fragment implements ProdutosAdapter.OnClic
         //ADICIONA PRODUTOS DO BANCO NO ARRAYLIST DE PRODUTOS
         produtoArrayList = produtosDAO.readAllProduto();
         //CRIA E SETA O ADAPTER
-        mAdapter = new ProdutosAdapter(this.getContext(), produtoArrayList, this::onClickImagem);
+        mAdapter = new ProdutosAdapter(this.getContext(), produtoArrayList, this, this);
         recyclerView.setAdapter(mAdapter);
         //BOTAO QUE FAZ APARECER O CARDVIEW DE ADICIONAR PRODUTO
         btnAdcionarProduto.setOnClickListener(adicionarProduto);
@@ -148,9 +147,9 @@ public class ProdutosFragment extends Fragment implements ProdutosAdapter.OnClic
                     txtQuantidadeProduto.setError("Este campo precisa estar preenchido");
                     teste=true;
                 }try{
-                    imageViewProduto.getDrawable();
+                    BitmapDrawable d = (BitmapDrawable) imageViewProduto.getDrawable();
                 }catch(Exception e){
-                    Toast.makeText(view.getContext(), "O Produto precisa de uma imagem", Toast.LENGTH_LONG);
+                    Toast.makeText(view.getContext(), "O Produto precisa de uma imagem", Toast.LENGTH_LONG).show();
                     return;
                 }
                 if(teste){
@@ -243,5 +242,14 @@ public class ProdutosFragment extends Fragment implements ProdutosAdapter.OnClic
         });
         this.imageView = imageView;
         dialog.show();
+    }
+
+    @Override
+    public void sumir() {
+        if(btnAdcionarProduto.getVisibility()==View.GONE){
+            btnAdcionarProduto.setVisibility(View.VISIBLE);
+        }else{
+            btnAdcionarProduto.setVisibility(View.GONE);
+        }
     }
 }

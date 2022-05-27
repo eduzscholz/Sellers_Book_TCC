@@ -91,8 +91,8 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.VendasView
                                 int id = vendaArrayList.get(holder.getAdapterPosition()).getIDVenda();
                                 if(vendasDAO.deleteOneVenda(id)){
                                     holder.cvVenda.findViewById(R.id.detalhes_venda).setVisibility(View.GONE);
-                                    vendaArrayList = vendasDAO.readAllVenda();
-                                    notifyDataSetChanged();
+                                    vendaArrayList.remove(holder.getAdapterPosition());
+                                    notifyItemRemoved(holder.getAdapterPosition());
                                 }else{
                                     Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG);
                                 }
@@ -153,7 +153,7 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.VendasView
             idVenda = itemView.findViewById(R.id.id_venda);
             btnPagar = itemView.findViewById(R.id.pago_venda);
             btnRemover = itemView.findViewById(R.id.remover_venda);
-            cvVenda = idVenda.findViewById(R.id.cv_venda_detalhes);
+            cvVenda = itemView.findViewById(R.id.cv_venda_detalhes);
             itemView.setOnClickListener(this);
         }
 

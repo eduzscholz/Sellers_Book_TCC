@@ -32,7 +32,7 @@
             android:layout_marginBottom="25dp"
             android:background="@drawable/round_button"
             android:contentDescription="@string/adcionar_produto"
-            android:elevation="8dp"
+            android:elevation="6dp"
             android:src="@drawable/ic_baseline_add_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.tcc.clientes.ClientesFragment;
+import com.example.tcc.inicio.FragInicio;
 import com.example.tcc.produtos.ProdutosFragment;
 import com.example.tcc.vendas.VendasFragment;
 

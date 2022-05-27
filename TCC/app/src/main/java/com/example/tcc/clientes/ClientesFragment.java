@@ -17,11 +17,12 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.tcc.R;
+import com.example.tcc.sumirBotaoAdc;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 
-public class ClientesFragment extends Fragment {
+public class ClientesFragment extends Fragment implements sumirBotaoAdc {
 
     //VARIAVEIS NECESSARIAS PARA O FUNCIONAMENTO DO RECYCLERVIEW
     private RecyclerView recyclerView;
@@ -60,7 +61,7 @@ public class ClientesFragment extends Fragment {
         btnAdcionarCliente.setOnClickListener(adicionarCliente);
 
         //CRIA E SETA O ADAPTER
-        mAdapter = new ClientesAdapter(this.getContext(), clienteArrayList);
+        mAdapter = new ClientesAdapter(this.getContext(), clienteArrayList, this);
         recyclerView.setAdapter(mAdapter);
 
         return view;
@@ -136,5 +137,14 @@ public class ClientesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void sumir() {
+        if(btnAdcionarCliente.getVisibility()==View.GONE){
+            btnAdcionarCliente.setVisibility(View.VISIBLE);
+        }else{
+            btnAdcionarCliente.setVisibility(View.GONE);
+        }
     }
 }

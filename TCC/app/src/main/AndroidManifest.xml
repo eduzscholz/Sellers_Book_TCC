@@ -14,12 +14,18 @@
         android:theme="@style/Theme.TCC" >
         <activity
             android:name=".vendas.adicionar.AdicionarVendaProduto"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".vendas.adicionar.AdicionarVendaCliente"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

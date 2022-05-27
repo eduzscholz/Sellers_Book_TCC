@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.tcc.R;
+import com.example.tcc.sumirBotaoAdc;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -35,15 +36,17 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
     private ArrayList<Produto> produtoArrayList;    //LISTA QUE GUARDA OS PRODUTOS
     Context context;    //CONTEXTO...
     OnClickImagemListener onClickImagemListener;
+    sumirBotaoAdc sumirBotaoAdc;
 
     private ActivityResultLauncher<String> buscaGaleria;
     private ActivityResultLauncher<Intent> tirarFoto;
 
     //CONSTRUTOR
-    public ProdutosAdapter(Context ct, ArrayList<Produto> produtoArrayList, OnClickImagemListener onClickImagemListener){
+    public ProdutosAdapter(Context ct, ArrayList<Produto> produtoArrayList, ProdutosFragment onClickImagemListener, sumirBotaoAdc sumirBotaoAdc){
         this.context=ct;
         this.produtoArrayList = produtoArrayList;
         this.onClickImagemListener = onClickImagemListener;
+        this.sumirBotaoAdc = sumirBotaoAdc;
     }
 
     //DEPOIS DE CRIAR ELE EMPACOTA E RETORNA O VIEW HOLDER
@@ -78,6 +81,7 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
             public void onClick(View view) {
                 if(holder.cardViewAtras.getVisibility()!=view.GONE) {
                     holder.cardViewAtras.setVisibility(view.GONE);
+                    sumirBotaoAdc.sumir();
                 }
             }
         });
@@ -88,6 +92,7 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
                 if(holder.cardViewAtras.getVisibility()!=view.VISIBLE) {
                     ByteArrayInputStream imageStream = new ByteArrayInputStream(produtoArrayList.get(holder.getAdapterPosition()).getImg());
                     Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
+                    sumirBotaoAdc.sumir();
                     holder.cardViewAtras.setVisibility(view.VISIBLE);
                     holder.imgProdutoa.setImageBitmap(bitmap);
                     holder.marcaProdutoa.setText(produtoArrayList.get(holder.getAdapterPosition()).getMarca());
@@ -167,8 +172,9 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 if(produtosDAO.deleteOneProduto(produtoArrayList.get(holder.getAdapterPosition()).getIDProduto())){
+                                    holder.cardViewFrente.findViewById(R.id.detalhes_produto).setVisibility(View.GONE);
                                     produtoArrayList.remove(holder.getAdapterPosition());
-                                    notifyDataSetChanged();
+                                    notifyItemRemoved(holder.getAdapterPosition());
                                 }else{
                                     Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG);
                                 }
@@ -192,7 +198,7 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
         //COMPONENTES DA LINHA DA LISTA QUE O VIEW HOLDER DEVE PREENCHER EM ITEM_PRODUTO
         private final ImageView imgProdutof, imgProdutoa;
         private final TextView qntProdutof,  precoProdutof, marcaProdutof, nomeProdutof, descricaof, tipof, unidadef;
-        private final CardView cardViewAtras;
+        private final CardView cardViewAtras, cardViewFrente;
         private final Button btnEditar,btnCancelar, btnRemover, btnSalvarEdicao;
         private final TextInputEditText nomeProdutoa, precoProdutoa, marcaProdutoa, descricaoa, qntProdutoa, medida;
         private final TextInputLayout textInputLayout;
@@ -204,6 +210,7 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
         public ProdutosViewHolder(@NonNull View itemView, OnClickImagemListener onClickImagemListener) {
             super(itemView);
             this.onClickImagemListener = onClickImagemListener;
+            cardViewFrente = itemView.findViewById(R.id.cardView_produto_detalhes);
             textInputLayout = itemView.findViewById(R.id.txt_inpt_nome_produto_edicao);
             imgProdutof = itemView.findViewById(R.id.imagem_produto_detalhes);
             qntProdutof = itemView.findViewById(R.id.quantidade_produto_detalhes);

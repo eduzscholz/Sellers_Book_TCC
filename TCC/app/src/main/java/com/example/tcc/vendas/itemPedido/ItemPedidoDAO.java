@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.tcc.CriarBancoSQL;
+
 import java.util.ArrayList;
 
 public class ItemPedidoDAO extends SQLiteOpenHelper{
@@ -22,6 +24,7 @@ public class ItemPedidoDAO extends SQLiteOpenHelper{
     private static final String COL_PRECO= "preco";
     private static final String COL_PRODUTO_ID = "produtoID";
     private static final String COL_VENDA_ID =  "vendaID";
+    private static final String COL_NOME_PRODUTO = "nomeProduto";
 
     private Context context;
 
@@ -32,16 +35,8 @@ public class ItemPedidoDAO extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String createTable =
-                "CREATE TABLE " + TABELA + " ("
-                + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + COL_QUANTIDADE + " INT, "
-                + COL_PRECO + " REAL, "
-                + COL_PRODUTO_ID + " INT, "
-                + COL_VENDA_ID + " INT, "
-                + " FOREIGN KEY (" + COL_PRODUTO_ID + ") REFERENCES produtos(produtoID),"
-                + " FOREIGN KEY (" + COL_VENDA_ID + ") REFERENCES vendas(vendaID));" ;
-        sqLiteDatabase.execSQL(createTable);
+        CriarBancoSQL criarBancoSQL = new CriarBancoSQL(context);
+        criarBancoSQL.criaItemPedido(sqLiteDatabase);
     }
 
     @Override
@@ -75,7 +70,8 @@ public class ItemPedidoDAO extends SQLiteOpenHelper{
             int quant = cursor.getInt(cursor.getColumnIndexOrThrow(COL_QUANTIDADE));
             int idprod = cursor.getInt(cursor.getColumnIndexOrThrow(COL_PRODUTO_ID));
             int idvenda = cursor.getInt(cursor.getColumnIndexOrThrow(COL_VENDA_ID));
-            itemPedidoArrayList.add(new ItemPedido(id,quant,preco,idprod,idvenda));
+            String nomeProduto = cursor.getString(cursor.getColumnIndexOrThrow(COL_NOME_PRODUTO));
+            itemPedidoArrayList.add(new ItemPedido(id,quant,preco,idprod,idvenda,nomeProduto));
         }
         cursor.close();
         return itemPedidoArrayList;
@@ -93,7 +89,9 @@ public class ItemPedidoDAO extends SQLiteOpenHelper{
             int quant = cursor.getInt(cursor.getColumnIndexOrThrow(COL_QUANTIDADE));
             int idprod = cursor.getInt(cursor.getColumnIndexOrThrow(COL_PRODUTO_ID));
             int idvenda = cursor.getInt(cursor.getColumnIndexOrThrow(COL_VENDA_ID));
-            itemPedidoArrayList.add(new ItemPedido(id,quant,preco,idprod,idvenda));        }
+            String nomeProduto = cursor.getString(cursor.getColumnIndexOrThrow(COL_NOME_PRODUTO));
+            itemPedidoArrayList.add(new ItemPedido(id,quant,preco,idprod,idvenda,nomeProduto));
+        }
         cursor.close();
         return itemPedidoArrayList;
     }

@@ -141,7 +141,7 @@ public class AdicionarVendaProduto extends AppCompatActivity  implements Produto
                 vendasDAO.createVenda(v);
                 int idVenda= vendasDAO.ultimoID();
                 for(int i = 0; i < carrinho.size(); i++){
-                    ItemPedido ip = new ItemPedido(0, carrinho.get(i).getQuantidade(), carrinho.get(i).getPreco(), carrinho.get(i).getIDProduto(),idVenda);
+                    ItemPedido ip = new ItemPedido(0, carrinho.get(i).getQuantidade(), carrinho.get(i).getPreco(), carrinho.get(i).getIDProduto(),idVenda, carrinho.get(i).getNome());
                     itemPedidoDAO.createItemPedido(ip);
                     produtosDAO.updateReduzQuantidade(ip.getProdutoID(),ip.getQuantidade());
                 }

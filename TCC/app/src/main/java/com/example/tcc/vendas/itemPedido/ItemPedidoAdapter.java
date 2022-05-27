@@ -40,15 +40,20 @@ public class ItemPedidoAdapter extends RecyclerView.Adapter<ItemPedidoAdapter.It
     public void onBindViewHolder(@NonNull ItemPedidoAdapter.ItemPedidoViewHolder holder, int position) {
         ProdutosDAO produtosDAO = new ProdutosDAO(context);
         DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
-        Produto p = produtosDAO.readOneProdutoID(itemPedidoArrayList.get(position).getProdutoID());
-        ByteArrayInputStream imagemStream = new ByteArrayInputStream(p.getImg());
-        Bitmap bitmap = BitmapFactory.decodeStream(imagemStream);
+
 
         holder.valorItemPedido.setText(decimalFormat.format(itemPedidoArrayList.get(position).getPreco()));
         holder.quantidadeItemPedido.setText(String.valueOf(itemPedidoArrayList.get(position).getQuantidade()));
-        holder.nomeItemPedido.setText(p.getNome());
-        holder.imagemItemPedido.setImageBitmap(bitmap);
+        holder.nomeItemPedido.setText(itemPedidoArrayList.get(position).getNomeProduto());
 
+        try{
+            Produto p = produtosDAO.readOneProdutoID(itemPedidoArrayList.get(position).getProdutoID());
+            ByteArrayInputStream imagemStream = new ByteArrayInputStream(p.getImg());
+            Bitmap bitmap = BitmapFactory.decodeStream(imagemStream);
+            holder.imagemItemPedido.setImageBitmap(bitmap);
+        }catch (Exception e){
+            holder.imagemItemPedido.setImageResource(R.drawable.ic_baseline_image_24);
+        }
     }
 
     @Override

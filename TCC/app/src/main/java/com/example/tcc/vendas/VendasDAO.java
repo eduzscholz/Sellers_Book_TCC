@@ -168,15 +168,9 @@ public class VendasDAO extends SQLiteOpenHelper {
         String sql = COL_ID + " = ?";
         String[] selectionArgs = {String.valueOf(id)};
         SQLiteDatabase db = getWritableDatabase();
-
-        ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO(context);
-        if(itemPedidoDAO.deleteManyItemPedidoIdVenda(id)==0){
-            return false;
-        }else {
-            int delete = db.delete(TABELA, sql, selectionArgs);
-            db.close();
-            return delete != 0;
-        }
+        int delete = db.delete(TABELA,sql,selectionArgs);
+        db.close();
+        return delete != 0;
     }
 
     public int deleteManyVenda(@NonNull int[] id){

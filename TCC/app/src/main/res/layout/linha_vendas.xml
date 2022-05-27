@@ -65,14 +65,15 @@
             android:id="@+id/valor_esta_pago_venda"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
+            android:layout_marginStart="-125dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
             android:checked="false"
             android:clickable="false"
             android:focusable="false"
             android:fontFamily="sans-serif-medium"
+            android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="R$: 200,00" />
 
@@ -171,7 +172,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/nome_cliente_vendas"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/nome_cliente_vendas"
-            tools:text="ID_venda" />
+            tools:text="XX" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

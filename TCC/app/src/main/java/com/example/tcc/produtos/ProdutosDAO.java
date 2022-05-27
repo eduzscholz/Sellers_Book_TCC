@@ -72,9 +72,10 @@ public class ProdutosDAO extends SQLiteOpenHelper{
     //LE TODAS AS LINHAS DA TABELA
     public ArrayList<Produto> readAllProduto(){
         ArrayList<Produto> produtoArrayList = new ArrayList<>();
+        ArrayList<Produto> semEstoqueFimDaFila = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABELA, null,null, null, COL_MARCA, null, COL_NOME + " ASC");
+        Cursor cursor = db.query(TABELA, null,null, null, null, null, COL_NOME + " ASC");
 
         while(cursor.moveToNext()){
             int id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID));
@@ -86,10 +87,14 @@ public class ProdutosDAO extends SQLiteOpenHelper{
             int quant = cursor.getInt(cursor.getColumnIndexOrThrow(COL_QUANTIDADE));
             String tipo = cursor.getString(cursor.getColumnIndexOrThrow(COL_TIPO));
             String unidadeMedida = cursor.getString(cursor.getColumnIndexOrThrow(COL_MEDIDA));
-            produtoArrayList.add(new Produto(id,img,nome,marca,desc,unidadeMedida,preco,quant,tipo));
+            if(quant==0){
+                semEstoqueFimDaFila.add(new Produto(id,img,nome,marca,desc,unidadeMedida,preco,quant,tipo));
+            }else {
+                produtoArrayList.add(new Produto(id, img, nome, marca, desc, unidadeMedida, preco, quant, tipo));
+            }
         }
-
         cursor.close();
+        produtoArrayList.addAll(semEstoqueFimDaFila);
         return produtoArrayList;
     }
 

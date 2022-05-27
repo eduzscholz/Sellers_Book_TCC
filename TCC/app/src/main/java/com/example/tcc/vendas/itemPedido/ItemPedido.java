@@ -6,13 +6,15 @@ public class ItemPedido {
     private double preco;
     private int produtoID;
     private int vendaID;
+    private String nomeProduto;
 
-    public ItemPedido(int itemPedidoID, int quantidade, double preco, int produtoID, int vendaID) {
+    public ItemPedido(int itemPedidoID, int quantidade, double preco, int produtoID, int vendaID, String nomeProduto) {
         this.itemPedidoID = itemPedidoID;
         this.quantidade = quantidade;
         this.preco = preco;
         this.produtoID = produtoID;
         this.vendaID = vendaID;
+        this.nomeProduto = nomeProduto;
     }
 
     @Override
@@ -24,6 +26,14 @@ public class ItemPedido {
                 ", produtoID=" + produtoID +
                 ", vendaID=" + vendaID +
                 '}';
+    }
+
+    public String getNomeProduto() {
+        return nomeProduto;
+    }
+
+    public void setNomeProduto(String nomeProduto) {
+        this.nomeProduto = nomeProduto;
     }
 
     public int getItemPedidoID() {

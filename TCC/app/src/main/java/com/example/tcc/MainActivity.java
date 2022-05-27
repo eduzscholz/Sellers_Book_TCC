@@ -20,14 +20,10 @@ public class MainActivity extends AppCompatActivity implements Pagamento {
     //TITULOS DAS TABS
     private final String[] titulos = {"INICIO","PRODUTOS","VENDAS","CLIENTES"};
 
-    //TODO ARMOR CASO NAO INSIRA DADOS PRODUTO E CLIENTE
-
-    //TODO QUANTIDADE ZERO produtos
     //TODO PADROES                                       ?
     //TODO CONSTRASTES
     //TODO NOTIFICAÇÃO
-    //ANIMACOES
-    //ARRUMAR PRODUTOS TABELA QUE NEM CLIENTE PARA VENDA
+    //todo ANIMACOES
 
     //futuro
     //parcelas
