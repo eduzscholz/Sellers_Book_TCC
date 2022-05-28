@@ -1,5 +1,9 @@
 package com.example.tcc.produtos;
 
+import androidx.annotation.NonNull;
+
+import java.util.Arrays;
+
 //CLASSE DOS PRODUTOS
 public class Produto {
     private byte[] img;    //IMAGEM DO PRODUTO
@@ -7,6 +11,15 @@ public class Produto {
     private double preco;
     private int quantidade;
     private int IDProduto;
+    private boolean aberto;
+
+    public boolean isAberto() {
+        return aberto;
+    }
+
+    public void setAberto(boolean aberto) {
+        this.aberto = aberto;
+    }
 
     public Produto(int id, byte[] img, String nome, String marca, String complemento, String medida, double preco, int quantidade, String tipo) {
         this.img = img;
@@ -18,12 +31,14 @@ public class Produto {
         this.quantidade = quantidade;
         this.tipoDeProduto = tipo;
         this.IDProduto = id;
+        this.aberto = false;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Produto{" +
-                "img=" + img +
+                "img=" + Arrays.toString(img) +
                 ", nome='" + nome + '\'' +
                 ", marca='" + marca + '\'' +
                 ", descricao='" + complemento + '\'' +

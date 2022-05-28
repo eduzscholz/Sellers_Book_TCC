@@ -11,6 +11,7 @@ public class Venda {
     private String nomeCliente;
     private int clienteID;
     private ArrayList<ItemPedido> itemPedidoArrayList;
+    private boolean aberto;
 
     public Venda(int IDVenda, String nomeCliente, Date dataCompra, Date dataPagamento, Date previsao, int clienteID, ArrayList<ItemPedido> itemPedidoArrayList) {
         this.IDVenda = IDVenda;
@@ -20,6 +21,15 @@ public class Venda {
         this.clienteID = clienteID;
         this.itemPedidoArrayList = itemPedidoArrayList;
         this.nomeCliente = nomeCliente;
+        this.aberto = false;
+    }
+
+    public boolean isAberto() {
+        return aberto;
+    }
+
+    public void setAberto(boolean aberto) {
+        this.aberto = aberto;
     }
 
     public String getNomeCliente() {

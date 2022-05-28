@@ -1,8 +1,6 @@
 package com.example.tcc.produtos;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -16,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,27 +21,24 @@ import com.example.tcc.R;
 import com.example.tcc.sumirBotaoAdc;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.ProdutosViewHolder> {
 
-    private ArrayList<Produto> produtoArrayList;    //LISTA QUE GUARDA OS PRODUTOS
+    protected static ArrayList<Produto> produtoArrayList;    //LISTA QUE GUARDA OS PRODUTOS
     Context context;    //CONTEXTO...
     OnClickImagemListener onClickImagemListener;
     sumirBotaoAdc sumirBotaoAdc;
 
-    private ActivityResultLauncher<String> buscaGaleria;
-    private ActivityResultLauncher<Intent> tirarFoto;
-
     //CONSTRUTOR
     public ProdutosAdapter(Context ct, ArrayList<Produto> produtoArrayList, ProdutosFragment onClickImagemListener, sumirBotaoAdc sumirBotaoAdc){
         this.context=ct;
-        this.produtoArrayList = produtoArrayList;
+        ProdutosAdapter.produtoArrayList = produtoArrayList;
         this.onClickImagemListener = onClickImagemListener;
         this.sumirBotaoAdc = sumirBotaoAdc;
     }
@@ -70,6 +64,8 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
         }else{
             holder.imgProdutof.setImageResource(R.drawable.ic_baseline_image_24);
         }
+        boolean estaAberto = produtoArrayList.get(position).isAberto();
+        holder.cardViewFrente.findViewById(R.id.detalhes_produto).setVisibility(estaAberto ? View.VISIBLE : View.GONE);
         holder.marcaProdutof.setText(produtoArrayList.get(position).getMarca());
         holder.nomeProdutof.setText(produtoArrayList.get(position).getNome());
         holder.precoProdutof.setText(decimalFormat.format(produtoArrayList.get(position).getPreco()));
@@ -79,53 +75,49 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
         holder.unidadef.setText(String.valueOf(produtoArrayList.get(position).getMedida()));
 
         //QUANDO CLICA CANCELAR, SOME O CARDVIEW DE EDIÇÃO
-        holder.btnCancelar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(holder.cardViewAtras.getVisibility()!=view.GONE) {
-                    holder.cardViewAtras.setVisibility(view.GONE);
-                    sumirBotaoAdc.sumir();
-                }
+        holder.btnCancelar.setOnClickListener(view -> {
+            if(holder.cardViewAtras.getVisibility()!= View.GONE) {
+                holder.cardViewAtras.setVisibility(View.GONE);
+                holder.cardViewFrente.setClickable(true);
+                sumirBotaoAdc.sumir();
             }
         });
         //APARECE O CARDVIEW DE EDIÇÃO
-        holder.btnEditar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(holder.cardViewAtras.getVisibility()!=view.VISIBLE) {
+        holder.btnEditar.setOnClickListener(view -> {
+            if(holder.cardViewAtras.getVisibility()!= View.VISIBLE) {
 
-                    if(produtoArrayList.get(holder.getAdapterPosition()).getImg()!=null) {
-                        ByteArrayInputStream imageStream = new ByteArrayInputStream(produtoArrayList.get(holder.getAdapterPosition()).getImg());
-                        Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
-                        holder.imgProdutof.setImageBitmap(bitmap);
-                    }else{
-                        holder.imgProdutof.setImageResource(R.drawable.ic_baseline_image_24);
-                    }
-                    sumirBotaoAdc.sumir();
-                    holder.cardViewAtras.setVisibility(view.VISIBLE);
-                    holder.marcaProdutoa.setText(produtoArrayList.get(holder.getAdapterPosition()).getMarca());
-                    holder.nomeProdutoa.setText(produtoArrayList.get(holder.getAdapterPosition()).getNome());
-                    holder.precoProdutoa.setText(String.valueOf(produtoArrayList.get(holder.getAdapterPosition()).getPreco()));
-                    holder.descricaoa.setText(produtoArrayList.get(holder.getAdapterPosition()).getComplemento());
-                    holder.medida.setText(String.valueOf(produtoArrayList.get(holder.getAdapterPosition()).getMedida()));
-                    holder.qntProdutoa.setText(String.valueOf(produtoArrayList.get(holder.getAdapterPosition()).getQuantidade()));
-                    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view.getContext(),R.array.tipo, android.R.layout.simple_spinner_dropdown_item);
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    holder.tipoa.setText(holder.tipof.getText());
-                    holder.tipoa.setAdapter(adapter);
+                if(produtoArrayList.get(holder.getAdapterPosition()).getImg()!=null) {
+                    ByteArrayInputStream imageStream = new ByteArrayInputStream(produtoArrayList.get(holder.getAdapterPosition()).getImg());
+                    Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
+                    holder.imgProdutof.setImageBitmap(bitmap);
+                }else{
+                    holder.imgProdutof.setImageResource(R.drawable.ic_baseline_image_24);
                 }
+                holder.cardViewAtras.setVisibility(View.VISIBLE);
+                holder.marcaProdutoa.setText(produtoArrayList.get(holder.getAdapterPosition()).getMarca());
+                holder.nomeProdutoa.setText(produtoArrayList.get(holder.getAdapterPosition()).getNome());
+                holder.precoProdutoa.setText(String.valueOf(produtoArrayList.get(holder.getAdapterPosition()).getPreco()));
+                holder.descricaoa.setText(produtoArrayList.get(holder.getAdapterPosition()).getComplemento());
+                holder.medida.setText(String.valueOf(produtoArrayList.get(holder.getAdapterPosition()).getMedida()));
+                holder.qntProdutoa.setText(String.valueOf(produtoArrayList.get(holder.getAdapterPosition()).getQuantidade()));
+                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view.getContext(),R.array.tipo, android.R.layout.simple_spinner_dropdown_item);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                holder.tipoa.setText(holder.tipof.getText());
+                holder.tipoa.setAdapter(adapter);
+                holder.cardViewFrente.setClickable(false);
+                sumirBotaoAdc.sumir();
             }
         });
         //SALVA AS MUDANCAS FEITAS
         holder.btnSalvarEdicao.setOnClickListener(view -> {
             boolean teste = false;
-            if(holder.nomeProdutoa.getText().toString().equals("") || holder.nomeProdutoa.getText().equals(null)){
+            if(Objects.requireNonNull(holder.nomeProdutoa.getText()).toString().equals("")){
                 holder.nomeProdutoa.setError("O produto precisa de um nome");
                 teste=true;
-            }if(holder.precoProdutoa.getText().toString().equals("") || holder.precoProdutoa.getText().toString().equals(null)){
+            }if(Objects.requireNonNull(holder.precoProdutoa.getText()).toString().equals("")){
                 holder.precoProdutoa.setError("O produto precisa de um preço");
                 teste=true;
-            }if(holder.qntProdutoa.getText().toString().equals("") || holder.qntProdutoa.getText().toString().equals(null)) {
+            }if(Objects.requireNonNull(holder.qntProdutoa.getText()).toString().equals("")) {
                 holder.qntProdutoa.setError("O produto precisa de uma quantidade");
                 teste = true;
             }
@@ -135,61 +127,54 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
             MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
             dialog .setTitle("Deseja editar esse cliente?")
                     .setNegativeButton("Não",null)
-                    .setPositiveButton("Sim", new DialogInterface.OnClickListener(){
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            byte imagemBytes[];
-                            try{
-                                BitmapDrawable drawable = (BitmapDrawable) holder.imgProdutoa.getDrawable();
-                                Bitmap bitmap = drawable.getBitmap();
+                    .setPositiveButton("Sim", (dialogInterface, i) -> {
+                        byte[] imagemBytes;
+                        try{
+                            BitmapDrawable drawable = (BitmapDrawable) holder.imgProdutoa.getDrawable();
+                            Bitmap bitmap = drawable.getBitmap();
 
-                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                                bitmap.compress(Bitmap.CompressFormat.JPEG,10,stream);
-                                imagemBytes = stream.toByteArray();
-                            }catch(Exception e){
-                                imagemBytes=null;
-                            }
-                            String nome = holder.nomeProdutoa.getText().toString();
-                            Double valor = Double.parseDouble(holder.precoProdutoa.getText().toString());
-                            String marca = holder.marcaProdutoa.getText().toString();
-                            int quant = Integer.parseInt(holder.qntProdutoa.getText().toString());
-                            String complemento = holder.descricaoa.getText().toString();
-                            String medida = holder.medida.getText().toString();
-                            String tipo = holder.tipoa.getText().toString();
-                            if(produtosDAO.updateProduto(produtoArrayList.get(holder.getAdapterPosition()).getIDProduto(),nome,marca,complemento,valor,medida,quant,tipo,imagemBytes)){
-                                sumirBotaoAdc.sumir();
-                                produtoArrayList = produtosDAO.readAllProduto();
-                                notifyDataSetChanged();
-                            }else{
-                                Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG);
-                            }
-                            holder.cardViewAtras.setVisibility(View.GONE);
+                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                            bitmap.compress(Bitmap.CompressFormat.JPEG,10,stream);
+                            imagemBytes = stream.toByteArray();
+                        }catch(Exception e){
+                            imagemBytes=null;
                         }
+                        String nome = holder.nomeProdutoa.getText().toString();
+                        Double valor = Double.parseDouble(holder.precoProdutoa.getText().toString());
+                        String marca = Objects.requireNonNull(holder.marcaProdutoa.getText()).toString();
+                        int quant = Integer.parseInt(holder.qntProdutoa.getText().toString());
+                        String complemento = Objects.requireNonNull(holder.descricaoa.getText()).toString();
+                        String medida = Objects.requireNonNull(holder.medida.getText()).toString();
+                        String tipo = holder.tipoa.getText().toString();
+                        Produto p = produtosDAO.updateProduto(produtoArrayList.get(holder.getAdapterPosition()).getIDProduto(),nome,marca,complemento,valor,medida,quant,tipo,imagemBytes);
+                        if(p!=null){
+                            holder.cardViewFrente.setClickable(true);
+                            sumirBotaoAdc.sumir();
+                            produtoArrayList.set(holder.getAdapterPosition(),p);
+                            notifyItemChanged(holder.getAdapterPosition());
+                        }else{
+                            Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG).show();
+                        }
+                        holder.cardViewAtras.setVisibility(View.GONE);
                     });
                 dialog.show();
         });
         //APAGA O PRODUTO DO BANCO
-        holder.btnRemover.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
-                dialog .setTitle("Deseja remover esse cliente?")
-                        .setNegativeButton("Não",null)
-                        .setPositiveButton("Sim", new DialogInterface.OnClickListener(){
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                if(produtosDAO.deleteOneProduto(produtoArrayList.get(holder.getAdapterPosition()).getIDProduto())){
-                                    holder.cardViewFrente.findViewById(R.id.detalhes_produto).setVisibility(View.GONE);
-                                    produtoArrayList.remove(holder.getAdapterPosition());
-                                    notifyItemRemoved(holder.getAdapterPosition());
-                                }else{
-                                    Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG);
-                                }
-                                holder.cardViewAtras.setVisibility(View.GONE);
-                            }
-                        });
-                dialog.show();
-            }
+        holder.btnRemover.setOnClickListener(view -> {
+            MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
+            dialog .setTitle("Deseja remover esse cliente?")
+                    .setNegativeButton("Não",null)
+                    .setPositiveButton("Sim", (dialogInterface, i) -> {
+                        if(produtosDAO.deleteOneProduto(produtoArrayList.get(holder.getAdapterPosition()).getIDProduto())){
+                            holder.cardViewFrente.findViewById(R.id.detalhes_produto).setVisibility(View.GONE);
+                            produtoArrayList.remove(holder.getAdapterPosition());
+                            notifyItemRemoved(holder.getAdapterPosition());
+                        }else{
+                            Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG).show();
+                        }
+                        holder.cardViewAtras.setVisibility(View.GONE);
+                    });
+            dialog.show();
         });
     }
 
@@ -200,7 +185,7 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
     }
 
     //VIEW HOLDER GUARDA É O QUE GUARDA O CONTEUDO DAS LINHAS DA LISTVIEW
-    public static class ProdutosViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ProdutosViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         //COMPONENTES DA LINHA DA LISTA QUE O VIEW HOLDER DEVE PREENCHER EM ITEM_PRODUTO
         private final ImageView imgProdutof, imgProdutoa;
@@ -208,17 +193,13 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
         private final CardView cardViewAtras, cardViewFrente;
         private final Button btnEditar,btnCancelar, btnRemover, btnSalvarEdicao;
         private final TextInputEditText nomeProdutoa, precoProdutoa, marcaProdutoa, descricaoa, qntProdutoa, medida;
-        private final TextInputLayout textInputLayout;
         private final AutoCompleteTextView tipoa;
-        private OnClickImagemListener onClickImagemListener;
 
 
         //CONTRUTOR CONECTA COM OS COMPONENTES DE ITEMVIEW(ITEM_PRODUTO)
         public ProdutosViewHolder(@NonNull View itemView, OnClickImagemListener onClickImagemListener) {
             super(itemView);
-            this.onClickImagemListener = onClickImagemListener;
             cardViewFrente = itemView.findViewById(R.id.cardView_produto_detalhes);
-            textInputLayout = itemView.findViewById(R.id.txt_inpt_nome_produto_edicao);
             imgProdutof = itemView.findViewById(R.id.imagem_produto_detalhes);
             qntProdutof = itemView.findViewById(R.id.quantidade_produto_detalhes);
             precoProdutof = itemView.findViewById(R.id.valor_produto_detalhes);
@@ -240,22 +221,16 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
             btnCancelar = itemView.findViewById(R.id.cancelar_produto);
             btnRemover = itemView.findViewById(R.id.remover_produto);
             btnSalvarEdicao = itemView.findViewById(R.id.salvar_produto);
-            imgProdutoa.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onClickImagemListener.onClickImagem(imgProdutoa);
-                }
-            });
+            imgProdutoa.setOnClickListener(view -> onClickImagemListener.onClickImagem(imgProdutoa));
             //ABRE OS DETALHES DO PRODUTO QUANDO CLICA NELE
             itemView.setOnClickListener(this);
         }
         @Override
         public void onClick(View view) {
-            if(view.findViewById(R.id.detalhes_produto).getVisibility()==view.VISIBLE){
-                view.findViewById(R.id.detalhes_produto).setVisibility(view.GONE);
-            }else {
-                view.findViewById(R.id.detalhes_produto).setVisibility(view.VISIBLE);
-            }
+            Produto p = produtoArrayList.get(getAdapterPosition());
+            p.setAberto(!p.isAberto());
+            cardViewFrente.findViewById(R.id.detalhes_produto).setVisibility(p.isAberto()? View.VISIBLE : View.GONE);
+            notifyItemChanged(getAdapterPosition());
         }
     }
     interface OnClickImagemListener{

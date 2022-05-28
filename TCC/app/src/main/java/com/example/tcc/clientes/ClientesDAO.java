@@ -18,7 +18,7 @@ public class ClientesDAO extends SQLiteOpenHelper {
     private static final String DATABASE = "banco.db";
     private static final String TABELA = "clientes";
     private static final int VERSAO = 1;
-    private Context context;
+    private final Context context;
 
     public static final String COL_NOME = "nome";
     public static final String COL_CONTATO = "contato";
@@ -53,7 +53,7 @@ public class ClientesDAO extends SQLiteOpenHelper {
         cv.put(COL_NOME, cliente.getNome());
         cv.put(COL_CONTATO, cliente.getContato());
         cv.put(COL_CPF, cliente.getCPF());
-        cv.put(COL_ENDERECO, cliente.getEndereço());
+        cv.put(COL_ENDERECO, cliente.getEndereco());
 
         long insert = db.insert(TABELA, null, cv);
         db.close();
@@ -84,7 +84,9 @@ public class ClientesDAO extends SQLiteOpenHelper {
 
         cursor.moveToNext();
 
-        return cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID));
+        int i = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID));
+        cursor.close();
+        return i;
     }
 
     public Cliente readOneClienteID(int buscaID){
@@ -107,7 +109,6 @@ public class ClientesDAO extends SQLiteOpenHelper {
     }
 
     public String readOneClienteIDNome(int buscaID){
-        Cliente cli;
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABELA, new String[]{COL_NOME},COL_ID + " = ?", new String[] {String.valueOf(buscaID)}, null, null, null);
@@ -153,8 +154,12 @@ public class ClientesDAO extends SQLiteOpenHelper {
         return count!=0;
     }
 
-    public boolean updateCliente(int id,String nome, String contato, String endereco, String CPF){
-        return updateCliente(id,new String[] {COL_NOME,COL_CPF,COL_CONTATO,COL_ENDERECO},new String[] {nome,CPF,contato,endereco});
+    public Cliente updateCliente(int id,String nome, String contato, String endereco, String CPF){
+        if(updateCliente(id,new String[] {COL_NOME,COL_CPF,COL_CONTATO,COL_ENDERECO},new String[] {nome,CPF,contato,endereco}))
+        {
+            return new Cliente(id,nome,CPF,endereco,contato);
+        }else
+            return null;
     }
 
     public boolean deleteOneCliente(int id){

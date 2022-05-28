@@ -21,10 +21,8 @@ public class MainActivity extends AppCompatActivity implements Pagamento {
     private final String[] titulos = {"INICIO","PRODUTOS","VENDAS","CLIENTES"};
 
     //TODO PADROES                                       ?
-    //TODO CONSTRASTES
     //TODO TESTES UNITARIOS
     //TODO NOTIFICAÇÃO
-    //todo ANIMACOES
 
     //futuro
     //parcelas

@@ -1,14 +1,10 @@
 package com.example.tcc.clientes;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,16 +18,17 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.ClientesViewHolder> {
 
-    private ArrayList<Cliente> clienteArrayList;
+    private static ArrayList<Cliente> clienteArrayList;
     Context context;
     sumirBotaoAdc sumirBotaoAdc;
 
     public ClientesAdapter(Context context, ArrayList<Cliente> clienteArrayList, sumirBotaoAdc sumirBotaoAdc) {
         this.context=context;
-        this.clienteArrayList = clienteArrayList;
+        ClientesAdapter.clienteArrayList = clienteArrayList;
         this.sumirBotaoAdc = sumirBotaoAdc;
     }
 
@@ -47,29 +44,36 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Client
         ClientesDAO clientesDAO = new ClientesDAO(context);
         boolean pagamento = clientesDAO.verificarPagamentoCliente(clienteArrayList.get(position).getID());
 
+        boolean estaAberto = clienteArrayList.get(position).isAberto();
+        holder.cardViewFrente.findViewById(R.id.detalhes_cliente).setVisibility(estaAberto ? View.VISIBLE : View.GONE);
         holder.nomeClienteFrente.setText(clienteArrayList.get(position).getNome());
         holder.contatoClienteFrente.setText(clienteArrayList.get(position).getContato());
-        holder.enderecoClienteFrente.setText(clienteArrayList.get(position).getEndereço());
+        holder.enderecoClienteFrente.setText(clienteArrayList.get(position).getEndereco());
         holder.pagamentoFrente.setText(pagamento ? "" : "Em Aberto" );
         holder.cpfClienteFrente.setText(clienteArrayList.get(position).getCPF());
+        //ABRE O CARDVIEW DE EDICAO
         holder.btnEditar.setOnClickListener(view -> {
-            if(holder.cardViewAtras.getVisibility()!=view.VISIBLE) {
-                holder.cardViewAtras.setVisibility(view.VISIBLE);
+            if(holder.cardViewAtras.getVisibility()!= View.VISIBLE) {
+                holder.cardViewAtras.setVisibility(View.VISIBLE);
                 holder.nomeClienteAtras.setText(clienteArrayList.get(holder.getAdapterPosition()).getNome());
                 holder.contatoClienteAtras.setText(clienteArrayList.get(holder.getAdapterPosition()).getContato());
-                holder.enderecoClienteAtras.setText(clienteArrayList.get(holder.getAdapterPosition()).getEndereço());
+                holder.enderecoClienteAtras.setText(clienteArrayList.get(holder.getAdapterPosition()).getEndereco());
                 holder.cpfClienteAtras.setText(clienteArrayList.get(holder.getAdapterPosition()).getCPF());
+                holder.cardViewFrente.setClickable(false);
                 sumirBotaoAdc.sumir();
             }
         });
+        //FECHA O CARDVIEW DE EDICAO
         holder.btnCancelar.setOnClickListener(view -> {
-            if(holder.cardViewAtras.getVisibility()!=view.GONE) {
-                holder.cardViewAtras.setVisibility(view.GONE);
+            if(holder.cardViewAtras.getVisibility()!= View.GONE) {
+                holder.cardViewAtras.setVisibility(View.GONE);
+                holder.cardViewFrente.setClickable(true);
                 sumirBotaoAdc.sumir();
             }
         });
+        //EDITA O CLIENTE
         holder.btnSalvarEdicao.setOnClickListener(view -> {
-            if(holder.nomeClienteAtras.getText().toString().equals("") || holder.nomeClienteAtras.getText().toString().equals(null)){
+            if(Objects.requireNonNull(holder.nomeClienteAtras.getText()).toString().equals("")){
                 holder.nomeClienteAtras.setError("O cliente precisa de um nome");
                 return;
             }
@@ -78,36 +82,37 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Client
                     .setNegativeButton("Não",null)
                     .setPositiveButton("Sim", (dialogInterface, i) -> {
                         String nome = holder.nomeClienteAtras.getText().toString();
-                        String contato = holder.contatoClienteAtras.getText().toString();
-                        String endereco = holder.enderecoClienteAtras.getText().toString();
-                        String cpf = holder.cpfClienteAtras.getText().toString();
+                        String contato = Objects.requireNonNull(holder.contatoClienteAtras.getText()).toString();
+                        String endereco = Objects.requireNonNull(holder.enderecoClienteAtras.getText()).toString();
+                        String cpf = Objects.requireNonNull(holder.cpfClienteAtras.getText()).toString();
 
-                        if(clientesDAO.updateCliente(clienteArrayList.get(holder.getAdapterPosition()).getID(),nome,contato,endereco,cpf)){
-                            clienteArrayList = clientesDAO.readAllClientes();
-                            notifyDataSetChanged();
+                        Cliente c = clientesDAO.updateCliente(clienteArrayList.get(holder.getAdapterPosition()).getID(),nome,contato,endereco,cpf);
+                        if(c!=null){
+                            clienteArrayList.set(holder.getAdapterPosition(),c);
+                            notifyItemChanged(holder.getAdapterPosition());
+                            holder.cardViewFrente.setClickable(true);
+                            sumirBotaoAdc.sumir();
                         }else{
-                            Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG);
+                            Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG).show();
                         }
                         holder.cardViewAtras.setVisibility(View.GONE);
                     });
             dialog.show();
         });
+        //REMOVE O CLIENTE
         holder.btnRemover.setOnClickListener(view -> {
             MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
             dialog .setTitle("Deseja remover esse cliente?")
                     .setNegativeButton("Não",null)
-                    .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            if(clientesDAO.deleteOneCliente(clienteArrayList.get(holder.getAdapterPosition()).getID())){
-                                holder.cardViewFrente.findViewById(R.id.detalhes_cliente).setVisibility(View.GONE);
-                                clienteArrayList.remove(holder.getAdapterPosition());
-                                notifyItemRemoved(holder.getAdapterPosition());
-                            }else{
-                                Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG);
-                            }
-                            holder.cardViewAtras.setVisibility(View.GONE);
+                    .setPositiveButton("Sim", (dialogInterface, i) -> {
+                        if(clientesDAO.deleteOneCliente(clienteArrayList.get(holder.getAdapterPosition()).getID())){
+                            holder.cardViewFrente.findViewById(R.id.detalhes_cliente).setVisibility(View.GONE);
+                            clienteArrayList.remove(holder.getAdapterPosition());
+                            notifyItemRemoved(holder.getAdapterPosition());
+                        }else{
+                            Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG).show();
                         }
+                        holder.cardViewAtras.setVisibility(View.GONE);
                     });
             dialog.show();
         });
@@ -118,7 +123,7 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Client
         return clienteArrayList.size();
     }
 
-    public static class ClientesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ClientesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final CardView cardViewAtras, cardViewFrente;
         private final TextView nomeClienteFrente, pagamentoFrente, contatoClienteFrente, enderecoClienteFrente, cpfClienteFrente;
@@ -147,11 +152,10 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Client
 
         @Override
         public void onClick(View view) {
-            if(view.findViewById(R.id.detalhes_cliente).getVisibility()==view.VISIBLE){
-                view.findViewById(R.id.detalhes_cliente).setVisibility(view.GONE);
-            }else {
-                view.findViewById(R.id.detalhes_cliente).setVisibility(view.VISIBLE);
-            }
+            Cliente c = clienteArrayList.get(getAdapterPosition());
+            c.setAberto(!c.isAberto());
+            cardViewFrente.findViewById(R.id.detalhes_cliente).setVisibility(c.isAberto()? View.VISIBLE : View.GONE);
+            notifyItemChanged(getAdapterPosition());
         }
     }
 }

@@ -44,7 +44,6 @@ public class InicioAdapter extends RecyclerView.Adapter<InicioAdapter.InicioView
     @Override
     public void onBindViewHolder(@NonNull InicioViewHolder holder, int position) {
         VendasDAO vendasDAO = new VendasDAO(context);
-        Date date = new Date();
         DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         holder.dataCompra.setText(simpleDateFormat.format(vendaArrayList.get(position).getDataCompra()));
@@ -52,35 +51,29 @@ public class InicioAdapter extends RecyclerView.Adapter<InicioAdapter.InicioView
         holder.nomeCli.setText(vendaArrayList.get(position).getNomeCliente());
         holder.valorTotal.setText(decimalFormat.format(vendaArrayList.get(position).getValorTotal()));
 
-        holder.button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
-                dialog .setTitle("Este cliente pagou?")
-                        .setNegativeButton("Não",null)
-                        .setPositiveButton("Sim", new DialogInterface.OnClickListener(){
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
-                                Date date = new Date();
-                                if(vendasDAO.updateVenda(vendaArrayList.get(holder.getAdapterPosition()).getIDVenda(),new String[] {VendasDAO.COL_DATA_PAGAMENTO},new String[] {simpleDateFormat.format(date)})){
-                                    vendaArrayList = vendasDAO.readAllVenda();
-                                    holder.button.setEnabled(false);
-                                    notifyDataSetChanged();
-                                    pagamento.atualizaViewPager(0);
-                                }else{
-                                    Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG);
-                                }
-                            }
-                        });
-                dialog.show();
-            }
+        holder.button.setOnClickListener(view -> {
+            MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
+            dialog .setTitle("Este cliente pagou?")
+                    .setNegativeButton("Não",null)
+                    .setPositiveButton("Sim", (dialogInterface, i) -> {
+                        SimpleDateFormat simpleDateFormat1 =new SimpleDateFormat("yyyy-MM-dd");
+                        Date date = new Date();
+                        if(vendasDAO.updateVenda(vendaArrayList.get(holder.getAdapterPosition()).getIDVenda(),new String[] {VendasDAO.COL_DATA_PAGAMENTO},new String[] {simpleDateFormat1.format(date)})){
+                            vendaArrayList = vendasDAO.readAllVenda();
+                            holder.button.setEnabled(false);
+                            notifyDataSetChanged();
+                            pagamento.atualizaViewPager(0);
+                        }else{
+                            Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG).show();
+                        }
+                    });
+            dialog.show();
         });
     }
 
     @Override
     public int getItemCount() {
-        return vendaArrayList.size()<2 ? vendaArrayList.size() : 2;
+        return Math.min(vendaArrayList.size(), 2);
     }
 
     public static class InicioViewHolder extends RecyclerView.ViewHolder {

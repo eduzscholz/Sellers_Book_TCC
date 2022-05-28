@@ -1,7 +1,6 @@
 package com.example.tcc.vendas;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,15 +29,14 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.VendasView
 
     private final RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
 
-    private ArrayList<Venda> vendaArrayList;
-    private ArrayList<ItemPedido> itemPedidoArrayList = new ArrayList<>();
-    private Pagamento pagamento;
+    private static ArrayList<Venda> vendaArrayList;
+    private final Pagamento pagamento;
 
     Context context;
 
     public VendasAdapter(Context context, ArrayList<Venda> vendaArrayList, Pagamento pagamento) {
         this.context = context;
-        this.vendaArrayList = vendaArrayList;
+        VendasAdapter.vendaArrayList = vendaArrayList;
         this.pagamento = pagamento;
     }
 
@@ -53,11 +51,13 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.VendasView
     public void onBindViewHolder(@NonNull VendasAdapter.VendasViewHolder holder, int position) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(holder.vendasRV.getContext());
         VendasDAO vendasDAO = new VendasDAO(context);
-        itemPedidoArrayList = vendaArrayList.get(position).getItemPedidoArrayList();
+        ArrayList<ItemPedido> itemPedidoArrayList = vendaArrayList.get(position).getItemPedidoArrayList();
         DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
+        boolean estaAberto = vendaArrayList.get(position).isAberto();
+        holder.cvVenda.findViewById(R.id.detalhes_venda).setVisibility(estaAberto ? View.VISIBLE : View.GONE);
         holder.idVenda.setText(String.valueOf(vendaArrayList.get(position).getIDVenda()));
         holder.pagamento.setText("R$ "+decimalFormat.format(vendaArrayList.get(position).getValorTotal()));
         holder.dataCompra.setText(simpleDateFormat.format(vendaArrayList.get(position).getDataCompra()));
@@ -79,52 +79,40 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.VendasView
         holder.vendasRV.setAdapter(mAdapter);
         holder.vendasRV.setRecycledViewPool(viewPool);
 
-        holder.btnRemover.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
-                dialog .setTitle("Deseja apagar essa venda?")
-                        .setNegativeButton("Não",null)
-                        .setPositiveButton("Sim", new DialogInterface.OnClickListener(){
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                int id = vendaArrayList.get(holder.getAdapterPosition()).getIDVenda();
-                                if(vendasDAO.deleteOneVenda(id)){
-                                    holder.cvVenda.findViewById(R.id.detalhes_venda).setVisibility(View.GONE);
-                                    vendaArrayList.remove(holder.getAdapterPosition());
-                                    notifyItemRemoved(holder.getAdapterPosition());
-                                }else{
-                                    Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG);
-                                }
-                            }
-                        });
-                dialog.show();
-            }
+        holder.btnRemover.setOnClickListener(view -> {
+            MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
+            dialog .setTitle("Deseja apagar essa venda?")
+                    .setNegativeButton("Não",null)
+                    .setPositiveButton("Sim", (dialogInterface, i) -> {
+                        int id = vendaArrayList.get(holder.getAdapterPosition()).getIDVenda();
+                        if(vendasDAO.deleteOneVenda(id)){
+                            holder.cvVenda.findViewById(R.id.detalhes_venda).setVisibility(View.GONE);
+                            vendaArrayList.remove(holder.getAdapterPosition());
+                            notifyItemRemoved(holder.getAdapterPosition());
+                        }else{
+                            Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG).show();
+                        }
+                    });
+            dialog.show();
         });
 
-        holder.btnPagar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
-                dialog .setTitle("Este cliente pagou?")
-                        .setNegativeButton("Não",null)
-                        .setPositiveButton("Sim", new DialogInterface.OnClickListener(){
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
-                                Date date = new Date();
-                                if(vendasDAO.updateVenda(vendaArrayList.get(holder.getAdapterPosition()).getIDVenda(),new String[] {VendasDAO.COL_DATA_PAGAMENTO},new String[] {simpleDateFormat.format(date)})){
-                                    vendaArrayList = vendasDAO.readAllVenda();
-                                    holder.btnPagar.setEnabled(false);
-                                    notifyDataSetChanged();
-                                    pagamento.atualizaViewPager(2);
-                                }else{
-                                    Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG);
-                                }
-                            }
-                        });
-                dialog.show();
-            }
+        holder.btnPagar.setOnClickListener(view -> {
+            MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
+            dialog .setTitle("Este cliente pagou?")
+                    .setNegativeButton("Não",null)
+                    .setPositiveButton("Sim", (dialogInterface, i) -> {
+                        SimpleDateFormat simpleDateFormat1 =new SimpleDateFormat("yyyy-MM-dd");
+                        Date date1 = new Date();
+                        if(vendasDAO.updateVenda(vendaArrayList.get(holder.getAdapterPosition()).getIDVenda(),new String[] {VendasDAO.COL_DATA_PAGAMENTO},new String[] {simpleDateFormat1.format(date1)})){
+                            vendaArrayList = vendasDAO.readAllVenda();
+                            holder.btnPagar.setEnabled(false);
+                            notifyItemChanged(holder.getAdapterPosition());
+                            pagamento.atualizaViewPager(2);
+                        }else{
+                            Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG).show();
+                        }
+                    });
+            dialog.show();
         });
     }
 
@@ -133,13 +121,14 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.VendasView
         return vendaArrayList.size();
     }
 
-    public static class VendasViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class VendasViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final TextView nomeCliente,  dataPrevista, dataPagamento, dataCompra, idVenda;
         private final CheckBox pagamento;
         private final RecyclerView vendasRV;
-        private Button btnRemover, btnPagar;
-        private CardView cvVenda;
+        private final Button btnRemover;
+        private final Button btnPagar;
+        private final CardView cvVenda;
 
         public VendasViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -159,11 +148,10 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.VendasView
 
         @Override
         public void onClick(View view) {
-            if(view.findViewById(R.id.detalhes_venda).getVisibility()==View.VISIBLE){
-                view.findViewById(R.id.detalhes_venda).setVisibility(View.GONE);
-            }else{
-                view.findViewById(R.id.detalhes_venda).setVisibility(View.VISIBLE);
-            }
+            Venda v = vendaArrayList.get(getAdapterPosition());
+            v.setAberto(!v.isAberto());
+            cvVenda.findViewById(R.id.detalhes_venda).setVisibility(v.isAberto()? View.VISIBLE : View.GONE);
+            notifyItemChanged(getAdapterPosition());
         }
     }
 }

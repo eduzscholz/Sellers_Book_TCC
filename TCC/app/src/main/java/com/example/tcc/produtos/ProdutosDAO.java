@@ -83,7 +83,7 @@ public class ProdutosDAO extends SQLiteOpenHelper{
             String desc = cursor.getString(cursor.getColumnIndexOrThrow(COL_COMPLEMENTO));
             String marca = cursor.getString(cursor.getColumnIndexOrThrow(COL_MARCA));
             String nome = cursor.getString(cursor.getColumnIndexOrThrow(COL_NOME));
-            Double preco = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_PRECO));
+            double preco = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_PRECO));
             int quant = cursor.getInt(cursor.getColumnIndexOrThrow(COL_QUANTIDADE));
             String tipo = cursor.getString(cursor.getColumnIndexOrThrow(COL_TIPO));
             String unidadeMedida = cursor.getString(cursor.getColumnIndexOrThrow(COL_MEDIDA));
@@ -104,7 +104,10 @@ public class ProdutosDAO extends SQLiteOpenHelper{
 
         cursor.moveToNext();
 
-        return cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID));
+        int i = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID));
+        cursor.close();
+
+        return i;
     }
 
     //LE UMA LINHA DA TABELA POR ID
@@ -120,7 +123,7 @@ public class ProdutosDAO extends SQLiteOpenHelper{
         String desc = cursor.getString(cursor.getColumnIndexOrThrow(COL_COMPLEMENTO));
         String marca = cursor.getString(cursor.getColumnIndexOrThrow(COL_MARCA));
         String nome = cursor.getString(cursor.getColumnIndexOrThrow(COL_NOME));
-        Double preco = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_PRECO));
+        double preco = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_PRECO));
         int quant = cursor.getInt(cursor.getColumnIndexOrThrow(COL_QUANTIDADE));
         String tipo = cursor.getString(cursor.getColumnIndexOrThrow(COL_TIPO));
         String unidadeMedida = cursor.getString(cursor.getColumnIndexOrThrow(COL_MEDIDA));
@@ -142,7 +145,7 @@ public class ProdutosDAO extends SQLiteOpenHelper{
             String desc = cursor.getString(cursor.getColumnIndexOrThrow(COL_COMPLEMENTO));
             String marca = cursor.getString(cursor.getColumnIndexOrThrow(COL_MARCA));
             String nome = cursor.getString(cursor.getColumnIndexOrThrow(COL_NOME));
-            Double preco = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_PRECO));
+            double preco = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_PRECO));
             int quant = cursor.getInt(cursor.getColumnIndexOrThrow(COL_QUANTIDADE));
             String tipo = cursor.getString(cursor.getColumnIndexOrThrow(COL_TIPO));
             String unidadeMedida = cursor.getString(cursor.getColumnIndexOrThrow(COL_MEDIDA));
@@ -155,7 +158,7 @@ public class ProdutosDAO extends SQLiteOpenHelper{
     }
 
     //ATUALIZA TODOS OS DADOS DE UMA LINHA
-    public boolean updateProduto(int id, String nome, String marca, String complemento, Double preco, String medida, int quantidade, String tipo, byte[] imagem){
+    public Produto updateProduto(int id, String nome, String marca, String complemento, Double preco, String medida, int quantidade, String tipo, byte[] imagem){
         ContentValues cv = new ContentValues();
         String selection = COL_ID + " = ?";
         String[] selectionArgs = {String.valueOf(id)};
@@ -172,9 +175,12 @@ public class ProdutosDAO extends SQLiteOpenHelper{
 
         int count = db.update(TABELA,cv,selection,selectionArgs);
         db.close();
-        return count!=0;
+        if (count==1) {
+            return new Produto(id, imagem, nome, marca, complemento, medida, preco, quantidade, tipo);
+        }else
+            return null;
     }
-    //REDUZ A QUANTIDADE DO PRODUTO TODO TESTE UNITARIO
+    //REDUZ A QUANTIDADE DO PRODUTO
     public boolean updateReduzQuantidade(int id, int quantidade){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();

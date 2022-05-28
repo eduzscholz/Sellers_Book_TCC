@@ -1,26 +1,39 @@
 package com.example.tcc.clientes;
 
+import androidx.annotation.NonNull;
+
 public class Cliente {
     private int ID;
     private String nome;
-    private String endereço;
+    private String endereco;
     private String contato;
     private String CPF;
+    private boolean aberto;
 
-    public Cliente(int ID, String nome, String CPF, String endereço, String contato) {
+    public Cliente(int ID, String nome, String CPF, String endereco, String contato) {
         this.ID = ID;
         this.nome = nome;
-        this.endereço = endereço;
+        this.endereco = endereco;
         this.contato = contato;
         this.CPF = CPF;
+        this.aberto = false;
     }
 
+    public boolean isAberto() {
+        return aberto;
+    }
+
+    public void setAberto(boolean aberto) {
+        this.aberto = aberto;
+    }
+
+    @NonNull
     @Override
     public String toString() {
         return "Cliente{" +
                 "ID=" + ID +
                 ", nome='" + nome + '\'' +
-                ", endereço='" + endereço + '\'' +
+                ", endereço='" + endereco + '\'' +
                 ", contato='" + contato + '\'' +
                 ", CPF='" + CPF + '\'' +
                 '}';
@@ -50,12 +63,12 @@ public class Cliente {
         this.nome = nome;
     }
 
-    public String getEndereço() {
-        return endereço;
+    public String getEndereco() {
+        return endereco;
     }
 
-    public void setEndereço(String endereço) {
-        this.endereço = endereço;
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
     }
 
     public String getContato() {

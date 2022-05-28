@@ -6,8 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -35,15 +33,11 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ProdutosFragment extends Fragment implements ProdutosAdapter.OnClickImagemListener, sumirBotaoAdc {
 
-    //RECYCLER VIEW E ADAPTER
-    private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
-
-    private SearchView searchView;
 
     //COMPONENTES CARDVIEW DE ADICIONAR PRODUTO
     private ImageButton btnAdcionarProduto;
@@ -61,22 +55,20 @@ public class ProdutosFragment extends Fragment implements ProdutosAdapter.OnClic
         View view = inflater.inflate(R.layout.fragment_produtos, container, false);
         ProdutosDAO produtosDAO = new ProdutosDAO(this.getContext());
 
-        searchView = view.findViewById(R.id.sv_produtos);
+        SearchView searchView = view.findViewById(R.id.sv_produtos);
         searchView.setOnQueryTextListener(buscaProduto);
 
         //ACHA E CONECTA COM OS COMPONENTES DA TELA
-        recyclerView = view.findViewById(R.id.lista_produtos);
+        //RECYCLER VIEW E ADAPTER
+        RecyclerView recyclerView = view.findViewById(R.id.lista_produtos);
         btnAdcionarProduto = view.findViewById(R.id.adcionar_produto);
 
-        tirarFoto = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-            @Override
-            public void onActivityResult(ActivityResult result) {
-                if(result.getData()!=null){
-                    Bundle bundle = result.getData().getExtras();
-                    Bitmap bitmap = (Bitmap) bundle.get("data");
-                    ImageView iV = imageView;
-                    iV.setImageBitmap(bitmap);
-                }
+        tirarFoto = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if(result.getData()!=null){
+                Bundle bundle = result.getData().getExtras();
+                Bitmap bitmap = (Bitmap) bundle.get("data");
+                ImageView iV = imageView;
+                iV.setImageBitmap(bitmap);
             }
         });
         buscaGaleria = registerForActivityResult(
@@ -91,7 +83,7 @@ public class ProdutosFragment extends Fragment implements ProdutosAdapter.OnClic
         recyclerView.setHasFixedSize(true);
 
         //INICIALIZA E SETA O LAYOUT MANAGER
-        layoutManager = new LinearLayoutManager(this.getContext());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         recyclerView.setLayoutManager(layoutManager);
 
         //ADICIONA PRODUTOS DO BANCO NO ARRAYLIST DE PRODUTOS
@@ -105,7 +97,7 @@ public class ProdutosFragment extends Fragment implements ProdutosAdapter.OnClic
         return view;
     }
 
-    private View.OnClickListener adicionarProduto = new View.OnClickListener() {
+    private final View.OnClickListener adicionarProduto = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             Dialog dialog = new Dialog(getContext());
@@ -133,22 +125,21 @@ public class ProdutosFragment extends Fragment implements ProdutosAdapter.OnClic
                 TextInputEditText txtQuantidadeProduto = dialog.findViewById(R.id.quantidade_produto_edicao);
                 TextInputEditText txtDescricaoProduto = dialog.findViewById(R.id.complemento_produto_edicao);
                 TextInputEditText txtMedidaProduto = dialog.findViewById(R.id.medida_produto_edicao);
-                AutoCompleteTextView spinTipoProduto = dialog.findViewById(R.id.tipo_produto_edicao);
-                ImageView imageViewProduto = dialog.findViewById(R.id.imagem_produto_edicao);
 
-                byte imagemBytes[] = null;
+                byte[] imagemBytes;
                 boolean teste = false;
-                if(txtNomeProduto.getText().toString().equals("") || txtNomeProduto.getText().equals(null)){
-                    txtNomeProduto.setError("Este campo precisa estar preenchido");
+                String s = "Este campo precisa estar preenchido";
+                if(Objects.requireNonNull(txtNomeProduto.getText()).toString().equals("")){
+                    txtNomeProduto.setError(s);
                     teste=true;
-                }if(txtValorProduto.getText().toString().equals("") || txtValorProduto.getText().toString().equals(null)){
-                    txtValorProduto.setError("Este campo precisa estar preenchido");
+                }if(Objects.requireNonNull(txtValorProduto.getText()).toString().equals("")){
+                    txtValorProduto.setError(s);
                     teste=true;
-                }if(txtQuantidadeProduto.getText().toString().equals("") || txtQuantidadeProduto.getText().toString().equals(null)){
-                    txtQuantidadeProduto.setError("Este campo precisa estar preenchido");
+                }if(Objects.requireNonNull(txtQuantidadeProduto.getText()).toString().equals("")){
+                    txtQuantidadeProduto.setError(s);
                     teste=true;
                 }try{
-                    BitmapDrawable drawable = (BitmapDrawable) imageViewProduto.getDrawable();
+                    BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
                     Bitmap bitmap = drawable.getBitmap();
 
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -163,19 +154,20 @@ public class ProdutosFragment extends Fragment implements ProdutosAdapter.OnClic
                 ProdutosDAO produtosDAO = new ProdutosDAO(view13.getContext());
 
                 String nome = txtNomeProduto.getText().toString();
-                Double valor = Double.parseDouble(txtValorProduto.getText().toString());
-                String marca = txtMarcaProduto.getText().toString();
+                double valor = Double.parseDouble(txtValorProduto.getText().toString());
+                String marca = Objects.requireNonNull(txtMarcaProduto.getText()).toString();
                 int quant = Integer.parseInt(txtQuantidadeProduto.getText().toString());
-                String complemento = txtDescricaoProduto.getText().toString();
-                String medida = txtMedidaProduto.getText().toString();
-                String tipo = spinTipoProduto.getText().toString();
+                String complemento = Objects.requireNonNull(txtDescricaoProduto.getText()).toString();
+                String medida = Objects.requireNonNull(txtMedidaProduto.getText()).toString();
+                String tipo = spinner.getText().toString();
                 Produto p = new Produto(0,imagemBytes,nome,marca,complemento,medida,valor,quant,tipo);
                 if(produtosDAO.createProduto(p)){
                     p.setIDProduto(produtosDAO.ultimoID());
                     produtoArrayList.add(p);
-                    mAdapter.notifyDataSetChanged();
+                    mAdapter.notifyItemInserted(produtoArrayList.size()+1);
+
                 }else{
-                    Toast.makeText(view13.getContext(),"Algo deu errado",Toast.LENGTH_LONG);
+                    Toast.makeText(view13.getContext(),"Algo deu errado",Toast.LENGTH_LONG).show();
                 }
                 txtDescricaoProduto.setText("");
                 txtMarcaProduto.setText("");
@@ -183,16 +175,15 @@ public class ProdutosFragment extends Fragment implements ProdutosAdapter.OnClic
                 txtValorProduto.setText("");
                 txtQuantidadeProduto.setText("");
                 txtNomeProduto.setText("");
-                imageViewProduto.setImageResource(R.drawable.ic_baseline_add_photo_alternate_24);
+                imageView.setImageResource(R.drawable.ic_baseline_add_photo_alternate_24);
                 dialog.cancel();
-                mAdapter.notifyDataSetChanged();
             });
             dialog.create();
             dialog.show();
         }
     };
 
-    private SearchView.OnQueryTextListener buscaProduto = new SearchView.OnQueryTextListener() {
+    private final SearchView.OnQueryTextListener buscaProduto = new SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String s) {
             ProdutosDAO produtosDAO = new ProdutosDAO(getContext());

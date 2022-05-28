@@ -21,15 +21,11 @@ import com.example.tcc.sumirBotaoAdc;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ClientesFragment extends Fragment implements sumirBotaoAdc {
 
-    //VARIAVEIS NECESSARIAS PARA O FUNCIONAMENTO DO RECYCLERVIEW
-    private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
-
-    private SearchView searchView;
 
     private ImageButton btnAdcionarCliente;
 
@@ -44,17 +40,18 @@ public class ClientesFragment extends Fragment implements sumirBotaoAdc {
         ClientesDAO clientesDAO = new ClientesDAO(this.getContext());
 
         //ACHA O RECYCLER VIEW E OS COMPONENTES
-        recyclerView = view.findViewById(R.id.lista_cliente);
+        //VARIAVEIS NECESSARIAS PARA O FUNCIONAMENTO DO RECYCLERVIEW
+        RecyclerView recyclerView = view.findViewById(R.id.lista_cliente);
         btnAdcionarCliente = view.findViewById(R.id.adcionar_cliente);
 
-        searchView = view.findViewById(R.id.sv_cliente);
+        SearchView searchView = view.findViewById(R.id.sv_cliente);
         searchView.setOnQueryTextListener(buscaCliente);
 
         //RECOMENDADO PELO GOOGLE
         recyclerView.setHasFixedSize(true);
 
         //INICIALIZA E SETA O LAYOUT MANAGER
-        layoutManager = new LinearLayoutManager(this.getContext());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         recyclerView.setLayoutManager(layoutManager);
 
         clienteArrayList = clientesDAO.readAllClientes();
@@ -67,7 +64,7 @@ public class ClientesFragment extends Fragment implements sumirBotaoAdc {
         return view;
     }
 
-    private View.OnClickListener adicionarCliente = new View.OnClickListener() {
+    private final View.OnClickListener adicionarCliente = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             ClientesDAO clientesDAO = new ClientesDAO(getContext());
@@ -86,33 +83,31 @@ public class ClientesFragment extends Fragment implements sumirBotaoAdc {
                 TextInputEditText txtEnderecoCliente = dialog.findViewById(R.id.endereco_cliente_edicao);
                 TextInputEditText txtCpfCliente = dialog.findViewById(R.id.cpf_cliente_edicao);
 
-                String nome = txtNomeCliente.getText().toString();
-                String contato = txtContatoCliente.getText().toString();
-                String endereco = txtEnderecoCliente.getText().toString();
-                String cpf = txtCpfCliente.getText().toString();
+                String nome = Objects.requireNonNull(txtNomeCliente.getText()).toString();
+                String contato = Objects.requireNonNull(txtContatoCliente.getText()).toString();
+                String endereco = Objects.requireNonNull(txtEnderecoCliente.getText()).toString();
+                String cpf = Objects.requireNonNull(txtCpfCliente.getText()).toString();
 
                 Cliente c = new Cliente(0,nome,cpf,endereco,contato);
                 if(clientesDAO.createCliente(c)){
                     c.setID(clientesDAO.ultimoID());
                     clienteArrayList.add(c);
-                    mAdapter.notifyDataSetChanged();
+                    mAdapter.notifyItemInserted(clienteArrayList.size()+1);
                 }else{
-                    Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG);
+                    Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG).show();
                 }
                 txtNomeCliente.setText("");
                 txtContatoCliente.setText("");
                 txtEnderecoCliente.setText("");
                 txtCpfCliente.setText("");
                 dialog.cancel();
-
-                mAdapter.notifyDataSetChanged();
             });
             dialog.create();
             dialog.show();
         }
     };
 
-    private SearchView.OnQueryTextListener buscaCliente = new SearchView.OnQueryTextListener() {
+    private final SearchView.OnQueryTextListener buscaCliente = new SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String s) {
             ClientesDAO clientesDAO = new ClientesDAO(getContext());
