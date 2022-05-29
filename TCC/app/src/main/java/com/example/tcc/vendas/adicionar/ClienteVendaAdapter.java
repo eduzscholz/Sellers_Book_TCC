@@ -30,7 +30,7 @@ public class ClienteVendaAdapter extends RecyclerView.Adapter<ClienteVendaAdapte
     @Override
     public ClienteVendaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.linha_cliente_venda,parent,false);
-        return new ClienteVendaAdapter.ClienteVendaViewHolder(view,onClickClienteListener);
+        return new ClienteVendaViewHolder(view, onClickClienteListener);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class ClienteVendaAdapter extends RecyclerView.Adapter<ClienteVendaAdapte
         return clientes.size();
     }
 
-    public class ClienteVendaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class ClienteVendaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         TextView nomeCliente;
         OnClickClienteListener onClickClienteListener;

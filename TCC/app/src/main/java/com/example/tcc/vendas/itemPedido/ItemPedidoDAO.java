@@ -26,7 +26,7 @@ public class ItemPedidoDAO extends SQLiteOpenHelper{
     private static final String COL_VENDA_ID =  "vendaID";
     private static final String COL_NOME_PRODUTO = "nomeProduto";
 
-    private Context context;
+    private final Context context;
 
     public ItemPedidoDAO(@Nullable Context context) {
         super(context, DATABASE, null, VERSAO);

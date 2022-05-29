@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.NumberPicker;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tcc.MainActivity;
@@ -28,7 +30,6 @@ import com.example.tcc.vendas.Venda;
 import com.example.tcc.vendas.VendasDAO;
 import com.example.tcc.vendas.itemPedido.ItemPedido;
 import com.example.tcc.vendas.itemPedido.ItemPedidoDAO;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,36 +40,32 @@ import java.util.Date;
 public class AdicionarVendaProduto extends AppCompatActivity  implements ProdutosVendaAdapter.OnClickProdutoListener,ItemPedidoVendaAdapter.OnClickItemPedidoListener{
 
     private ArrayList<Produto> produtos;
-    private ArrayList<Produto> carrinho = new ArrayList<>();
+    private final ArrayList<Produto> carrinho = new ArrayList<>();
     private Cliente cliente;
-    private ClientesDAO clientesDAO;
-    private RecyclerView rvProdutos, rvItemPedido;
-    private RecyclerView.LayoutManager layoutManagerItemPedido = new LinearLayoutManager(this),layoutManagerProdutos = new LinearLayoutManager(this);
+    private final RecyclerView.LayoutManager layoutManagerItemPedido = new LinearLayoutManager(this);
+    private final RecyclerView.LayoutManager layoutManagerProdutos = new LinearLayoutManager(this);
     private RecyclerView.Adapter adpProdutos, adpItemPedido;
-    private Button voltar, salvar;
     private ProdutosDAO produtosDAO;
-    private Toolbar toolbar;
-    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_venda_produto);
         getCliente();
-        toolbar = findViewById(R.id.toolbar_add_venda_produto);
+        Toolbar toolbar = findViewById(R.id.toolbar_add_venda_produto);
         toolbar.setTitle("Adicionar Venda - Produtos");
 
-        searchView = findViewById(R.id.sv_venda_produto);
+        SearchView searchView = findViewById(R.id.sv_venda_produto);
         searchView.setOnQueryTextListener(buscaProduto);
 
         produtosDAO = new ProdutosDAO(this);
         produtos = produtosDAO.readAllProduto();
 
-        voltar = findViewById(R.id.btn_cancelar);
-        salvar = findViewById(R.id.btn_salvar);
-        rvItemPedido = findViewById(R.id.rv_itempedido_add_venda);
-        rvProdutos = findViewById(R.id.rv_produto_add_venda);
-        adpProdutos = new ProdutosVendaAdapter(this,produtos,this::onClickProduto);
+        Button voltar = findViewById(R.id.btn_cancelar);
+        Button salvar = findViewById(R.id.btn_salvar);
+        RecyclerView rvItemPedido = findViewById(R.id.rv_itempedido_add_venda);
+        RecyclerView rvProdutos = findViewById(R.id.rv_produto_add_venda);
+        adpProdutos = new ProdutosVendaAdapter(this,produtos, this);
         adpItemPedido = new ItemPedidoVendaAdapter(this, carrinho,this::onClickItemPedido);
         rvProdutos.setLayoutManager(layoutManagerProdutos);
         rvItemPedido.setLayoutManager(layoutManagerItemPedido);
@@ -78,7 +75,7 @@ public class AdicionarVendaProduto extends AppCompatActivity  implements Produto
         voltar.setOnClickListener(voltarListener);
     }
 
-    private SearchView.OnQueryTextListener buscaProduto = new SearchView.OnQueryTextListener() {
+    private final SearchView.OnQueryTextListener buscaProduto = new SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String s) {
             ProdutosDAO produtosDAO = new ProdutosDAO(getBaseContext());
@@ -100,14 +97,11 @@ public class AdicionarVendaProduto extends AppCompatActivity  implements Produto
         }
     };
 
-    private View.OnClickListener datePicker = new View.OnClickListener() {
+    private final View.OnClickListener datePicker = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             if(carrinho.size()==0){
-                MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(view.getContext());
-                dialog .setTitle("Voce precisa adicionar produtos para salvar")
-                        .setPositiveButton("OK", null)
-                        .show();
+                Toast.makeText(getBaseContext(),"Você precisa adicionar pelo menos um produto",Toast.LENGTH_LONG).show();
             }else {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(view.getContext(), salvarListener,
                         Calendar.getInstance().get(Calendar.YEAR),
@@ -120,19 +114,14 @@ public class AdicionarVendaProduto extends AppCompatActivity  implements Produto
         }
     };
 
-    View.OnClickListener voltarListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            finish();
-        }
-    };
+    View.OnClickListener voltarListener = view -> finish();
 
-    private DatePickerDialog.OnDateSetListener salvarListener = new DatePickerDialog.OnDateSetListener() {
+    private final DatePickerDialog.OnDateSetListener salvarListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int y, int m, int d) {
             VendasDAO vendasDAO = new VendasDAO(getBaseContext());
             ItemPedidoDAO itemPedidoDAO = new ItemPedidoDAO(getBaseContext());
-            Date dataPrevisao = new Date();
+            Date dataPrevisao;
             Date dataAtual = new Date();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             try {
@@ -158,7 +147,7 @@ public class AdicionarVendaProduto extends AppCompatActivity  implements Produto
 
     private void getCliente(){
         Bundle extras = getIntent().getExtras();
-        clientesDAO = new ClientesDAO(this);
+        ClientesDAO clientesDAO = new ClientesDAO(this);
         int i = extras.getInt("clienteID");
         if(extras!=null){
             cliente = clientesDAO.readOneClienteID(i);
@@ -172,15 +161,21 @@ public class AdicionarVendaProduto extends AppCompatActivity  implements Produto
 
     @Override
     public void onClickItemPedido(int position) {
-        MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this);
-        dialog .setTitle("Deseja retirar esse pedido da lista?")
-                .setNegativeButton("Cancelar",null)
-                .setPositiveButton("Excluir", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        carrinho.remove(position);
-                        adpItemPedido.notifyDataSetChanged();
-                    }
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.dialogo_simples);
+
+        TextView txt = dialog.findViewById(R.id.texto);
+        txt.setText("Você tem certeza que deseja remover este produto do carrinho?");
+
+        Button buttonNao = dialog.findViewById(R.id.nao);
+        Button buttonSim = dialog.findViewById(R.id.sim);
+        buttonNao.setOnClickListener(view1 -> dialog.cancel());
+        buttonSim.setOnClickListener(view12 -> {
+                    carrinho.remove(position);
+                    adpItemPedido.notifyItemRemoved(position);
+                    dialog.cancel();
                 });
         dialog.show();
     }
@@ -198,36 +193,28 @@ public class AdicionarVendaProduto extends AppCompatActivity  implements Produto
         numberPicker.setMaxValue(produtos.get(position).getQuantidade());
         numberPicker.setMinValue(0);
 
-        buttonCancelar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.cancel();
-            }
-        });
-        buttonEnviar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Produto p = produtos.get(position);
-                boolean chave=true;
-                int valor = numberPicker.getValue();
-                if(valor==0){
-                    Toast.makeText(view.getContext(), "Valor invalido",Toast.LENGTH_LONG).show();
-                }else{
-                    for(int i = 0; i< carrinho.size(); i++){
-                        if(carrinho.get(i).getIDProduto()==p.getIDProduto()){
-                            carrinho.get(i).setQuantidade(carrinho.get(i).getQuantidade()+valor);
-                            chave=false;
-                            break;
-                        }
-                    }if (chave){
-                        carrinho.add(new Produto(p.getIDProduto(),p.getImg(),p.getNome(),p.getMarca(),p.getComplemento(),p.getMedida(),p.getPreco(),valor,p.getTipoDeProduto()));
+        buttonCancelar.setOnClickListener(view -> dialog.cancel());
+        buttonEnviar.setOnClickListener(view -> {
+            Produto p = produtos.get(position);
+            boolean chave=true;
+            int valor = numberPicker.getValue();
+            if(valor==0){
+                Toast.makeText(view.getContext(), "Valor invalido",Toast.LENGTH_LONG).show();
+            }else{
+                for(int i = 0; i< carrinho.size(); i++){
+                    if(carrinho.get(i).getIDProduto()==p.getIDProduto()){
+                        carrinho.get(i).setQuantidade(carrinho.get(i).getQuantidade()+valor);
+                        chave=false;
+                        break;
                     }
-                    p.setQuantidade(p.getQuantidade()-valor);
-                    adpItemPedido.notifyDataSetChanged();
-                    adpProdutos.notifyDataSetChanged();
-                    dialog.cancel();
-                 }
-            }
+                }if (chave){
+                    carrinho.add(new Produto(p.getIDProduto(),p.getImg(),p.getNome(),p.getMarca(),p.getComplemento(),p.getMedida(),p.getPreco(),valor,p.getTipoDeProduto()));
+                }
+                p.setQuantidade(p.getQuantidade()-valor);
+                adpItemPedido.notifyItemChanged(position);
+                adpProdutos.notifyItemChanged(position);
+                dialog.cancel();
+             }
         });
         dialog.create();
         dialog.show();

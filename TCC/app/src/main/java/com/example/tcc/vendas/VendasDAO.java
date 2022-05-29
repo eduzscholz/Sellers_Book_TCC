@@ -31,10 +31,7 @@ public class VendasDAO extends SQLiteOpenHelper {
     public static final String COL_PREVISAO = "previsaoPagamento";
     public static final String COL_NOME_CLIENTE = "nomeCliente";
 
-    private static final String TABELA_CLIENTE = "clientes";
-    private static final String FKID_CLIENTE = "clienteID";
-
-    private Context context;
+    private final Context context;
 
     public VendasDAO(@Nullable Context context) {
         super(context, DATABASE, null, VERSAO);
@@ -77,7 +74,10 @@ public class VendasDAO extends SQLiteOpenHelper {
 
         cursor.moveToNext();
 
-        return cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID));
+        int i = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID));
+        cursor.close();
+
+        return i;
     }
 
     public ArrayList<Venda> readAllVenda(){
@@ -108,6 +108,7 @@ public class VendasDAO extends SQLiteOpenHelper {
                 e.printStackTrace();
             }
         }
+        cursor.close();
         return vendaArrayList;
     }
 
@@ -136,6 +137,7 @@ public class VendasDAO extends SQLiteOpenHelper {
                 e.printStackTrace();
             }
         }
+        cursor.close();
         return vendaArrayList;
     }
 
@@ -154,11 +156,11 @@ public class VendasDAO extends SQLiteOpenHelper {
         return count!=0;
     }
 
-    public boolean updateVenda(int id, Date dataCompra, Date previsão, Date dataPagamento, int CID, String nomeCliente){
+    public boolean updateVenda(int id, Date dataCompra, Date previsao, Date dataPagamento, int CID, String nomeCliente){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dtC = simpleDateFormat.format(dataCompra);
         String dtP = simpleDateFormat.format(dataPagamento);
-        String pre = simpleDateFormat.format(previsão);
+        String pre = simpleDateFormat.format(previsao);
         String cid = String.valueOf(CID);
 
         return updateVenda(id, new String[] {COL_DATA_COMPRA,COL_PREVISAO,COL_DATA_PAGAMENTO,COL_ID_CLIENTE,COL_NOME_CLIENTE}, new String[] {dtC,pre,dtP,cid,nomeCliente});
@@ -194,10 +196,28 @@ public class VendasDAO extends SQLiteOpenHelper {
 
         while (cursor.moveToNext()){
             if(cursor.getString(cursor.getColumnIndexOrThrow(COL_DATA_PAGAMENTO)).equals("")){
+                cursor.close();
                 return false;
             }
         }
+        cursor.close();
         return true;
+    }
+
+    public ArrayList<Venda> readVendasSemPagamento(String data){
+        ArrayList<Venda> vendas = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABELA,new String[] {COL_NOME_CLIENTE, COL_ID}, COL_DATA_PAGAMENTO + " = '' AND "+COL_PREVISAO+" = '"+data+"'", null,null, null,null);
+
+        while (cursor.moveToNext())
+        {
+            String nome = cursor.getString(cursor.getColumnIndexOrThrow(COL_NOME_CLIENTE));
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID));
+            vendas.add(new Venda(id,nome,null,null,null,0,null));
+        }
+        cursor.close();
+        return vendas;
     }
 
     public ArrayList<Venda> readVendaMes(String mes){
@@ -231,6 +251,7 @@ public class VendasDAO extends SQLiteOpenHelper {
                 e.printStackTrace();
             }
         }
+        cursor.close();
         return vendaArrayList;
     }
 }

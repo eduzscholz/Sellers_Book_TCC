@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class ItemPedidoVendaAdapter  extends RecyclerView.Adapter<ItemPedidoVendaAdapter.ItemPedidoVendaViewHolder> {
 
     Context context;
-    ArrayList<Produto> carrinho = new ArrayList<>();
+    ArrayList<Produto> carrinho;
     OnClickItemPedidoListener onClickItemPedidoListener;
 
     public ItemPedidoVendaAdapter(Context context, ArrayList<Produto> carrinho, OnClickItemPedidoListener onClickItemPedidoListener){
@@ -34,7 +34,7 @@ public class ItemPedidoVendaAdapter  extends RecyclerView.Adapter<ItemPedidoVend
     @Override
     public ItemPedidoVendaAdapter.ItemPedidoVendaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.linha_item_pedido,parent,false);
-        return new ItemPedidoVendaViewHolder(view,onClickItemPedidoListener);
+        return new ItemPedidoVendaViewHolder(view, onClickItemPedidoListener);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class ItemPedidoVendaAdapter  extends RecyclerView.Adapter<ItemPedidoVend
         return carrinho.size();
     }
 
-    public class ItemPedidoVendaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ItemPedidoVendaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView nomeItemPedido, quantidadeItemPedido, valorItemPedido;
         public ImageView imagemItemPedido;

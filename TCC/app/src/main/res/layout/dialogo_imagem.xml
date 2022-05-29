@@ -1,52 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp">
+    app:cardCornerRadius="5dp">
 
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="@string/de_onde_deseja_pegar_a_imagem"
-        android:textSize="@dimen/tamanho_fonte_maior"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp">
 
-    <TextView
-        android:id="@+id/txt_foto"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/tamanho_textos"
-        android:layout_margin="10dp"
-        android:clickable="true"
-        android:drawablePadding="15dp"
-        android:focusable="true"
-        android:gravity="center|start"
-        android:text="@string/foto"
-        android:textSize="@dimen/tamanho_fonte_menor"
-        app:drawableStartCompat="@drawable/ic_baseline_photo_camera_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_galeria" />
+        <TextView
+            android:id="@+id/txt_galeria"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/tamanho_textos"
+            android:layout_margin="10dp"
+            android:clickable="true"
+            android:drawablePadding="5dp"
+            android:focusable="true"
+            android:gravity="center|start"
+            android:text="@string/galeria"
+            android:textSize="@dimen/tamanho_fonte_menor"
+            app:drawableStartCompat="@drawable/ic_baseline_image_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
-    <TextView
-        android:id="@+id/txt_galeria"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/tamanho_textos"
-        android:layout_margin="10dp"
-        android:clickable="true"
-        android:drawablePadding="5dp"
-        android:focusable="true"
-        android:gravity="center|start"
-        android:text="@string/galeria"
-        android:textSize="@dimen/tamanho_fonte_menor"
-        app:drawableStartCompat="@drawable/ic_baseline_image_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/txt_foto"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/tamanho_textos"
+            android:layout_margin="10dp"
+            android:clickable="true"
+            android:drawablePadding="15dp"
+            android:focusable="true"
+            android:gravity="center|start"
+            android:text="@string/foto"
+            android:textSize="@dimen/tamanho_fonte_menor"
+            app:drawableStartCompat="@drawable/ic_baseline_photo_camera_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_galeria" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/de_onde_deseja_pegar_a_imagem"
+            android:textSize="@dimen/tamanho_fonte_maior"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

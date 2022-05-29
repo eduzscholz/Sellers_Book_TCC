@@ -1,10 +1,12 @@
 package com.example.tcc.inicio;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,7 +18,6 @@ import com.example.tcc.Pagamento;
 import com.example.tcc.R;
 import com.example.tcc.vendas.Venda;
 import com.example.tcc.vendas.VendasDAO;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -52,10 +53,18 @@ public class InicioAdapter extends RecyclerView.Adapter<InicioAdapter.InicioView
         holder.valorTotal.setText(decimalFormat.format(vendaArrayList.get(position).getValorTotal()));
 
         holder.button.setOnClickListener(view -> {
-            MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
-            dialog .setTitle("Este cliente pagou?")
-                    .setNegativeButton("Não",null)
-                    .setPositiveButton("Sim", (dialogInterface, i) -> {
+            Dialog dialog = new Dialog(context);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(true);
+            dialog.setContentView(R.layout.dialogo_simples);
+
+            TextView txt = dialog.findViewById(R.id.texto);
+            txt.setText("Este cliente pagou?");
+
+            Button buttonNao = dialog.findViewById(R.id.nao);
+            Button buttonSim = dialog.findViewById(R.id.sim);
+            buttonNao.setOnClickListener(view1 -> dialog.cancel());
+            buttonSim.setOnClickListener(view12 -> {
                         SimpleDateFormat simpleDateFormat1 =new SimpleDateFormat("yyyy-MM-dd");
                         Date date = new Date();
                         if(vendasDAO.updateVenda(vendaArrayList.get(holder.getAdapterPosition()).getIDVenda(),new String[] {VendasDAO.COL_DATA_PAGAMENTO},new String[] {simpleDateFormat1.format(date)})){
@@ -65,6 +74,7 @@ public class InicioAdapter extends RecyclerView.Adapter<InicioAdapter.InicioView
                             pagamento.atualizaViewPager(0);
                         }else{
                             Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG).show();
+                            dialog.cancel();
                         }
                     });
             dialog.show();

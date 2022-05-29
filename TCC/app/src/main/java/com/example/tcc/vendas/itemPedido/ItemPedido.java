@@ -1,5 +1,7 @@
 package com.example.tcc.vendas.itemPedido;
 
+import androidx.annotation.NonNull;
+
 public class ItemPedido {
     private int itemPedidoID;
     private int quantidade;
@@ -17,6 +19,7 @@ public class ItemPedido {
         this.nomeProduto = nomeProduto;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "ItemPedido{" +

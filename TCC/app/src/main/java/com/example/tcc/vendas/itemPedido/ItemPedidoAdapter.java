@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class ItemPedidoAdapter extends RecyclerView.Adapter<ItemPedidoAdapter.ItemPedidoViewHolder> {
 
-    private ArrayList<ItemPedido> itemPedidoArrayList = new ArrayList<>();
+    private ArrayList<ItemPedido> itemPedidoArrayList;
     Context context;
 
     public ItemPedidoAdapter(Context ct, ArrayList<ItemPedido> itemPedidoArrayList){

@@ -23,14 +23,9 @@ import java.util.ArrayList;
 
 public class VendasFragment extends Fragment {
 
-    //VARIAVEIS NECESSARIAS PARA O FUNCIONAMENTO DO RECYCLERVIEW
-    private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
-    private ImageButton adcVenda;
-    private Pagamento pagamento;
+    private final Pagamento pagamento;
     private ArrayList<Venda>  vendaArrayList = new ArrayList<>();
-    private SearchView searchView;
 
     public VendasFragment(Pagamento pagamento){
         super();
@@ -43,16 +38,17 @@ public class VendasFragment extends Fragment {
         VendasDAO vendasDAO = new VendasDAO(this.getContext());
         vendaArrayList = vendasDAO.readAllVenda();
 
-        searchView = view.findViewById(R.id.sv_venda);
+        SearchView searchView = view.findViewById(R.id.sv_venda);
         searchView.setOnQueryTextListener(buscaVenda);
-        recyclerView = view.findViewById(R.id.lista_vendas);
+        //VARIAVEIS NECESSARIAS PARA O FUNCIONAMENTO DO RECYCLERVIEW
+        RecyclerView recyclerView = view.findViewById(R.id.lista_vendas);
         recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this.getContext());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         recyclerView.setLayoutManager(layoutManager);
         mAdapter = new VendasAdapter(this.getContext(),vendaArrayList, pagamento);
         recyclerView.setAdapter(mAdapter);
 
-        adcVenda = view.findViewById(R.id.adcionar_venda);
+        ImageButton adcVenda = view.findViewById(R.id.adcionar_venda);
         adcVenda.setOnClickListener(view1 -> {
             Intent intent = new Intent(view1.getContext(), AdicionarVendaCliente.class);
             startActivity(intent);

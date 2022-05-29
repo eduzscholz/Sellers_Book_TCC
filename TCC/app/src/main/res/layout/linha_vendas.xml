@@ -156,7 +156,7 @@
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
+            android:layout_marginEnd="100dp"
             android:text="@string/remover"
             android:textColor="?attr/colorPrimaryVariant"
             app:layout_constraintBottom_toBottomOf="@+id/pago_venda"
@@ -166,7 +166,6 @@
             android:id="@+id/detalhes_venda"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             app:constraint_referenced_ids="txt_data_compra_venda,txt_previsao_venda,divider3,txt_data_pagamento_venda,data_pagamento_venda,data_previsao_venda,data_compra_venda,produtos_venda,pago_venda,remover_venda" />
 
         <TextView

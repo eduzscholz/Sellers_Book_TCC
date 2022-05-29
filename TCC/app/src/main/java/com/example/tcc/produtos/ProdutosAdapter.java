@@ -1,5 +1,6 @@
 package com.example.tcc.produtos;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -19,7 +21,6 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.tcc.R;
 import com.example.tcc.sumirBotaoAdc;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.ByteArrayInputStream;
@@ -66,13 +67,13 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
         }
         boolean estaAberto = produtoArrayList.get(position).isAberto();
         holder.cardViewFrente.findViewById(R.id.detalhes_produto).setVisibility(estaAberto ? View.VISIBLE : View.GONE);
-        holder.marcaProdutof.setText(produtoArrayList.get(position).getMarca());
+        if(!produtoArrayList.get(position).getMarca().equals(""))holder.marcaProdutof.setText(produtoArrayList.get(position).getMarca());
         holder.nomeProdutof.setText(produtoArrayList.get(position).getNome());
         holder.precoProdutof.setText(decimalFormat.format(produtoArrayList.get(position).getPreco()));
         holder.qntProdutof.setText(String.valueOf(produtoArrayList.get(position).getQuantidade()));
-        holder.tipof.setText(produtoArrayList.get(position).getTipoDeProduto());
-        holder.descricaof.setText(produtoArrayList.get(position).getComplemento());
-        holder.unidadef.setText(String.valueOf(produtoArrayList.get(position).getMedida()));
+        if(!produtoArrayList.get(position).getTipoDeProduto().equals(""))holder.tipof.setText(produtoArrayList.get(position).getTipoDeProduto());
+        if(!produtoArrayList.get(position).getComplemento().equals(""))holder.descricaof.setText(produtoArrayList.get(position).getComplemento());
+        if(!produtoArrayList.get(position).getMedida().equals(""))holder.unidadef.setText(String.valueOf(produtoArrayList.get(position).getMedida()));
 
         //QUANDO CLICA CANCELAR, SOME O CARDVIEW DE EDIÇÃO
         holder.btnCancelar.setOnClickListener(view -> {
@@ -124,10 +125,18 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
             if(teste){
                 return;
             }
-            MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
-            dialog .setTitle("Deseja editar esse cliente?")
-                    .setNegativeButton("Não",null)
-                    .setPositiveButton("Sim", (dialogInterface, i) -> {
+            Dialog dialog = new Dialog(context);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(true);
+            dialog.setContentView(R.layout.dialogo_simples);
+
+            TextView txt = dialog.findViewById(R.id.texto);
+            txt.setText("Você tem certeza que deseja editar este produto?");
+
+            Button buttonNao = dialog.findViewById(R.id.nao);
+            Button buttonSim = dialog.findViewById(R.id.sim);
+            buttonNao.setOnClickListener(view1 -> dialog.cancel());
+            buttonSim.setOnClickListener(view12 -> {
                         byte[] imagemBytes;
                         try{
                             BitmapDrawable drawable = (BitmapDrawable) holder.imgProdutoa.getDrawable();
@@ -156,24 +165,34 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.Produt
                             Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG).show();
                         }
                         holder.cardViewAtras.setVisibility(View.GONE);
+                        dialog.cancel();
                     });
                 dialog.show();
         });
         //APAGA O PRODUTO DO BANCO
         holder.btnRemover.setOnClickListener(view -> {
-            MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
-            dialog .setTitle("Deseja remover esse cliente?")
-                    .setNegativeButton("Não",null)
-                    .setPositiveButton("Sim", (dialogInterface, i) -> {
-                        if(produtosDAO.deleteOneProduto(produtoArrayList.get(holder.getAdapterPosition()).getIDProduto())){
-                            holder.cardViewFrente.findViewById(R.id.detalhes_produto).setVisibility(View.GONE);
-                            produtoArrayList.remove(holder.getAdapterPosition());
-                            notifyItemRemoved(holder.getAdapterPosition());
-                        }else{
-                            Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG).show();
-                        }
-                        holder.cardViewAtras.setVisibility(View.GONE);
-                    });
+            Dialog dialog = new Dialog(context);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(true);
+            dialog.setContentView(R.layout.dialogo_simples);
+
+            TextView txt = dialog.findViewById(R.id.texto);
+            txt.setText("Você tem certeza que deseja remover este produto?");
+
+            Button buttonNao = dialog.findViewById(R.id.nao);
+            Button buttonSim = dialog.findViewById(R.id.sim);
+            buttonNao.setOnClickListener(view1 -> dialog.cancel());
+            buttonSim.setOnClickListener(view12 -> {
+                if(produtosDAO.deleteOneProduto(produtoArrayList.get(holder.getAdapterPosition()).getIDProduto())){
+                    holder.cardViewFrente.findViewById(R.id.detalhes_produto).setVisibility(View.GONE);
+                    produtoArrayList.remove(holder.getAdapterPosition());
+                    notifyItemRemoved(holder.getAdapterPosition());
+                }else{
+                    Toast.makeText(view.getContext(),"Algo deu errado",Toast.LENGTH_LONG).show();
+                }
+                holder.cardViewAtras.setVisibility(View.GONE);
+                dialog.cancel();
+            });
             dialog.show();
         });
     }

@@ -23,7 +23,7 @@
     <string name="selecionar_varios">Selecionar Vários</string>
     <string name="valor">R$ Valor</string>
     <string name="nome_do_produto">Nome do Produto</string>
-    <string name="marca">Marca</string>
+    <string name="marca">Marca:</string>
     <string name="volume_peso">Volume/Peso</string>
     <string name="complemento">Complemento</string>
     <string name="tipo_da_produto">Tipo do Produto, exemplo: Cosmético</string>
@@ -63,6 +63,12 @@
     <string name="recebimento_atrasado">Atrasado:</string>
     <string name="lucro_previsto">Lucro Previsto:</string>
     <string name="proximos_pagamentos">PROXIMOS PAGAMENTOS:</string>
+    <string name="detalhes">Detalhes:</string>
+    <string name="medida">Medida</string>
+    <string name="channel_name">Notificações de pagamentos</string>
+    <string name="channel_description">Notificações de que um ou mais clientes devem pagar</string>
+    <string name="n_o">não</string>
+    <string name="sim">sim</string>
 
     <dimen name="tamanho_textos">55dp</dimen>
     <dimen name="tamanho_fonte_menor">18sp</dimen>

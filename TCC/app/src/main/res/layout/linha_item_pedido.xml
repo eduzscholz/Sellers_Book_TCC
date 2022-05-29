@@ -17,12 +17,14 @@
 
         <TextView
             android:id="@+id/nome_item_pedido"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginStart="10dp"
+            android:layout_marginEnd="5dp"
             android:gravity="center|start"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/txt_quantidade_item_pedido"
             app:layout_constraintStart_toEndOf="@+id/imagem_item_pedido"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="nome_produto" />
