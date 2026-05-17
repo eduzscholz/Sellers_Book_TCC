@@ -29,8 +29,11 @@ Aplicativo Android desenvolvido para auxiliar vendedores autônomos no gerenciam
  └── TCC/app/src/main/               # Arquivos do aplicativo desenvolvido
      ├── res                         # Recursos Visuais, telas e drawables
      └── java/com/example/tcc/       # Classes e Codigos desenvolvidos para o projeto
-         ├── clientes                # Codigos referentes a tela de clientes
-         ├── inicio                  # Codigos referentes a tela de inicio
-         ├── vendas                  # Codigos referentes a tela de vendas
-         └── produtos                # Codigos referentes a tela de produtos
+         ├── clientes                # Codigos da classe cliente
+         ├── inicio                  # Codigos da tela de inicio
+         ├── vendas                  # Codigos da classe vendas
+         └── produtos                # Codigos da classe produtos
 ```
+## Classes
+O aplicativo possui três classes principais, Clientes, Vendas e Produtos. Cada classe principal possui suas classes auxiliares para trabalhar com a interface do android studio (fragment e adapter), e uma classe para trabalhar com o banco de dados SQLite (DAO). O aplicativo tambem possui a classe inicio que trabalha com a interface inicial do aplicativo, que leva para as outras telas das classes principais.
+
